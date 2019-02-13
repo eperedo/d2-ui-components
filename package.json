@@ -7,7 +7,7 @@
         "type": "git",
         "url": "git+https://github.com/eyeseetea/d2-ui-components.git"
     },
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "peerDependencies": {
@@ -52,7 +52,7 @@
     },
     "scripts": {
         "build-only": "babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
-        "build": "yarn code-quality && rm -rf build/* && yarn run build-only",
+        "build": "yarn code-quality && rm -rf build/* && yarn run build-only && tsc --outDir build",
         "build-dev": "yarn run build-only --watch",
         "code-quality": "yarn lint && yarn prettify && yarn test",
         "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
