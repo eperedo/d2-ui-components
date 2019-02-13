@@ -1,6 +1,6 @@
-import * as React from "react";
+import React from "react";
 import { mount } from "enzyme";
-import DatePicker from "../DatePicker";
+import { DatePicker } from "../DatePicker";
 
 it("shows label", () => {
     const onChange = jest.fn();
@@ -8,3 +8,5 @@ it("shows label", () => {
 
     expect(datePicker.text()).toContain("My label");
 });
+
+export {}

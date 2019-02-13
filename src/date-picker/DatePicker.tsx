@@ -7,7 +7,13 @@ import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "material-u
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import cyan from "@material-ui/core/colors/cyan";
 
-class DatePicker extends React.PureComponent {
+export interface DatePickerProps {
+    label: string;
+    value?: Date;
+    onChange: (date: Date) => {};
+}
+
+class DatePicker extends React.PureComponent<DatePickerProps> {
     static propTypes = {
         label: PropTypes.string.isRequired,
         value: PropTypes.object,
@@ -16,7 +22,7 @@ class DatePicker extends React.PureComponent {
 
     render() {
         const { label, value, onChange } = this.props;
-        const format = moment.localeData()._longDateFormat.LL;
+        const format = moment.localeData().longDateFormat("L");
 
         return (
             <MuiThemeProvider theme={materialTheme}>
@@ -76,4 +82,4 @@ const materialTheme = createMuiTheme({
     },
 });
 
-export default DatePicker;
+export { DatePicker };

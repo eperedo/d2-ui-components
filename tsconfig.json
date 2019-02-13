@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
         "declaration": true,
+        "esModuleInterop": true,
+        "isolatedModules": false,
         "jsx": "react"
     },
     "include": ["src"],
