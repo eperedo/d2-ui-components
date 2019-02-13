@@ -5,5 +5,3 @@ function add(x: number, y: number): number {
 export function answer(): number {
     return add(40, 2);
 }
-
-console.log(answer());

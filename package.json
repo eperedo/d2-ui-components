@@ -4,13 +4,19 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "devDependencies": {
+        "@typescript-eslint/parser": "^1.3.0",
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.13.0",
+        "eslint-plugin-react": "^7.12.4",
         "prettier": "1.16.4",
         "type-scripts": "1.2.1",
         "typescript": "^3.3.3"
     },
     "dependencies": {},
     "scripts": {
-        "build": "rm build -rf && type-scripts-build",
-        "prettify": "prettier \"{src}/**/*.{js,jsx,json,css,ts,tsx}\" --write"
+        "code-quality": "yarn lint && yarn prettify",
+        "build": "yarn code-quality && rm build -rf && type-scripts-build",
+        "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
+        "prettify": "prettier src/*.ts src/**/*.{js,jsx,json,css,ts,tsx} --write"
     }
 }
