@@ -1,6 +1,6 @@
 # Introduction
 
- ## Setup
+## Setup
 
 ```
 $ yarn install

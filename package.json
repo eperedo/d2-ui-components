@@ -56,6 +56,7 @@
         "build-dev": "yarn run build-only --watch",
         "code-quality": "yarn lint && yarn prettify && yarn test",
         "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
+        "prepublish": "yarn run build",
         "prettify": "prettier src/*.ts src/**/*.{js,jsx,json,css,ts,tsx} --write",
         "test": "jest"
     }
