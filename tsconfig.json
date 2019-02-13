@@ -2,5 +2,7 @@
     "compilerOptions": {
         "declaration": true,
         "jsx": "react"
-    }
+    },
+    "include": ["src"],
+    "exclude": ["**/*.spec.{js,jsx,ts,tsx}"]
 }

@@ -8,5 +8,5 @@ module.exports = {
 	moduleFileExtensions: [ 'ts', 'tsx', 'js', 'jsx', 'json', 'node' ],
 	transformIgnorePatterns: [],
 	snapshotSerializers: ["enzyme-to-json/serializer"],
-	setupTestFrameworkScriptFile: "<rootDir>/src/setupEnzyme.ts",
+	setupTestFrameworkScriptFile: "<rootDir>/setupEnzyme.ts",
 };

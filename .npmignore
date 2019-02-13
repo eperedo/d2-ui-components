@@ -1,0 +1,8 @@
+yarn-error.log
+setupEnzyme.ts
+.git/
+.rpt2_cache/
+node_modules/
+src/
+package/
+__tests__
