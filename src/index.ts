@@ -1,3 +1,3 @@
-export function add(x: number, y: number): number {
-    return x + y;
-}
+import DatePicker from "./date-picker/DatePicker";
+
+export { DatePicker };
