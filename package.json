@@ -1,14 +1,16 @@
 {
-  "name": "d2-ui-components",
-  "version": "0.1.0",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "devDependencies": {
-    "type-scripts": "1.2.1",
-    "typescript": "^3.3.3"
-  },
-  "dependencies": {},
-  "scripts": {
-    "build": "rm build -rf && type-scripts-build"
-  }
+    "name": "d2-ui-components",
+    "version": "0.1.0",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "devDependencies": {
+        "prettier": "1.16.4",
+        "type-scripts": "1.2.1",
+        "typescript": "^3.3.3"
+    },
+    "dependencies": {},
+    "scripts": {
+        "build": "rm build -rf && type-scripts-build",
+        "prettify": "prettier \"{src}/**/*.{js,jsx,json,css,ts,tsx}\" --write"
+    }
 }

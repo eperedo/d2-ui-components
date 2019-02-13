@@ -1,6 +1,6 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "jsx": "react"
-  }
+    "compilerOptions": {
+        "declaration": true,
+        "jsx": "react"
+    }
 }
