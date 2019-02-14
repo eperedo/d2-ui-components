@@ -37,6 +37,7 @@
         "eslint-config-prettier": "^4.0.0",
         "eslint-plugin-react": "^7.12.4",
         "jest": "^23",
+        "loglevel": "^1.6.1",
         "prettier": "1.16.4",
         "prop-types": "^15.6.0",
         "react": "^16.6.0",
