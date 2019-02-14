@@ -46,6 +46,8 @@
     },
     "dependencies": {
         "@date-io/moment": "^1.0.2",
+        "@dhis2/d2-ui-core": "^1.3.5",
+        "@dhis2/d2-ui-group-editor": "^5.1.1",
         "@material-ui/core": "^3.9.1",
         "material-ui-pickers": "^2.1.2",
         "moment": "^2.22.2"
@@ -56,7 +58,6 @@
         "build-dev": "yarn run build-only --watch",
         "code-quality": "yarn lint && yarn prettify && yarn test",
         "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
-        "prepublish": "yarn run build",
         "prettify": "prettier src/*.ts src/**/*.{js,jsx,json,css,ts,tsx} --write",
         "test": "jest"
     }
