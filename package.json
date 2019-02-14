@@ -53,7 +53,8 @@
         "moment": "^2.22.2"
     },
     "scripts": {
-        "build-only": "babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+        "build-only": "yarn build-css && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+        "build-css": "cd src && cp -a --parents **/*.css ../build",
         "build": "yarn code-quality && rm -rf build/* && yarn run build-only && tsc --outDir build",
         "build-dev": "yarn run build-only --watch",
         "code-quality": "yarn lint && yarn prettify && yarn test",
