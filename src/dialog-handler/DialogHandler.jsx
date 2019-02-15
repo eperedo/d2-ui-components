@@ -1,9 +1,9 @@
 import React from "react";
-import i18n from "@dhis2/d2-i18n";
 import PropTypes from "prop-types";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent, DialogActions, Button } from "@material-ui/core";
+import i18n from '../i18n';
 
 class DialogHandler extends React.Component {
     static propTypes = {
@@ -25,14 +25,14 @@ class DialogHandler extends React.Component {
     };
 
     render() {
-        const { buttonComponent: CustomButton, title, contents, classes } = this.props;
+        const { buttonComponent: CustomButton, title, contents } = this.props;
         const { isOpen } = this.state;
 
         return (
             <React.Fragment>
                 <CustomButton onClick={this.handleClickOpen} />
 
-                <Dialog open={isOpen} onClose={this.handleClose} className={classes.dialog}>
+                <Dialog open={isOpen} onClose={this.handleClose}>
                     <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
 
                     <DialogContent>{contents}</DialogContent>

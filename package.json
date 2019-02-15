@@ -23,6 +23,8 @@
         "@babel/preset-env": "^7.3.1",
         "@babel/preset-react": "^7.0.0",
         "@babel/preset-typescript": "^7.1.0",
+        "@dhis2/d2-i18n-extract": "^1.0.6",
+        "@dhis2/d2-i18n-generate": "^1.0.18",
         "@types/enzyme": "^3.1.17",
         "@types/jest": "^24.0.3",
         "@typescript-eslint/parser": "^1.3.0",
@@ -47,6 +49,7 @@
     },
     "dependencies": {
         "@date-io/moment": "^1.0.2",
+        "@dhis2/d2-i18n": "^1.0.3",
         "@dhis2/d2-ui-core": "^1.3.5",
         "@dhis2/d2-ui-group-editor": "^5.1.1",
         "@material-ui/core": "^3.9.1",
@@ -54,12 +57,15 @@
         "moment": "^2.22.2"
     },
     "scripts": {
-        "build-only": "yarn build-css && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+        "build-only": "yarn build-css && yarn localize && cp -a src/locales/* build/locales && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
         "build-css": "cd src && cp -a --parents **/*.css ../build",
         "build": "yarn code-quality && rm -rf build/* && yarn run build-only && tsc --outDir build",
         "build-dev": "yarn run build-only --watch",
         "code-quality": "yarn lint && yarn prettify && yarn test",
+        "extract-pot": "d2-i18n-extract -p src/ -o i18n/",
         "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
+        "localize": "npm run extract-pot && d2-i18n-generate -n d2-ui-components -p ./i18n/ -o ./src/locales/",
+        "update-po": "yarn extract-pot && for pofile in i18n/*.po; do msgmerge --backup=off -U $pofile i18n/en.pot; done",
         "prettify": "prettier src/*.ts src/**/*.{js,jsx,json,css,ts,tsx} --write",
         "test": "jest"
     }
