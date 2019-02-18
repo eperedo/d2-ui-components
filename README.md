@@ -1,38 +1,3 @@
-# Introduction
-
-## Setup
-
-```
-$ yarn install
-```
-
-## Development
-
-When developing your app, init the link in this repository:
-
-```
-$ yarn link
-```
-
-And then link it wherever you want to use the package:
-
-```
-$ cd /path/to/my/project/using-d2-ui-components
-$ yarn link d2-ui-components
-```
-
-When you want to change code in the components, run this command to build the package on any change:
-
-```
-$ yarn build-dev
-```
-
-Run tests, linter and prettier:
-
-```
-$ yarn code-quality
-```
-
 # Components
 
 ## Date Picker
@@ -77,4 +42,38 @@ const MySimpleCheckBox = () =>
         checked={true}
         onClick={values => console.log("Checkbox was clicked")}
     />
+```
+
+# Setup
+
+```
+$ yarn install
+```
+
+Run tests, linter and prettier:
+
+```
+$ yarn code-quality
+```
+
+## i18n
+
+We use `@dhis2/i18n` for the internationalization, with translations added to the namespace `d2-ui-components`.
+Within this package, all components should import [src/utils/i18n.js](src/utils/i18n.js) and use
+`i18n.t("Some literal")`, which uses the correct namespace.
+
+### Update an existing language
+
+```
+$ yarn update-po
+# ... add/edit translations in po files ...
+$ yarn localize
+```
+
+### Create a new language
+
+```
+$ cp i18n/en.pot i18n/es.po
+# ... add translations to i18n/es.po ...
+$ yarn localize
 ```

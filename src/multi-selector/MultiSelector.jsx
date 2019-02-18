@@ -4,6 +4,7 @@ import GroupEditor from "@dhis2/d2-ui-group-editor/GroupEditor.component";
 import GroupEditorWithOrdering from "@dhis2/d2-ui-group-editor/GroupEditorWithOrdering.component";
 import { Store } from "@dhis2/d2-ui-core";
 import { withStyles } from "@material-ui/core/styles";
+import i18n from "../utils/i18n";
 
 const styles = () => ({
     wrapper: {
@@ -38,7 +39,7 @@ class MultiSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: this.props.d2,
+            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
         };
     }
 
@@ -86,5 +87,12 @@ class MultiSelector extends React.Component {
         );
     }
 }
+
+const d2UiTranslations = () => ({
+    assign_all: i18n.t("Assign all"),
+    remove_all: i18n.t("Remove all"),
+    hidden_by_filters: i18n.t("Hidden by filters"),
+    selected: i18n.t("selected"),
+});
 
 export default withStyles(styles)(MultiSelector);
