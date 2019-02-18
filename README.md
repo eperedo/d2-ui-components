@@ -5,12 +5,13 @@
 ```
 import { DatePicker } from "d2-ui-components";
 
-const MyDatePicker = () =>
+const MyDatePicker = () => (
     <DatePicker
         label="Label of the TextInput component"
         value={new Date("2019/01/30")}
         onChange={newValue => console.log(newValue)}
     />
+);
 ```
 
 ## Multiple Selector
@@ -18,7 +19,7 @@ const MyDatePicker = () =>
 ```
 import { MultipleSelector } from "d2-ui-components";
 
-const MyMultipleSelector = () =>
+const MyMultipleSelector = () => (
     <MultiSelector
         d2={d2}
         height={300}
@@ -27,6 +28,7 @@ const MyMultipleSelector = () =>
         selected={["id1"]}
         ordered={true}
     />
+);
 ```
 
 ## Simple checkbox
@@ -37,11 +39,64 @@ Visually similar to material-ui checkbox but much lighter, useful when you have 
 ```
 import { SimpleCheckBox } from "d2-ui-components";
 
-const MySimpleCheckBox = () =>
+const MySimpleCheckBox = () => (
     <SimpleCheckBox
         checked={true}
         onClick={values => console.log("Checkbox was clicked")}
     />
+);
+```
+
+## Organisation Units selector
+
+```
+import { OrgUnitsSelector }  from "d2-ui-components";
+
+const MyOrgUnitsSelector = () => (
+    <OrgUnitsSelector
+        d2={d2}
+        onChange={orgUnitsPaths => console.log("Selected orgUnitPaths", orgUnitsPaths)}
+        selected={["/ImspTQPwCqd/O6uvpzGd5pu", "/ImspTQPwCqd/PMa2VCrupOd"]}
+        levels={[1, 2]}
+    />
+);
+```
+
+# Snackbar feedback
+
+There should be a unique snackbar for the whole app, so we need to insert a single provider in the main component:
+
+```
+import { SnackbarProvider }  from "d2-ui-components";
+
+const MyAppWithSnackbar = (
+    <SnackbarProvider>
+        <MyApp />
+    </SnackbarProvider>
+);
+```
+
+To use it, create a HOC with `withSnackbar`, add `snackbar` to your propTypes, and show messages using the functions `props.snackbar[.level]`. Levels supported: _success_, _error_, _info_, _warning_. 
+
+```
+import { withSnackbar } from "d2-ui-components";
+import PropTypes from "prop-types";
+
+const MyComponent = ({name, snackbar}) => (
+    <div>
+        <a onClick={() => snackbar.success(name)}>Success</a>
+        <a onClick={() => snackbar.error(name)}>Error</a>
+        <a onClick={() => snackbar.info(name)}>Info</a>
+        <a onClick={() => snackbar.warning(name)}>Warning</a>
+    </div>
+);
+
+MyComponent.propTypes = {
+    name: PropTypes.object.isRequired,
+    snackbar: PropTypes.object.isRequired,
+}
+
+export default withSnackbar(MyComponent);
 ```
 
 # Setup

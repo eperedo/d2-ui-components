@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent, DialogActions, Button } from "@material-ui/core";
-import i18n from '../utils/i18n';
+import i18n from "../utils/i18n";
 
 class DialogHandler extends React.Component {
     static propTypes = {

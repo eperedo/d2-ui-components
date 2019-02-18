@@ -1,7 +1,7 @@
 import i18n from "@dhis2/d2-i18n";
 
 function t(key, options) {
-    const optionsWithNs = {...options, ns: "d2-ui-components"};
+    const optionsWithNs = { ...options, ns: "d2-ui-components" };
     return i18n.t(key, optionsWithNs);
 }
 
@@ -16,4 +16,4 @@ function getStubD2WithTranslations(baseD2, translations) {
     };
 }
 
-export default {t, getStubD2WithTranslations}
+export default { t, getStubD2WithTranslations };

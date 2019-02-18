@@ -68,7 +68,6 @@ export default class OrgUnitsSelector extends React.Component {
     }
 
     getChildContext() {
-        debugger
         return {
             d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
         };

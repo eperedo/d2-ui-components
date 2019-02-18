@@ -4,6 +4,7 @@
         "declaration": true,
         "esModuleInterop": true,
         "isolatedModules": false,
+        "skipLibCheck" : true,
         "jsx": "react"
     },
     "include": ["src"],
