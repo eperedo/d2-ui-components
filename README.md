@@ -99,6 +99,67 @@ MyComponent.propTypes = {
 export default withSnackbar(MyComponent);
 ```
 
+## Objects table
+
+Display D2 objects in a table with:
+
+    - Filters: By default, it shows a search bar to filter by name, custom filters can be added.
+    - Details sidebar.
+    - Pagination
+    - Creation button.
+
+```
+
+const columns = [
+    { name: "displayName", text: i18n.t("Name"), sortable: true },
+    { name: "publicAccess", text: i18n.t("Public access"), sortable: true },
+    { name: "lastUpdated", text: i18n.t("Last updated"), sortable: true },
+];
+
+const detailsFields = [
+    { name: "displayName", text: i18n.t("Name") },
+    { name: "code", text: i18n.t("Code") },
+    { name: "created", text: i18n.t("Created") },
+    { name: "href", text: i18n.t("API link") },
+];
+
+const actions = [
+    {
+        name: "details",
+        text: i18n.t("Details"),
+        multiple: false,
+        type: "details",
+    },
+    {
+        name: "delete",
+        text: i18n.t("Delete"),
+        multiple: true,
+    },
+];
+
+
+const CustomFilters = (
+    <Checkbox ....>
+);
+
+const MyObjectsTable = () => (
+    <ObjectsTable
+        d2={d2}
+        model={d2.models.dataSet}
+        columns={columns}
+        detailsFields={detailsFields}
+        pageSize={20}
+        initialSorting=["displayName", "asc"]}
+        actions={actions}
+        onCreate={true}
+        list={list}
+        customFiltersComponent={CustomFilters}
+        customFilters={{key1: "value1", key2: "value2}}
+    />
+);
+```
+
+
 # Setup
 
 ```

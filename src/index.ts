@@ -6,6 +6,7 @@ import DialogHandler from "./dialog-handler/DialogHandler";
 import OrgUnitsSelector from "./org-units-selector/OrgUnitsSelector";
 import { withSnackbar } from "./snackbar";
 import SnackbarProvider from "./snackbar/SnackbarProvider";
+import ObjectsTable from "./objects-table/ObjectsTable";
 
 import "./locales";
 
@@ -18,4 +19,5 @@ export {
     OrgUnitsSelector,
     SnackbarProvider,
     withSnackbar,
+    ObjectsTable,
 };

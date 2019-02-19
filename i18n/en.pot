@@ -5,10 +5,31 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-02-15T13:09:40.606Z\n"
-"PO-Revision-Date: 2019-02-15T13:09:40.606Z\n"
+"POT-Creation-Date: 2019-02-19T11:16:57.453Z\n"
+"PO-Revision-Date: 2019-02-19T11:16:57.453Z\n"
+
+msgid "Actions"
+msgstr ""
+
+msgid "of"
+msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "R/W"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid "Metadata"
+msgstr ""
+
+msgid "Data"
 msgstr ""
 
 msgid "Assign all"
@@ -21,6 +42,9 @@ msgid "Hidden by filters"
 msgstr ""
 
 msgid "selected"
+msgstr ""
+
+msgid "No results found"
 msgstr ""
 
 msgid "For organisation units within"

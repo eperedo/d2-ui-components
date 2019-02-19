@@ -58,11 +58,14 @@
         "@material-ui/core": "^3.9.1",
         "@material-ui/icons": "^3.0.1",
         "material-ui-pickers": "^2.1.2",
-        "moment": "^2.22.2"
+        "moment": "^2.22.2",
+        "nano-memoize": "^1.0.3",
+        "throttle-debounce": "^2.1.0"
     },
     "scripts": {
-        "build-only": "yarn build-css && yarn localize && mkdir -p build/locales && cp -a src/locales/* build/locales && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
-        "build-css": "cd src && cp -a --parents **/*.css ../build",
+        "build-only": "yarn build-css && yarn localize && yarn build-locales && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+        "build-locales": "mkdir -p build/locales && cp -a src/locales/* build/locales",
+        "build-css": "cd src && cp -a --parents **/*.css **/*.scss ../build",
         "build": "yarn code-quality && rm -rf build/* && yarn run build-only && tsc --outDir build",
         "build-dev": "yarn run build-only --watch --verbose",
         "code-quality": "yarn lint && yarn prettify && yarn test",

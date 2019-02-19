@@ -27,7 +27,7 @@ class SearchBox extends React.Component {
                 fullWidth
                 type="search"
                 onChange={this.onKeyUp}
-                hintText={`${i18n.t("Search by name")}`}
+                hintText={i18n.t("Search by name")}
                 data-test="search"
             />
         );
