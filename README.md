@@ -103,10 +103,12 @@ export default withSnackbar(MyComponent);
 
 Display D2 objects in a table with:
 
+    - Sortable columns.
     - Filters: By default, it shows a search bar to filter by name, custom filters can be added.
     - Details sidebar.
-    - Pagination
-    - Creation button.
+    - Configurable context actions.
+    - Pagination.
+    - _Create_ button action.
 
 ```
 
@@ -119,7 +121,6 @@ const columns = [
 const detailsFields = [
     { name: "displayName", text: i18n.t("Name") },
     { name: "code", text: i18n.t("Code") },
-    { name: "created", text: i18n.t("Created") },
     { name: "href", text: i18n.t("API link") },
 ];
 
@@ -137,9 +138,8 @@ const actions = [
     },
 ];
 
-
 const CustomFilters = (
-    <Checkbox ....>
+    <Checkbox ... />
 );
 
 const MyObjectsTable = () => (
@@ -149,16 +149,15 @@ const MyObjectsTable = () => (
         columns={columns}
         detailsFields={detailsFields}
         pageSize={20}
-        initialSorting=["displayName", "asc"]}
+        initialSorting={["displayName", "asc"]}
         actions={actions}
         onCreate={true}
-        list={list}
+        list={list} // list(d2, filters, pagination) -> {pager, objects}
         customFiltersComponent={CustomFilters}
         customFilters={{key1: "value1", key2: "value2}}
     />
 );
 ```
-
 
 # Setup
 
@@ -172,11 +171,17 @@ Run tests, linter and prettier:
 $ yarn code-quality
 ```
 
+To publish a new package to npmjs:
+
+```
+$ yarn build && yarn publish build/
+```
+
 ## i18n
 
-We use `@dhis2/i18n` for the internationalization, with translations added to the namespace `d2-ui-components`.
-Within this package, all components should import [src/utils/i18n.js](src/utils/i18n.js) and use
-`i18n.t("Some literal")`, which uses the correct namespace.
+We use `@dhis2/i18n` with namespace `d2-ui-components`. Within this package, all components
+should import [src/utils/i18n.js](src/utils/i18n.js) and use
+`i18n.t("Some literal")`, which wraps the original i18n object with namespace `d2-ui-components`.
 
 ### Update an existing language
 

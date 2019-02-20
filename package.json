@@ -7,9 +7,9 @@
         "type": "git",
         "url": "git+https://github.com/eyeseetea/d2-ui-components.git"
     },
-    "version": "0.0.3",
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
+    "version": "0.0.4",
+    "main": "index.js",
+    "types": "index.d.ts",
     "peerDependencies": {
         "d2": "^31",
         "react": "^16",
@@ -63,16 +63,18 @@
         "throttle-debounce": "^2.1.0"
     },
     "scripts": {
-        "build-only": "yarn build-css && yarn localize && yarn build-locales && babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+        "build-only": "yarn build-css && yarn localize && yarn build-locales && yarn build-babel && tsc --outDir build && cp package.json build/",
+        "build-babel": "babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
         "build-locales": "mkdir -p build/locales && cp -a src/locales/* build/locales",
         "build-css": "cd src && cp -a --parents **/*.css **/*.scss ../build",
-        "build": "yarn code-quality && rm -rf build/* && yarn run build-only && tsc --outDir build",
-        "build-dev": "yarn run build-only --watch --verbose",
+        "build": "yarn code-quality && rm -rf build/* && yarn build-only",
+        "build-dev": "yarn build-only --watch --verbose",
         "code-quality": "yarn lint && yarn prettify && yarn test",
         "extract-pot": "d2-i18n-extract -p src/ -o i18n/",
         "lint": "eslint src src/ --ext .js,.ts,.jsx,.tsx",
-        "localize": "npm run extract-pot && d2-i18n-generate -n d2-ui-components -p ./i18n/ -o ./src/locales/",
-        "update-po": "yarn extract-pot && for pofile in i18n/*.po; do msgmerge --backup=off -U $pofile i18n/en.pot; done",
+        "localize": "yarn extract-pot && yarn update-po && yarn localize-update",
+        "localize-update": "d2-i18n-generate -n d2-ui-components -p ./i18n/ -o ./src/locales/",
+        "update-po": "for pofile in i18n/*.po; do msgmerge --backup=off -U $pofile i18n/en.pot; done",
         "prettify": "prettier src/*.ts src/**/*.{js,jsx,json,css,ts,tsx} --write",
         "test": "jest"
     }
