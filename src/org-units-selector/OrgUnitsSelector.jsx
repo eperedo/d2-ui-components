@@ -11,7 +11,7 @@ import { OrgUnitSelectAll } from "@dhis2/d2-ui-org-unit-select";
 import { incrementMemberCount, decrementMemberCount } from "@dhis2/d2-ui-org-unit-tree";
 
 import i18n from "../utils/i18n";
-import SearchBox from "../search-box/SearchBox.component";
+import SearchBox from "../search-box/SearchBox";
 
 // Base code taken from d2-ui/examples/create-react-app/src/components/org-unit-selector.js
 
