@@ -60,6 +60,7 @@
         "material-ui-pickers": "^2.1.2",
         "moment": "^2.22.2",
         "nano-memoize": "^1.0.3",
+        "node-sass": "^4.11.0",
         "throttle-debounce": "^2.1.0"
     },
     "scripts": {
