@@ -103,15 +103,14 @@ export default withSnackbar(MyComponent);
 
 Display D2 objects in a table with:
 
-    - Sortable columns.
-    - Filters: By default, it shows a search bar to filter by name, custom filters can be added.
-    - Details sidebar.
-    - Configurable context actions.
-    - Pagination.
-    - _Create_ button action.
+- Sortable columns.
+- Filters: By default, it shows a search bar to filter by name, custom filters can be added.
+- Details sidebar.
+- Configurable context actions.
+- Pagination.
+- _Create_ button action.
 
 ```
-
 const columns = [
     { name: "displayName", text: i18n.t("Name"), sortable: true },
     { name: "publicAccess", text: i18n.t("Public access"), sortable: true },
