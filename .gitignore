@@ -64,3 +64,6 @@ typings/
 
 # i18n
 src/locales
+
+# IntelliJ
+.idea/*

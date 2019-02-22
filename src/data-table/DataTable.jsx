@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import _ from "../utils/lodash";
 
 import MultipleDataTableRow from "./MultipleDataTableRow.component";
 import DataTableHeader from "./DataTableHeader.component";
