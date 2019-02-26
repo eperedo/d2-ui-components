@@ -58,7 +58,6 @@ const MyMultipleSelector = () => (
 
 Visually similar to material-ui checkbox but much lighter, useful when you have lots of checks in a page.
 
-
 ```
 import { SimpleCheckBox } from "d2-ui-components";
 
@@ -99,7 +98,7 @@ const MyAppWithSnackbar = (
 );
 ```
 
-To use it, create a HOC with `withSnackbar`, add `snackbar` to your propTypes, and show messages using the functions `props.snackbar[.level]`. Levels supported: _success_, _error_, _info_, _warning_. 
+To use it, create a HOC with `withSnackbar`, add `snackbar` to your propTypes, and show messages using the functions `props.snackbar[.level]`. Levels supported: _success_, _error_, _info_, _warning_.
 
 ```
 import { withSnackbar } from "d2-ui-components";
@@ -126,12 +125,12 @@ export default withSnackbar(MyComponent);
 
 Display D2 objects in a table with:
 
-- Sortable columns.
-- Filters: By default, it shows a search bar to filter by name, custom filters can be added.
-- Details sidebar.
-- Configurable context actions.
-- Pagination.
-- _Create_ button action.
+-   Sortable columns.
+-   Filters: By default, it shows a search bar to filter by name, custom filters can be added.
+-   Details sidebar.
+-   Configurable context actions.
+-   Pagination.
+-   _Create_ button action.
 
 ```
 const columns = [
