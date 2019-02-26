@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "isolatedModules": false,
+        "skipLibCheck" : true,
+        "jsx": "react"
+    },
+    "include": ["src"],
+    "exclude": ["**/*.spec.{js,jsx,ts,tsx}"]
+}
