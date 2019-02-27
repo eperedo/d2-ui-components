@@ -199,12 +199,17 @@ class ObjectsTable extends React.Component {
     };
 
     getPaginationProps() {
-        const currentlyShown = calculatePageValue(this.state.pager, this.props.pageSize);
         const { pager } = this.state;
 
+        const isValidPage = _(["page", "total"])
+            .difference(_.keys(pager || {}))
+            .isEmpty();
+        if (!isValidPage) return {};
+        const pageCount = Math.ceil(pager.total / pager.pageSize);
+
         return {
-            hasNextPage: () => Boolean(pager.hasNextPage) && pager.hasNextPage(),
-            hasPreviousPage: () => Boolean(pager.hasPreviousPage) && pager.hasPreviousPage(),
+            hasNextPage: () => pager.page < pageCount,
+            hasPreviousPage: () => pager.page > 1,
             onNextPageClick: () => {
                 this.setState(
                     {
@@ -224,7 +229,7 @@ class ObjectsTable extends React.Component {
                 );
             },
             total: pager.total,
-            currentlyShown,
+            currentlyShown: calculatePageValue(pager, this.props.pageSize),
         };
     }
 
