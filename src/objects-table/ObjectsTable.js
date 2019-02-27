@@ -201,13 +201,14 @@ class ObjectsTable extends React.Component {
     getPaginationProps() {
         const { pager } = this.state;
 
-        const isValidPage = _(["page", "pageCount", "total"])
+        const isValidPage = _(["page", "total"])
             .difference(_.keys(pager || {}))
             .isEmpty();
         if (!isValidPage) return {};
+        const pageCount = Math.ceil(pager.total / pager.pageSize);
 
         return {
-            hasNextPage: () => pager.page < pager.pageCount,
+            hasNextPage: () => pager.page < pageCount,
             hasPreviousPage: () => pager.page > 1,
             onNextPageClick: () => {
                 this.setState(
