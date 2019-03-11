@@ -245,7 +245,7 @@ function getDefaultRoots(d2) {
 const styles = {
     cardWide: {
         display: "inline-block",
-        margin: 16,
+        margin: 0,
         transition: "all 175ms ease-out",
         width: 1052,
     },
