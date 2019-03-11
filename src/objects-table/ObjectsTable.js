@@ -141,6 +141,10 @@ class ObjectsTable extends React.Component {
         this.getObjects({ clearPage: false });
     }
 
+    notifySelectionChange = () => {
+        this.props.onSelectionChange(this.state.selection);
+    };
+
     async getObjects({ clearPage = true } = {}) {
         const { d2, pageSize, list, customFilters } = this.props;
         const { page, sorting, searchValue } = this.state;
@@ -155,8 +159,7 @@ class ObjectsTable extends React.Component {
             dataRows: objects,
             page: newPage,
             selection: [],
-        });
-        this.props.onSelectionChange([]);
+        }, this.notifySelectionChange);
     }
 
     onSearchChange = value => {
@@ -177,15 +180,13 @@ class ObjectsTable extends React.Component {
         const deletedIds = _.remove(selection, id => id === obj.id);
         if (deletedIds.length === 0) selection.push(obj.id);
 
-        this.setState({ selection });
-        this.props.onSelectionChange(selection);
+        this.setState({ selection }, this.notifySelectionChange);
     }
 
     onSelectAllToggle = selectedHeaderChecked => {
         const selection = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
 
-        this.setState({ selection });
-        this.props.onSelectionChange(selection);
+        this.setState({ selection }, this.notifySelectionChange);
     };
 
     onActiveRowsChange = objs => {
