@@ -179,7 +179,7 @@ class ObjectsTable extends React.Component {
         ev.preventDefault();
         ev.stopPropagation();
 
-        const { selection } = this.state;
+        const selection = new Set(this.state.selection);
         const found = selection.delete(obj.id);
         if (!found) selection.add(obj.id);
 
