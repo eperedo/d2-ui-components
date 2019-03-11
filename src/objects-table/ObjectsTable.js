@@ -142,7 +142,7 @@ class ObjectsTable extends React.Component {
     }
 
     notifySelectionChange = () => {
-        this.props.onSelectionChange(this.state.selection);
+        this.props.onSelectionChange(_.cloneDeep(this.state.selection));
     };
 
     async getObjects({ clearPage = true } = {}) {
