@@ -66,6 +66,11 @@ class ObjectsTable extends React.Component {
         list: PropTypes.func.isRequired,
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
+        onSelectionChange: PropTypes.func,
+    };
+
+    static defaultProps = {
+        onSelectionChange: () => {},
     };
 
     constructor(props) {
@@ -124,6 +129,7 @@ class ObjectsTable extends React.Component {
             sorting: this.props.initialSorting,
             searchValue: null,
             detailsObject: null,
+            selection: [],
         };
     }
 
@@ -142,14 +148,15 @@ class ObjectsTable extends React.Component {
         const filters = { search: searchValue, ...customFilters };
         const pagination = { page: newPage, pageSize: pageSize, sorting };
         const { pager, objects } = await list(d2, filters, pagination);
-        const dataRows = objects.map(dr => ({ ...dr, selected: false }));
 
         this.setState({
             isLoading: false,
             pager: pager,
-            dataRows: dataRows,
+            dataRows: objects,
             page: newPage,
+            selection: [],
         });
+        this.props.onSelectionChange([]);
     }
 
     onSearchChange = value => {
@@ -165,27 +172,24 @@ class ObjectsTable extends React.Component {
     onSelectToggle(ev, obj) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({
-            dataRows: this.state.dataRows.map(dr =>
-                dr.id === obj.id ? _.merge(dr, { selected: !dr.selected }) : dr
-            ),
-        });
+
+        const { selection } = this.state;
+        const deletedIds = _.remove(selection, id => id === obj.id);
+        if (deletedIds.length === 0) selection.push(obj.id);
+
+        this.setState({ selection });
+        this.props.onSelectionChange(selection);
     }
 
-    onSelectAllToggle = value => {
-        this.setState({
-            dataRows: this.state.dataRows.map(dr => _.merge(dr, { selected: !value })),
-        });
+    onSelectAllToggle = selectedHeaderChecked => {
+        const selection = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
+
+        this.setState({ selection });
+        this.props.onSelectionChange(selection);
     };
 
     onActiveRowsChange = objs => {
-        const selectedIds = new Set(objs.map(obj => obj.id));
-
-        this.setState({
-            dataRows: this.state.dataRows.map(dr =>
-                _.merge(dr, { selected: selectedIds.has(dr.id) })
-            ),
-        });
+        this.setState({ selection: objs.map(obj => obj.id) });
     };
 
     onColumnSort = sorting => {
@@ -240,14 +244,14 @@ class ObjectsTable extends React.Component {
 
     render() {
         const { onCreate, columns, detailsFields, model, customFiltersComponent } = this.props;
-        const { dataRows, sorting } = this.state;
+        const { dataRows, sorting, selection } = this.state;
         const paginationProps = this.getPaginationProps();
         const rows = dataRows.map(dr =>
             Object.assign({}, dr, {
                 selected: (
                     <SimpleCheckBox
                         onClick={ev => this.onSelectToggle(ev, dr)}
-                        checked={dr.selected}
+                        checked={selection.includes(dr.id)}
                     />
                 ),
             })
@@ -260,14 +264,12 @@ class ObjectsTable extends React.Component {
             getValue: field.getValue || getFormatter(model, field.name),
         }));
 
-        const selectedHeaderChecked = !_.isEmpty(dataRows) && dataRows.every(row => row.selected);
+        const selectedHeaderChecked =
+            !_.isEmpty(dataRows) && dataRows.every(row => selection.includes(row.id));
 
         const allColumns = this.getColumns(columns, selectedHeaderChecked);
 
-        const activeRows = _(rows)
-            .keyBy("id")
-            .at(dataRows.filter(dr => dr.selected).map(dr => dr.id))
-            .value();
+        const activeRows = selection.map(id => rows.find(dr => dr.id === id));
 
         return (
             <div>
