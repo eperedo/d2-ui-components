@@ -129,7 +129,7 @@ class ObjectsTable extends React.Component {
             sorting: this.props.initialSorting,
             searchValue: null,
             detailsObject: null,
-            selection: [],
+            selection: new Set(),
         };
     }
 
@@ -142,7 +142,7 @@ class ObjectsTable extends React.Component {
     }
 
     notifySelectionChange = () => {
-        this.props.onSelectionChange(_.clone(this.state.selection));
+        this.props.onSelectionChange(Array.from(this.state.selection));
     };
 
     async getObjects({ clearPage = true } = {}) {
@@ -153,13 +153,16 @@ class ObjectsTable extends React.Component {
         const pagination = { page: newPage, pageSize: pageSize, sorting };
         const { pager, objects } = await list(d2, filters, pagination);
 
-        this.setState({
-            isLoading: false,
-            pager: pager,
-            dataRows: objects,
-            page: newPage,
-            selection: [],
-        }, this.notifySelectionChange);
+        this.setState(
+            {
+                isLoading: false,
+                pager: pager,
+                dataRows: objects,
+                page: newPage,
+                selection: new Set(),
+            },
+            this.notifySelectionChange
+        );
     }
 
     onSearchChange = value => {
@@ -177,20 +180,22 @@ class ObjectsTable extends React.Component {
         ev.stopPropagation();
 
         const { selection } = this.state;
-        const deletedIds = _.remove(selection, id => id === obj.id);
-        if (deletedIds.length === 0) selection.push(obj.id);
+        const found = selection.delete(obj.id);
+        if (!found) selection.add(obj.id);
 
         this.setState({ selection }, this.notifySelectionChange);
     }
 
     onSelectAllToggle = selectedHeaderChecked => {
-        const selection = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
+        const selection = new Set(
+            selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id)
+        );
 
         this.setState({ selection }, this.notifySelectionChange);
     };
 
     onActiveRowsChange = objs => {
-        this.setState({ selection: objs.map(obj => obj.id) });
+        this.setState({ selection: new Set(objs.map(obj => obj.id)) });
     };
 
     onColumnSort = sorting => {
@@ -252,7 +257,7 @@ class ObjectsTable extends React.Component {
                 selected: (
                     <SimpleCheckBox
                         onClick={ev => this.onSelectToggle(ev, dr)}
-                        checked={selection.includes(dr.id)}
+                        checked={selection.has(dr.id)}
                     />
                 ),
             })
@@ -266,11 +271,14 @@ class ObjectsTable extends React.Component {
         }));
 
         const selectedHeaderChecked =
-            !_.isEmpty(dataRows) && dataRows.every(row => selection.includes(row.id));
+            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
 
         const allColumns = this.getColumns(columns, selectedHeaderChecked);
 
-        const activeRows = selection.map(id => rows.find(dr => dr.id === id));
+        const activeRows = _(rows)
+            .keyBy("id")
+            .at(dataRows.filter(dr => selection.has(dr.id)).map(dr => dr.id))
+            .value();
 
         return (
             <div>
