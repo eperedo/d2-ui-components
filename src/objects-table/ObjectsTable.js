@@ -66,6 +66,11 @@ class ObjectsTable extends React.Component {
         list: PropTypes.func.isRequired,
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
+        onSelectionChange: PropTypes.func,
+    };
+
+    static defaultProps = {
+        onSelectionChange: () => {},
     };
 
     constructor(props) {
@@ -124,6 +129,7 @@ class ObjectsTable extends React.Component {
             sorting: this.props.initialSorting,
             searchValue: null,
             detailsObject: null,
+            selection: new Set(),
         };
     }
 
@@ -135,6 +141,10 @@ class ObjectsTable extends React.Component {
         this.getObjects({ clearPage: false });
     }
 
+    notifySelectionChange = () => {
+        this.props.onSelectionChange(Array.from(this.state.selection));
+    };
+
     async getObjects({ clearPage = true } = {}) {
         const { d2, pageSize, list, customFilters } = this.props;
         const { page, sorting, searchValue } = this.state;
@@ -142,14 +152,17 @@ class ObjectsTable extends React.Component {
         const filters = { search: searchValue, ...customFilters };
         const pagination = { page: newPage, pageSize: pageSize, sorting };
         const { pager, objects } = await list(d2, filters, pagination);
-        const dataRows = objects.map(dr => ({ ...dr, selected: false }));
 
-        this.setState({
-            isLoading: false,
-            pager: pager,
-            dataRows: dataRows,
-            page: newPage,
-        });
+        this.setState(
+            {
+                isLoading: false,
+                pager: pager,
+                dataRows: objects,
+                page: newPage,
+                selection: new Set(),
+            },
+            this.notifySelectionChange
+        );
     }
 
     onSearchChange = value => {
@@ -165,27 +178,24 @@ class ObjectsTable extends React.Component {
     onSelectToggle(ev, obj) {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({
-            dataRows: this.state.dataRows.map(dr =>
-                dr.id === obj.id ? _.merge(dr, { selected: !dr.selected }) : dr
-            ),
-        });
+
+        const selection = new Set(this.state.selection);
+        const found = selection.delete(obj.id);
+        if (!found) selection.add(obj.id);
+
+        this.setState({ selection }, this.notifySelectionChange);
     }
 
-    onSelectAllToggle = value => {
-        this.setState({
-            dataRows: this.state.dataRows.map(dr => _.merge(dr, { selected: !value })),
-        });
+    onSelectAllToggle = selectedHeaderChecked => {
+        const selection = new Set(
+            selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id)
+        );
+
+        this.setState({ selection }, this.notifySelectionChange);
     };
 
     onActiveRowsChange = objs => {
-        const selectedIds = new Set(objs.map(obj => obj.id));
-
-        this.setState({
-            dataRows: this.state.dataRows.map(dr =>
-                _.merge(dr, { selected: selectedIds.has(dr.id) })
-            ),
-        });
+        this.setState({ selection: new Set(objs.map(obj => obj.id)) });
     };
 
     onColumnSort = sorting => {
@@ -240,14 +250,14 @@ class ObjectsTable extends React.Component {
 
     render() {
         const { onCreate, columns, detailsFields, model, customFiltersComponent } = this.props;
-        const { dataRows, sorting } = this.state;
+        const { dataRows, sorting, selection } = this.state;
         const paginationProps = this.getPaginationProps();
         const rows = dataRows.map(dr =>
             Object.assign({}, dr, {
                 selected: (
                     <SimpleCheckBox
                         onClick={ev => this.onSelectToggle(ev, dr)}
-                        checked={dr.selected}
+                        checked={selection.has(dr.id)}
                     />
                 ),
             })
@@ -260,13 +270,14 @@ class ObjectsTable extends React.Component {
             getValue: field.getValue || getFormatter(model, field.name),
         }));
 
-        const selectedHeaderChecked = !_.isEmpty(dataRows) && dataRows.every(row => row.selected);
+        const selectedHeaderChecked =
+            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
 
         const allColumns = this.getColumns(columns, selectedHeaderChecked);
 
         const activeRows = _(rows)
             .keyBy("id")
-            .at(dataRows.filter(dr => dr.selected).map(dr => dr.id))
+            .at(dataRows.filter(dr => selection.has(dr.id)).map(dr => dr.id))
             .value();
 
         return (
