@@ -1,0 +1,75 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"POT-Creation-Date: 2019-02-19T11:16:57.453Z\n"
+"PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgid "Actions"
+msgstr "Acciones"
+
+msgid "of"
+msgstr "de"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "R/W"
+msgstr "R/W"
+
+msgid "Read"
+msgstr "Lectura"
+
+msgid "Private"
+msgstr "Privado"
+
+msgid "Metadata"
+msgstr "Metadatos"
+
+msgid "Data"
+msgstr "Datos"
+
+msgid "Assign all"
+msgstr "Asignar todos"
+
+msgid "Remove all"
+msgstr "Quitar todos"
+
+msgid "Hidden by filters"
+msgstr "Ocultos por filtro"
+
+msgid "selected"
+msgstr "seleccionados"
+
+msgid "No results found"
+msgstr "No hay resultados"
+
+msgid "For organisation units within"
+msgstr "Para unidades organizativas dentro de"
+
+msgid "For all organisation units"
+msgstr "Para todas las unidades organizativas"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid "Unselect"
+msgstr "Deseleccionar"
+
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+msgid "Unselect all"
+msgstr "Deseleccionar todo"
+
+msgid "Organisation Unit Level"
+msgstr "Nivel de unidad organizativa"
+
+msgid "Organisation Unit Group"
+msgstr "Grupo de unidad organizativa"
+
+msgid "Search by name"
+msgstr "Buscar por nombre"
