@@ -21,6 +21,20 @@ export default class OrgUnitsSelector extends React.Component {
         onChange: PropTypes.func.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string).isRequired,
         levels: PropTypes.arrayOf(PropTypes.number),
+        controls: PropTypes.shape({
+            filterByLevel: PropTypes.bool,
+            filterByGroup: PropTypes.bool,
+            selectAll: PropTypes.bool,
+        }),
+    };
+
+    static defaultProps = {
+        levels: null,
+        controls: {
+            filterByLevel: true,
+            filterByGroup: true,
+            selectAll: true,
+        },
     };
 
     static childContextTypes = {
@@ -38,25 +52,30 @@ export default class OrgUnitsSelector extends React.Component {
             currentRoot: null,
         };
 
+        const { filterByLevel, filterByGroup } = props.controls;
+
         Promise.all([
-            props.d2.models.organisationUnitLevels.list({
-                paging: false,
-                fields: "id,level,displayName",
-                order: "level:asc",
-                // bug in old versions of dhis2, cannot use filter=level:in:[1,2] -> HTTP 500
-                // filter: props.levels ? `level:in:[${props.levels.join(',')}]` : undefined,
-                ...(props.levels
-                    ? {
-                          filter: props.levels.map(level => `level:eq:${level}`),
-                          rootJunction: "OR",
-                      }
-                    : {}),
-            }),
-            props.d2.models.organisationUnitGroups.list({
-                pageSize: 1,
-                paging: false,
-                fields: "id,displayName",
-            }),
+            !filterByLevel
+                ? Promise.resolve([])
+                : props.d2.models.organisationUnitLevels.list({
+                      paging: false,
+                      fields: "id,level,displayName",
+                      order: "level:asc",
+                      // bug in old versions of dhis2, cannot use filter=level:in:[1,2] -> HTTP 500
+                      ...(props.levels
+                          ? {
+                                filter: props.levels.map(level => `level:eq:${level}`),
+                                rootJunction: "OR",
+                            }
+                          : {}),
+                  }),
+            !filterByGroup
+                ? Promise.resolve([])
+                : props.d2.models.organisationUnitGroups.list({
+                      pageSize: 1,
+                      paging: false,
+                      fields: "id,displayName",
+                  }),
             getDefaultRoots(props.d2),
         ]).then(([levels, groups, defaultRoots]) => {
             this.setState({
@@ -132,10 +151,13 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected } = this.props;
+        const { selected, controls } = this.props;
+        const { filterByLevel, filterByGroup, selectAll } = controls;
+        const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
+        const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
         return (
             <div>
@@ -145,7 +167,7 @@ export default class OrgUnitsSelector extends React.Component {
                             <SearchBox onChange={this.filterOrgUnits} />
                         </div>
 
-                        <div style={styles.left}>
+                        <div style={leftStyles}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
@@ -164,37 +186,45 @@ export default class OrgUnitsSelector extends React.Component {
                             ))}
                         </div>
 
-                        <div style={styles.right}>
-                            <div>
-                                <OrgUnitSelectTitle />
+                        {someControlsVisible && (
+                            <div style={styles.right}>
+                                {(filterByLevel || filterByGroup) && (
+                                    <div>
+                                        <OrgUnitSelectTitle />
 
-                                <div style={styles.selectByLevel}>
-                                    <OrgUnitSelectByLevel
-                                        levels={levels}
-                                        selected={selected}
-                                        currentRoot={currentRoot}
-                                        onUpdateSelection={this.handleSelectionUpdate}
-                                    />
-                                </div>
+                                        {filterByLevel && (
+                                            <div style={styles.selectByLevel}>
+                                                <OrgUnitSelectByLevel
+                                                    levels={levels}
+                                                    selected={selected}
+                                                    currentRoot={currentRoot}
+                                                    onUpdateSelection={this.handleSelectionUpdate}
+                                                />
+                                            </div>
+                                        )}
 
-                                <div>
-                                    <OrgUnitSelectByGroup
-                                        groups={groups}
+                                        {filterByGroup && (
+                                            <div>
+                                                <OrgUnitSelectByGroup
+                                                    groups={groups}
+                                                    selected={selected}
+                                                    currentRoot={currentRoot}
+                                                    onUpdateSelection={this.handleSelectionUpdate}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div style={styles.selectAll}>
+                                    <OrgUnitSelectAll
                                         selected={selected}
                                         currentRoot={currentRoot}
                                         onUpdateSelection={this.handleSelectionUpdate}
                                     />
                                 </div>
                             </div>
-
-                            <div style={styles.selectAll}>
-                                <OrgUnitSelectAll
-                                    selected={selected}
-                                    currentRoot={currentRoot}
-                                    onUpdateSelection={this.handleSelectionUpdate}
-                                />
-                            </div>
-                        </div>
+                        )}
                     </CardText>
                 </Card>
             </div>
@@ -260,13 +290,21 @@ const styles = {
         borderBottom: "1px solid #eeeeee",
     },
     searchBox: {
-        width: "45%",
+        width: 300,
     },
     left: {
         display: "inline-block",
         position: "absolute",
         height: 350,
         width: 500,
+        overflowY: "scroll",
+        marginBottom: 16,
+    },
+    leftFullWidth: {
+        display: "inline-block",
+        position: "absolute",
+        height: 350,
+        width: 1000,
         overflowY: "scroll",
         marginBottom: 16,
     },
