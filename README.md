@@ -121,6 +121,44 @@ MyComponent.propTypes = {
 export default withSnackbar(MyComponent);
 ```
 
+# Loading Mask
+
+There should be a unique loading mask for the whole app, so we need to insert a single provider in the main component:
+
+```
+import { LoadingProvider }  from "d2-ui-components";
+
+const MyAppWithLoadingMask = (
+    <LoadingProvider>
+        <MyApp />
+    </LoadingProvider>
+);
+```
+
+To use it, create a HOC with `withLoading`, add `loading` to your propTypes, and show the mask using the functions `props.loading.show()`.
+
+```
+import { withLoading } from "d2-ui-components";
+import PropTypes from "prop-types";
+
+const MyComponent = ({name, loading}) => (
+    <div>
+        <a onClick={() => loading.show()}>Show loading mask</a>
+        <a onClick={() => loading.show(false)}>Hide loading mask</a>
+        <a onClick={() => loading.show(true, 'Message', 35)}>Show loading mask with extra information</a>
+        <a onClick={() => loading.updateMessage('String')}>Update message</a>
+        <a onClick={() => loading.updateProgress(98)}>Update progress</a>
+    </div>
+);
+
+MyComponent.propTypes = {
+    name: PropTypes.object.isRequired,
+    loading: PropTypes.object.isRequired,
+}
+
+export default withLoading(MyComponent);
+```
+
 ## Objects table
 
 Display D2 objects in a table with:
