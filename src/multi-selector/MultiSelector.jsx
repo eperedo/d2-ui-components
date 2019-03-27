@@ -20,6 +20,10 @@ const optionsPropType = PropTypes.arrayOf(
 );
 
 class MultiSelector extends React.Component {
+    state = {
+        selected: []
+    };
+
     static propTypes = {
         d2: PropTypes.object.isRequired,
         height: PropTypes.number,
@@ -30,7 +34,6 @@ class MultiSelector extends React.Component {
 
     static defaultProps = {
         height: 300,
-        selected: [],
         ordered: true,
     };
 
@@ -45,26 +48,27 @@ class MultiSelector extends React.Component {
         };
     }
 
-    assignItems = values => {
-        const newValues = this.props.selected.concat(values);
-        this.props.onChange(newValues);
-        return Promise.resolve();
+    assignItems = async values => {
+        const selected = this.state.selected.concat(values);
+        this.setState({ selected });
+        this.props.onChange(selected);
     };
 
-    unassignItems = values => {
+    unassignItems = async values => {
         const itemValuesToRemove = new Set(values);
-        const newValues = this.props.selected.filter(value => !itemValuesToRemove.has(value));
-        this.props.onChange(newValues);
-        return Promise.resolve();
+        const selected = this.state.selected.filter(value => !itemValuesToRemove.has(value));
+        this.setState({ selected });
+        this.props.onChange(selected);
     };
 
-    orderChanged = values => {
+    orderChanged = async values => {
         this.props.onChange(values);
-        return Promise.resolve();
     };
 
     render() {
-        const { height, options, selected, classes, ordered } = this.props;
+        const { height, options, classes, ordered } = this.props;
+
+        const selected = this.props.selected ? this.props.selected : this.state.selected;
 
         const itemStore = Store.create();
         const assignedItemStore = Store.create();
