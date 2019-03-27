@@ -36,7 +36,7 @@ class ConfirmationDialog extends React.Component {
 
         return (
             <React.Fragment>
-                <Dialog open={isOpen} onClose={onCancel ? onCancel : () => null} {...other}>
+                <Dialog open={isOpen} onClose={onCancel} {...other}>
                     <DialogTitle>{title}</DialogTitle>
 
                     <DialogContent>
