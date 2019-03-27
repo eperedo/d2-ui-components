@@ -23,13 +23,15 @@ class MultiSelector extends React.Component {
     static propTypes = {
         d2: PropTypes.object.isRequired,
         height: PropTypes.number,
-        ordered: PropTypes.bool.isRequired,
+        ordered: PropTypes.bool,
         options: optionsPropType.isRequired,
-        selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+        selected: PropTypes.arrayOf(PropTypes.string),
     };
 
     static defaultProps = {
         height: 300,
+        selected: [],
+        ordered: true,
     };
 
     // Required by <GroupEditor>
