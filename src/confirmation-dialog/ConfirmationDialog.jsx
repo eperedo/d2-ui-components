@@ -22,13 +22,15 @@ class ConfirmationDialog extends React.Component {
     };
 
     render() {
-        const { title, description, onSave, onCancel, isOpen, children, cancelText, saveText } = this.props;
+        const { title, description, onSave, onCancel, isOpen, children, cancelText, saveText, ...other } = this.props;
 
         return (
             <React.Fragment>
                 <Dialog
                     open={isOpen}
-                    onClose={onCancel ? onCancel : () => null}>
+                    onClose={onCancel ? onCancel : () => null}
+                    {...other}
+                >
                     <DialogTitle>
                         {title}
                     </DialogTitle>
