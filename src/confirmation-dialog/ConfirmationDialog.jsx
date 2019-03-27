@@ -22,32 +22,39 @@ class ConfirmationDialog extends React.Component {
     };
 
     render() {
-        const { title, description, onSave, onCancel, isOpen, children, cancelText, saveText, ...other } = this.props;
+        const {
+            title,
+            description,
+            onSave,
+            onCancel,
+            isOpen,
+            children,
+            cancelText,
+            saveText,
+            ...other
+        } = this.props;
 
         return (
             <React.Fragment>
-                <Dialog
-                    open={isOpen}
-                    onClose={onCancel ? onCancel : () => null}
-                    {...other}
-                >
-                    <DialogTitle>
-                        {title}
-                    </DialogTitle>
+                <Dialog open={isOpen} onClose={onCancel ? onCancel : () => null} {...other}>
+                    <DialogTitle>{title}</DialogTitle>
 
-                    {description && <DialogContent>
-                        {description}
-                    </DialogContent>}
-
-                    {children}
+                    <DialogContent>
+                        {description && { description }}
+                        {children}
+                    </DialogContent>
 
                     <DialogActions>
-                        {onCancel && <Button onClick={onCancel} autoFocus>
-                            {cancelText}
-                        </Button>}
-                        {onSave && <Button onClick={onSave} color="primary">
-                            {saveText}
-                        </Button>}
+                        {onCancel && (
+                            <Button onClick={onCancel} autoFocus>
+                                {cancelText}
+                            </Button>
+                        )}
+                        {onSave && (
+                            <Button onClick={onSave} color="primary">
+                                {saveText}
+                            </Button>
+                        )}
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
