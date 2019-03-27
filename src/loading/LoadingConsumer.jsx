@@ -9,28 +9,28 @@ import Divider from "@material-ui/core/Divider";
 
 const styles = _theme => ({
     loadingMask: {
-        height: '100%',
-        width: '100%',
-        position: 'fixed',
+        height: "100%",
+        width: "100%",
+        position: "fixed",
         zIndex: 1,
-        background: 'rgba(38, 50, 56, 0.9)',
+        background: "rgba(38, 50, 56, 0.9)",
     },
     contents: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        textAlign: 'center',
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        textAlign: "center",
     },
     message: {
-        color: 'white',
+        color: "white",
     },
     progress: {
-        color: 'white',
+        color: "white",
     },
     divider: {
-        margin: "40px"
-    }
+        margin: "40px",
+    },
 });
 
 const LoadingConsumer = props => {
@@ -45,7 +45,7 @@ const LoadingConsumer = props => {
                         <div className={classes.contents}>
                             <CircularProgress
                                 className={classes.progress}
-                                variant={progress >= 0 ? 'determinate' : 'indeterminate'}
+                                variant={progress >= 0 ? "determinate" : "indeterminate"}
                                 value={progress}
                                 size={100}
                                 thickness={1.5}

@@ -25,16 +25,12 @@ export default class SnackbarProvider extends Component {
 
     reset = () => this.show(false, "", -1);
 
-    updateMessage = (message) => {
-        this.setState({
-            message
-        });
+    updateMessage = message => {
+        this.setState({ message });
     };
 
-    updateProgress = (progress) => {
-        this.setState({
-            progress
-        });
+    updateProgress = progress => {
+        this.setState({ progress });
     };
 
     render() {
