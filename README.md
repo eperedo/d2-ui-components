@@ -1,15 +1,15 @@
 # Components
 
-## Dialog Handler
+## Dialog Button
 
 A button that opens a modal info dialog when clicked.
 
 ```
 import { Icon, IconButton } from "@material-ui/core";
-import { DialogHandler } from "d2-ui-components";
+import { DialogButton } from "d2-ui-components";
 
 const MyDialogHandler = () => (
-    <DialogHandler
+    <DialogButton
         title="Help"
         contents="This is some help message"
         buttonComponent={
