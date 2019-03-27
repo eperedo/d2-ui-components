@@ -145,9 +145,11 @@ const MyComponent = ({name, loading}) => (
     <div>
         <a onClick={() => loading.show()}>Show loading mask</a>
         <a onClick={() => loading.show(false)}>Hide loading mask</a>
+        <a onClick={() => loading.hide()}>Also hides loading mask</a>
         <a onClick={() => loading.show(true, 'Message', 35)}>Show loading mask with extra information</a>
         <a onClick={() => loading.updateMessage('String')}>Update message</a>
         <a onClick={() => loading.updateProgress(98)}>Update progress</a>
+        <a onClick={() => loading.reset()}>Hide and clear message/progress</a>
     </div>
 );
 

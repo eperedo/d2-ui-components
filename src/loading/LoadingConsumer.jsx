@@ -7,7 +7,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 
-const styles = theme => ({
+const styles = _theme => ({
     loadingMask: {
         height: '100%',
         width: '100%',
@@ -36,13 +36,10 @@ const styles = theme => ({
 const LoadingConsumer = props => {
     const { classes } = props;
 
-    const showMessage = () => {
-        return this.message.trim()
-    };
-
     return (
         <LoadingContext.Consumer>
             {({ isLoading, message, progress }) => {
+                const hideMessage = !message || !message.trim();
                 return (
                     <div className={classes.loadingMask} hidden={!isLoading}>
                         <div className={classes.contents}>
@@ -56,12 +53,12 @@ const LoadingConsumer = props => {
                             <Divider
                                 className={classes.divider}
                                 variant="middle"
-                                hidden={!message || message.trim().length === 0}
+                                hidden={hideMessage}
                             />
                             <Typography
                                 className={classes.message}
                                 variant="h6"
-                                hidden={!message || message.trim().length === 0}
+                                hidden={hideMessage}
                                 gutterBottom
                             >
                                 {message}

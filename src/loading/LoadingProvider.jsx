@@ -21,6 +21,10 @@ export default class SnackbarProvider extends Component {
         });
     };
 
+    hide = () => this.show(false);
+
+    reset = () => this.show(false, "", -1);
+
     updateMessage = (message) => {
         this.setState({
             message
@@ -38,6 +42,8 @@ export default class SnackbarProvider extends Component {
 
         const value = {
             show: this.show,
+            hide: this.hide,
+            reset: this.reset,
             updateMessage: this.updateMessage,
             updateProgress: this.updateProgress,
             isLoading: this.state.isLoading,
