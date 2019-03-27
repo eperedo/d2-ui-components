@@ -12,7 +12,7 @@ const styles = _theme => ({
         height: "100%",
         width: "100%",
         position: "fixed",
-        zIndex: 1,
+        zIndex: 2000,
         background: "rgba(38, 50, 56, 0.9)",
     },
     contents: {
