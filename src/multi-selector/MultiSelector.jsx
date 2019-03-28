@@ -20,8 +20,10 @@ const optionsPropType = PropTypes.arrayOf(
 );
 
 class MultiSelector extends React.Component {
+    isControlled = !!this.props.selected;
+
     state = {
-        selected: []
+        selected: [],
     };
 
     static propTypes = {
@@ -36,6 +38,7 @@ class MultiSelector extends React.Component {
     static defaultProps = {
         height: 300,
         ordered: true,
+        selected: undefined,
     };
 
     // Required by <GroupEditor>
@@ -49,28 +52,44 @@ class MultiSelector extends React.Component {
         };
     }
 
-    assignItems = async values => {
-        const selected = this.state.selected.concat(values);
-        this.setState({ selected });
-        this.props.onChange(selected);
+    getSelected = () => {
+        return this.isControlled ? this.props.selected : this.state.selected;
     };
 
-    unassignItems = async values => {
+    updateSelected = updateFn => {
+        const selected = this.getSelected();
+        const selectedUpdated = updateFn(selected);
+
+        if (this.isControlled) {
+            this.props.onChange(selectedUpdated);
+        } else {
+            this.setState({ selected: selectedUpdated });
+            this.props.onChange(selectedUpdated);
+        }
+
+        // <GroupEditor> requires the props assign/unassign/orderChange to return a promise
+        return Promise.resolve();
+    };
+
+    assignItems = values => {
+        return this.updateSelected(selected => selected.concat(values));
+    };
+
+    unassignItems = values => {
         const itemValuesToRemove = new Set(values);
-        const selected = this.state.selected.filter(value => !itemValuesToRemove.has(value));
-        this.setState({ selected });
-        this.props.onChange(selected);
+        return this.updateSelected(selected =>
+            selected.filter(value => !itemValuesToRemove.has(value))
+        );
     };
 
-    orderChanged = async values => {
-        this.props.onChange(values);
+    orderChanged = values => {
+        return this.updateSelected(_selected => values);
     };
 
     render() {
         const { height, options, classes, ordered } = this.props;
 
-        const selected = this.props.selected ? this.props.selected : this.state.selected;
-
+        const selected = this.getSelected();
         const itemStore = Store.create();
         const assignedItemStore = Store.create();
         itemStore.setState(options);
