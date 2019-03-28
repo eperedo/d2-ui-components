@@ -6,6 +6,9 @@
     "extends": [
         "prettier"
     ],
+    "rules": {
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    },
     "parserOptions": {
         "jsx": true,
         "useJSXTextNode": true
