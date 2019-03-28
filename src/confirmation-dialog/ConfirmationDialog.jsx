@@ -1,9 +1,14 @@
 import React from "react";
 import i18n from "@dhis2/d2-i18n";
 import PropTypes from "prop-types";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Dialog from "@material-ui/core/Dialog";
-import { DialogContent, DialogActions, Button } from "@material-ui/core";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+} from "@material-ui/core";
 
 class ConfirmationDialog extends React.Component {
     static propTypes = {
@@ -35,29 +40,27 @@ class ConfirmationDialog extends React.Component {
         } = this.props;
 
         return (
-            <React.Fragment>
-                <Dialog open={isOpen} onClose={onCancel} {...other}>
-                    <DialogTitle>{title}</DialogTitle>
+            <Dialog open={isOpen} onClose={onCancel} {...other}>
+                <DialogTitle>{title}</DialogTitle>
 
-                    <DialogContent>
-                        {description && { description }}
-                        {children}
-                    </DialogContent>
+                <DialogContent>
+                    {description && <DialogContentText>{description}</DialogContentText>}
+                    {children}
+                </DialogContent>
 
-                    <DialogActions>
-                        {onCancel && (
-                            <Button onClick={onCancel} autoFocus>
-                                {cancelText}
-                            </Button>
-                        )}
-                        {onSave && (
-                            <Button onClick={onSave} color="primary">
-                                {saveText}
-                            </Button>
-                        )}
-                    </DialogActions>
-                </Dialog>
-            </React.Fragment>
+                <DialogActions>
+                    {onCancel && (
+                        <Button onClick={onCancel} autoFocus>
+                            {cancelText}
+                        </Button>
+                    )}
+                    {onSave && (
+                        <Button onClick={onSave} color="primary">
+                            {saveText}
+                        </Button>
+                    )}
+                </DialogActions>
+            </Dialog>
         );
     }
 }
