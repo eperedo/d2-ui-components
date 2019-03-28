@@ -60,7 +60,7 @@ class MultiSelector extends React.Component {
         const oldSelected = this.getSelected();
         const selected = updateFn(oldSelected);
 
-        this.setState({ selected });
+        if (!this.isControlled) this.setState({ selected });
         this.props.onChange(selected);
 
         return Promise.resolve();
