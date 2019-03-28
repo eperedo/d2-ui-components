@@ -56,12 +56,14 @@ class MultiSelector extends React.Component {
         return this.isControlled ? this.props.selected : this.state.selected;
     };
 
-    updateSelected = async updateFn => {
+    updateSelected = updateFn => {
         const oldSelected = this.getSelected();
         const selected = updateFn(oldSelected);
 
         this.setState({ selected });
         this.props.onChange(selected);
+
+        return Promise.resolve();
     };
 
     assignItems = values => {
