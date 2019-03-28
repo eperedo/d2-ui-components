@@ -23,6 +23,25 @@ const MyDialogHandler = () => (
 );
 ```
 
+## Confirmation Dialog
+
+A wrapper that creates all the logic needed to build a modal dialog.
+
+```
+import { ConfirmationDialog } from "d2-ui-components";
+
+const MyDialog = () => (
+    <ConfirmationDialog
+        isOpen={this.dialogOpen}
+        onSave={this.handleDialogConfirm}
+        onCancel={this.handleDialogCancel}
+        title={"Delete Instance?"}
+        description={"Are you sure you want to delete this instance?"}
+        saveText={"Ok"}
+    />
+);
+```
+
 ## Date Picker
 
 ```
