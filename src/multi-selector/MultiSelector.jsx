@@ -56,26 +56,19 @@ class MultiSelector extends React.Component {
         return this.isControlled ? this.props.selected : this.state.selected;
     };
 
-    updateSelected = updateFn => {
-        const selected = this.getSelected();
-        const selectedUpdated = updateFn(selected);
+    updateSelected = async updateFn => {
+        const oldSelected = this.getSelected();
+        const selected = updateFn(oldSelected);
 
-        if (this.isControlled) {
-            this.props.onChange(selectedUpdated);
-        } else {
-            this.setState({ selected: selectedUpdated });
-            this.props.onChange(selectedUpdated);
-        }
-
-        // <GroupEditor> requires the props assign/unassign/orderChange to return a promise
-        return Promise.resolve();
+        this.setState({ selected });
+        this.props.onChange(selected);
     };
 
     assignItems = values => {
         return this.updateSelected(selected => selected.concat(values));
     };
 
-    unassignItems = values => {
+    removeItems = values => {
         const itemValuesToRemove = new Set(values);
         return this.updateSelected(selected =>
             selected.filter(value => !itemValuesToRemove.has(value))
@@ -105,7 +98,7 @@ class MultiSelector extends React.Component {
                     itemStore={itemStore}
                     assignedItemStore={assignedItemStore}
                     onAssignItems={this.assignItems}
-                    onRemoveItems={this.unassignItems}
+                    onRemoveItems={this.removeItems}
                     height={height}
                     {...extraProps}
                 />
