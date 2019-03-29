@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
+import { Dictionary } from "lodash";
 
 import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "material-ui-pickers";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
@@ -15,7 +16,7 @@ export interface DatePickerProps {
     isFilter?: boolean;
 }
 
-const colors = {
+const colors: { filter: Dictionary<string>; form: Dictionary<string> } = {
     filter: {
         grey: "#aaaaaa",
         input: "#565656",
@@ -37,7 +38,7 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
         isFilter: PropTypes.bool,
     };
 
-    getMaterialTheme = (isFilter: boolean, colors: any) =>
+    getMaterialTheme = (isFilter: boolean, colors: Dictionary<string>) =>
         createMuiTheme({
             typography: {
                 useNextVariants: true,
