@@ -20,12 +20,10 @@ const colors: { filter: Dictionary<string>; form: Dictionary<string> } = {
     filter: {
         grey: "#aaaaaa",
         input: "#565656",
-        underline: "#e0e0e0",
     },
     form: {
         grey: "#0000004d",
         input: "#000000de",
-        underline: "#bdbdbd",
     },
 };
 
@@ -67,7 +65,7 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
                     },
                     underline: {
                         "&&&&:hover:before": {
-                            borderBottom: `1px solid ${colors.underline}`,
+                            borderBottom: `1px solid #bdbdbd`,
                         },
                         "&:hover:not($disabled):before": {
                             borderBottom: `1px solid ${colors.grey}`,
@@ -76,7 +74,7 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
                             borderBottom: `2px solid ${cyan["500"]}`,
                         },
                         "&:before": {
-                            borderBottom: `1px solid ${colors.underline}`,
+                            borderBottom: `1px solid #bdbdbd`,
                         },
                     },
                 },
