@@ -1,11 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Dialog from "@material-ui/core/Dialog";
-import { DialogContent, DialogActions, Button } from "@material-ui/core";
 import i18n from "../utils/i18n";
+import ConfirmationDialog from "../confirmation-dialog/ConfirmationDialog";
 
-class DialogHandler extends React.Component {
+class DialogButton extends React.Component {
     static propTypes = {
         buttonComponent: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
@@ -32,20 +30,16 @@ class DialogHandler extends React.Component {
             <React.Fragment>
                 <CustomButton onClick={this.handleClickOpen} />
 
-                <Dialog open={isOpen} onClose={this.handleClose}>
-                    <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
-
-                    <DialogContent>{contents}</DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                            {i18n.t("Close")}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                <ConfirmationDialog
+                    isOpen={isOpen}
+                    title={title}
+                    description={contents}
+                    onCancel={this.handleClose}
+                    cancelText={i18n.t("Close")}
+                />
             </React.Fragment>
         );
     }
 }
 
-export default DialogHandler;
+export default DialogButton;

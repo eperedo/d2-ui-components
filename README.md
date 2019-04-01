@@ -1,15 +1,15 @@
 # Components
 
-## Dialog Handler
+## Dialog Button
 
 A button that opens a modal info dialog when clicked.
 
 ```
 import { Icon, IconButton } from "@material-ui/core";
-import { DialogHandler } from "d2-ui-components";
+import { DialogButton } from "d2-ui-components";
 
 const MyDialogHandler = () => (
-    <DialogHandler
+    <DialogButton
         title="Help"
         contents="This is some help message"
         buttonComponent={
@@ -19,6 +19,25 @@ const MyDialogHandler = () => (
                 </IconButton>
             )
         }
+    />
+);
+```
+
+## Confirmation Dialog
+
+A wrapper that creates all the logic needed to build a modal dialog.
+
+```
+import { ConfirmationDialog } from "d2-ui-components";
+
+const MyDialog = () => (
+    <ConfirmationDialog
+        isOpen={this.dialogOpen}
+        onSave={this.handleDialogConfirm}
+        onCancel={this.handleDialogCancel}
+        title={"Delete Instance?"}
+        description={"Are you sure you want to delete this instance?"}
+        saveText={"Ok"}
     />
 );
 ```
@@ -119,6 +138,46 @@ MyComponent.propTypes = {
 }
 
 export default withSnackbar(MyComponent);
+```
+
+# Loading Mask
+
+There should be a unique loading mask for the whole app, so we need to insert a single provider in the main component:
+
+```
+import { LoadingProvider }  from "d2-ui-components";
+
+const MyAppWithLoadingMask = (
+    <LoadingProvider>
+        <MyApp />
+    </LoadingProvider>
+);
+```
+
+To use it, create a HOC with `withLoading`, add `loading` to your propTypes, and show the mask using the functions `props.loading.show()`.
+
+```
+import { withLoading } from "d2-ui-components";
+import PropTypes from "prop-types";
+
+const MyComponent = ({name, loading}) => (
+    <div>
+        <a onClick={() => loading.show()}>Show loading mask</a>
+        <a onClick={() => loading.show(false)}>Hide loading mask</a>
+        <a onClick={() => loading.hide()}>Also hides loading mask</a>
+        <a onClick={() => loading.show(true, 'Message', 35)}>Show loading mask with extra information</a>
+        <a onClick={() => loading.updateMessage('String')}>Update message</a>
+        <a onClick={() => loading.updateProgress(98)}>Update progress</a>
+        <a onClick={() => loading.reset()}>Hide and clear message/progress</a>
+    </div>
+);
+
+MyComponent.propTypes = {
+    name: PropTypes.object.isRequired,
+    loading: PropTypes.object.isRequired,
+}
+
+export default withLoading(MyComponent);
 ```
 
 ## Objects table
