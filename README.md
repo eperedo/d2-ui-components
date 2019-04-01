@@ -1,15 +1,15 @@
 # Components
 
-## Dialog Handler
+## Dialog Button
 
 A button that opens a modal info dialog when clicked.
 
 ```
 import { Icon, IconButton } from "@material-ui/core";
-import { DialogHandler } from "d2-ui-components";
+import { DialogButton } from "d2-ui-components";
 
 const MyDialogHandler = () => (
-    <DialogHandler
+    <DialogButton
         title="Help"
         contents="This is some help message"
         buttonComponent={
@@ -19,6 +19,25 @@ const MyDialogHandler = () => (
                 </IconButton>
             )
         }
+    />
+);
+```
+
+## Confirmation Dialog
+
+A wrapper that creates all the logic needed to build a modal dialog.
+
+```
+import { ConfirmationDialog } from "d2-ui-components";
+
+const MyDialog = () => (
+    <ConfirmationDialog
+        isOpen={this.dialogOpen}
+        onSave={this.handleDialogConfirm}
+        onCancel={this.handleDialogCancel}
+        title={"Delete Instance?"}
+        description={"Are you sure you want to delete this instance?"}
+        saveText={"Ok"}
     />
 );
 ```
