@@ -9,4 +9,4 @@ it("shows label", () => {
     expect(datePicker.text()).toContain("My label");
 });
 
-export {}
+export {};
