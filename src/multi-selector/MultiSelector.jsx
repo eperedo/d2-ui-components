@@ -20,16 +20,25 @@ const optionsPropType = PropTypes.arrayOf(
 );
 
 class MultiSelector extends React.Component {
+    isControlled = !!this.props.selected;
+
+    state = {
+        selected: [],
+    };
+
     static propTypes = {
         d2: PropTypes.object.isRequired,
         height: PropTypes.number,
-        ordered: PropTypes.bool.isRequired,
+        ordered: PropTypes.bool,
         options: optionsPropType.isRequired,
-        selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+        selected: PropTypes.arrayOf(PropTypes.string),
+        onChange: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
         height: 300,
+        ordered: true,
+        selected: undefined,
     };
 
     // Required by <GroupEditor>
@@ -43,27 +52,39 @@ class MultiSelector extends React.Component {
         };
     }
 
-    assignItems = values => {
-        const newValues = this.props.selected.concat(values);
-        this.props.onChange(newValues);
+    getSelected = () => {
+        return this.isControlled ? this.props.selected : this.state.selected;
+    };
+
+    updateSelected = updateFn => {
+        const oldSelected = this.getSelected();
+        const selected = updateFn(oldSelected);
+
+        if (!this.isControlled) this.setState({ selected });
+        this.props.onChange(selected);
+
         return Promise.resolve();
     };
 
-    unassignItems = values => {
+    assignItems = values => {
+        return this.updateSelected(selected => selected.concat(values));
+    };
+
+    removeItems = values => {
         const itemValuesToRemove = new Set(values);
-        const newValues = this.props.selected.filter(value => !itemValuesToRemove.has(value));
-        this.props.onChange(newValues);
-        return Promise.resolve();
+        return this.updateSelected(selected =>
+            selected.filter(value => !itemValuesToRemove.has(value))
+        );
     };
 
     orderChanged = values => {
-        this.props.onChange(values);
-        return Promise.resolve();
+        return this.updateSelected(_selected => values);
     };
 
     render() {
-        const { height, options, selected, classes, ordered } = this.props;
+        const { height, options, classes, ordered } = this.props;
 
+        const selected = this.getSelected();
         const itemStore = Store.create();
         const assignedItemStore = Store.create();
         itemStore.setState(options);
@@ -79,7 +100,7 @@ class MultiSelector extends React.Component {
                     itemStore={itemStore}
                     assignedItemStore={assignedItemStore}
                     onAssignItems={this.assignItems}
-                    onRemoveItems={this.unassignItems}
+                    onRemoveItems={this.removeItems}
                     height={height}
                     {...extraProps}
                 />
