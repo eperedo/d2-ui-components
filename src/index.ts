@@ -2,10 +2,13 @@ import { DatePicker } from "./date-picker/DatePicker";
 import MultiSelector from "./multi-selector/MultiSelector";
 import SimpleCheckBox from "./simple-check-box/SimpleCheckBox";
 import SearchBox from "./search-box/SearchBox";
-import DialogHandler from "./dialog-handler/DialogHandler";
+import DialogButton from "./dialog-button/DialogButton";
+import ConfirmationDialog from "./confirmation-dialog/ConfirmationDialog";
 import OrgUnitsSelector from "./org-units-selector/OrgUnitsSelector";
 import { withSnackbar } from "./snackbar";
 import SnackbarProvider from "./snackbar/SnackbarProvider";
+import { withLoading } from "./loading";
+import LoadingProvider from "./loading/LoadingProvider";
 import ObjectsTable from "./objects-table/ObjectsTable";
 
 import "./locales";
@@ -15,9 +18,12 @@ export {
     MultiSelector,
     SimpleCheckBox,
     SearchBox,
-    DialogHandler,
+    DialogButton,
+    ConfirmationDialog,
     OrgUnitsSelector,
     SnackbarProvider,
     withSnackbar,
+    LoadingProvider,
+    withLoading,
     ObjectsTable,
 };
