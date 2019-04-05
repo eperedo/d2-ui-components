@@ -19,6 +19,7 @@ class ConfirmationDialog extends React.Component {
         onCancel: PropTypes.func,
         saveText: PropTypes.string,
         cancelText: PropTypes.string,
+        disableSave: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -36,6 +37,7 @@ class ConfirmationDialog extends React.Component {
             children,
             cancelText,
             saveText,
+            disableSave,
             ...other
         } = this.props;
 
@@ -55,7 +57,7 @@ class ConfirmationDialog extends React.Component {
                         </Button>
                     )}
                     {onSave && (
-                        <Button onClick={onSave} color="primary">
+                        <Button onClick={onSave} color="primary" disabled={disableSave}>
                             {saveText}
                         </Button>
                     )}
