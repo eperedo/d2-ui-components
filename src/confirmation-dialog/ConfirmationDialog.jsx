@@ -46,7 +46,7 @@ class ConfirmationDialog extends React.Component {
                 <DialogTitle>{title}</DialogTitle>
 
                 <DialogContent>
-                    {description && <DialogContentText>{description}</DialogContentText>}
+                    {description && <DialogContentText>{description.split('\n').map(text => <p>{text}</p>)}</DialogContentText>}
                     {children}
                 </DialogContent>
 
