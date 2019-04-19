@@ -1,14 +1,7 @@
 import React from "react";
 import i18n from "@dhis2/d2-i18n";
 import PropTypes from "prop-types";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Button,
-} from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
 
 class ConfirmationDialog extends React.Component {
     static propTypes = {
@@ -46,7 +39,13 @@ class ConfirmationDialog extends React.Component {
                 <DialogTitle>{title}</DialogTitle>
 
                 <DialogContent>
-                    {description && <DialogContentText>{description.split('\n').map(text => <p>{text}</p>)}</DialogContentText>}
+                    {description && (
+                        <React.Fragment>
+                            {description.split("\n").map((text, idx) => (
+                                <p key={idx}>{text}</p>
+                            ))}
+                        </React.Fragment>
+                    )}
                     {children}
                 </DialogContent>
 
