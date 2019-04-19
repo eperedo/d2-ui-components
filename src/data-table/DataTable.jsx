@@ -182,7 +182,7 @@ class DataTable extends React.Component {
                 },
                 this.notifyActiveRows
             );
-            this.props.primaryAction(rowSource);
+            this.props.primaryAction([rowSource]);
             return;
         }
 

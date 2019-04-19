@@ -309,7 +309,11 @@ class ObjectsTable extends React.Component {
                             onColumnSort={this.onColumnSort}
                             contextMenuActions={this.actions.contextActions}
                             contextMenuIcons={this.actions.contextMenuIcons}
-                            primaryAction={this.actions.contextActions[0].fn}
+                            primaryAction={
+                                this.actions.contextActions.length > 0
+                                    ? this.actions.contextActions[0].fn
+                                    : undefined
+                            }
                             isContextActionAllowed={this.isContextActionAllowed}
                             activeRows={activeRows}
                             onActiveRowsChange={this.onActiveRowsChange}
