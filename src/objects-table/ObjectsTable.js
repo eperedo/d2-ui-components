@@ -297,7 +297,7 @@ class ObjectsTable extends React.Component {
                 message: i18n.t("There are {{count}} items selected in all pages.", {
                     count: pager.total,
                 }),
-                link: i18n.t("Clear selection in all pages"),
+                link: i18n.t("Clear selection"),
                 action: this.clearSelection,
             });
         } else if (selectionInOtherPages.length > 0) {
@@ -305,7 +305,7 @@ class ObjectsTable extends React.Component {
                 message: i18n.t("There are {{count}} items selected on other pages.", {
                     count: selectionInOtherPages.length,
                 }),
-                link: i18n.t("Clear selection in all pages"),
+                link: i18n.t("Clear selection"),
                 action: this.clearSelection,
             });
         }
