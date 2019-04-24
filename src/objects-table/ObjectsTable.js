@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import Checkbox from "material-ui/Checkbox/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
@@ -99,9 +98,9 @@ class ObjectsTable extends React.Component {
     getColumns(columns, selectedHeaderChecked) {
         const { model } = this.props;
         const selectedColumnContents = (
-            <Checkbox
+            <SimpleCheckBox
                 checked={selectedHeaderChecked}
-                onCheck={() => this.onSelectAllToggle(selectedHeaderChecked)}
+                onClick={() => this.toggleSelectAll(selectedHeaderChecked)}
                 iconStyle={styles.selectColumn}
             />
         );
@@ -130,11 +129,13 @@ class ObjectsTable extends React.Component {
             searchValue: null,
             detailsObject: null,
             selection: new Set(),
+            allObjects: new Set(),
         };
     }
 
     componentDidMount() {
         this.getObjects({});
+        this.getAllObjects();
     }
 
     getObjectsForCurrentPage() {
@@ -159,11 +160,21 @@ class ObjectsTable extends React.Component {
                 pager: pager,
                 dataRows: objects,
                 page: newPage,
-                selection: new Set(),
             },
             this.notifySelectionChange
         );
     }
+
+    getAllObjects = async () => {
+        const { d2, list, customFilters } = this.props;
+        const { searchValue } = this.state;
+        const filters = { search: searchValue, ...customFilters };
+        const pagination = { paging: false };
+        const { objects } = await list(d2, filters, pagination);
+        const allObjects = new Set(objects.map(dr => dr.id));
+
+        this.setState({ allObjects });
+    };
 
     onSearchChange = value => {
         this.setState(
@@ -175,7 +186,7 @@ class ObjectsTable extends React.Component {
         );
     };
 
-    onSelectToggle(ev, obj) {
+    toggleSelect(ev, obj) {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -186,12 +197,22 @@ class ObjectsTable extends React.Component {
         this.setState({ selection }, this.notifySelectionChange);
     }
 
-    onSelectAllToggle = selectedHeaderChecked => {
+    toggleSelectAll = selectedHeaderChecked => {
         const selection = new Set(
             selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id)
         );
 
         this.setState({ selection }, this.notifySelectionChange);
+    };
+
+    selectAllPages = () => {
+        const { allObjects } = this.state;
+
+        this.setState({ selection: new Set(allObjects) }, this.notifySelectionChange);
+    };
+
+    clearSelection = () => {
+        this.setState({ selection: new Set() }, this.notifySelectionChange);
     };
 
     onActiveRowsChange = objs => {
@@ -248,15 +269,55 @@ class ObjectsTable extends React.Component {
         return this.actions.isContextActionAllowed(this.props.d2, ...args);
     };
 
+    getSelectionMessages = () => {
+        const { allObjects, dataRows, selection, pager } = this.state;
+        const messages = [];
+
+        const selectedAllInCurrentPage =
+            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
+        const selectedAllInAllPages = selection.size === pager.total;
+        const selectInAllPagesImplemented = allObjects.size === pager.total;
+
+        if (selectedAllInCurrentPage && !selectedAllInAllPages && selectInAllPagesImplemented) {
+            messages.push({
+                message: i18n.t("All {{count}} items on this page are selected.", {
+                    count: dataRows.length,
+                }),
+                link: i18n.t("Select all {{count}} items in all pages", { count: pager.total }),
+                action: this.selectAllPages,
+            });
+        }
+
+        const selectionInOtherPages = _.difference(
+            Array.from(selection),
+            dataRows.map(dr => dr.id)
+        );
+
+        if (selectionInOtherPages.length > 0) {
+            messages.push({
+                message: i18n.t("There are {{count}} items on other pages selected.", {
+                    count: selectionInOtherPages.length,
+                }),
+                link: i18n.t("Clear selection in all pages"),
+                action: this.clearSelection,
+            });
+        }
+
+        return messages;
+    };
+
     render() {
         const { onCreate, columns, detailsFields, model, customFiltersComponent } = this.props;
-        const { dataRows, sorting, selection } = this.state;
+        const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
+        const { contextActions, contextMenuIcons } = this.actions;
+        const notificationMessages = this.getSelectionMessages();
+
         const paginationProps = this.getPaginationProps();
         const rows = dataRows.map(dr =>
             Object.assign({}, dr, {
                 selected: (
                     <SimpleCheckBox
-                        onClick={ev => this.onSelectToggle(ev, dr)}
+                        onClick={ev => this.toggleSelect(ev, dr)}
                         checked={selection.has(dr.id)}
                     />
                 ),
@@ -293,44 +354,60 @@ class ObjectsTable extends React.Component {
                         <Pagination {...paginationProps} />
                     </div>
 
-                    <div style={styles.spinner}>
-                        {this.state.isLoading && <CircularProgress size={30} />}
-                    </div>
+                    <div style={styles.spinner}>{isLoading && <CircularProgress size={30} />}</div>
 
                     <div style={styles.clear} />
                 </div>
 
                 <div style={styles.listDetailsWrap}>
                     <div style={styles.dataTableWrap} className="objects-table">
+                        {notificationMessages.length > 0 && (
+                            <div style={styles.notificationPanel}>
+                                {notificationMessages.map(notification => (
+                                    <div style={styles.notification}>
+                                        <span style={styles.notificationText}>
+                                            {notification.message}
+                                        </span>
+                                        <span
+                                            style={styles.notificationLink}
+                                            onClick={notification.action}
+                                        >
+                                            {notification.link}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
                         <DataTable
                             rows={rows}
                             columns={allColumns}
                             sorting={sorting}
                             onColumnSort={this.onColumnSort}
-                            contextMenuActions={this.actions.contextActions}
-                            contextMenuIcons={this.actions.contextMenuIcons}
+                            contextMenuActions={contextActions}
+                            contextMenuIcons={contextMenuIcons}
                             primaryAction={
-                                this.actions.contextActions.length > 0
-                                    ? this.actions.contextActions[0].fn
-                                    : undefined
+                                contextActions.length > 0 ? contextActions[0].fn : undefined
                             }
                             isContextActionAllowed={this.isContextActionAllowed}
                             activeRows={activeRows}
                             onActiveRowsChange={this.onActiveRowsChange}
                             isMultipleSelectionAllowed={true}
                         />
-                        {dataRows.length > 0 || this.state.isLoading ? null : (
+
+                        {dataRows.length > 0 || isLoading ? null : (
                             <div>{i18n.t("No results found")}</div>
                         )}
                     </div>
-                    {this.state.detailsObject ? (
+
+                    {detailsObject ? (
                         <div style={styles.detailsBoxWrap}>
                             <WithScroll alignTo=".objects-table">
                                 <DetailsBox
                                     alignTo=".objects-table"
                                     fields={detailsFieldsProcessed}
                                     style={styles.detailsBoxWrap}
-                                    object={this.state.detailsObject}
+                                    object={detailsObject}
                                     onClose={this.closeDetails}
                                 />
                             </WithScroll>
@@ -379,6 +456,28 @@ const styles = {
         flex: 1,
         display: "flex",
         flexOrientation: "row",
+    },
+    notificationPanel: {
+        captionSide: "top",
+        display: "table-caption",
+        textAlign: "center",
+        padding: "0.5rem",
+        backgroundColor: "#E0E0E0",
+        margin: "0.25rem 0 0.5rem",
+    },
+    notification: {
+        padding: "0.75rem",
+    },
+    notificationText: {
+        letterSpacing: ".25px",
+        color: "#5F6368",
+    },
+    notificationLink: {
+        letterSpacing: ".25px",
+        cursor: "pointer",
+        fontWeight: 500,
+        color: "#1A73E8",
+        padding: "0 8px",
     },
 };
 
