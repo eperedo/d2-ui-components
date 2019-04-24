@@ -135,7 +135,6 @@ class ObjectsTable extends React.Component {
 
     componentDidMount() {
         this.getObjects({});
-        this.getAllObjects();
     }
 
     getObjectsForCurrentPage() {
@@ -154,27 +153,22 @@ class ObjectsTable extends React.Component {
         const pagination = { page: newPage, pageSize: pageSize, sorting };
         const { pager, objects } = await list(d2, filters, pagination);
 
+        const allObjectsFilters = { ...filters, fields: ["id"] };
+        const allObjectsPagination = { paging: false };
+        const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
+        const allObjects = new Set(ids.map(dr => dr.id));
+
         this.setState(
             {
                 isLoading: false,
                 pager: pager,
                 dataRows: objects,
                 page: newPage,
+                allObjects,
             },
             this.notifySelectionChange
         );
     }
-
-    getAllObjects = async () => {
-        const { d2, list, customFilters } = this.props;
-        const { searchValue } = this.state;
-        const filters = { search: searchValue, ...customFilters };
-        const pagination = { paging: false };
-        const { objects } = await list(d2, filters, pagination);
-        const allObjects = new Set(objects.map(dr => dr.id));
-
-        this.setState({ allObjects });
-    };
 
     onSearchChange = value => {
         this.setState(
