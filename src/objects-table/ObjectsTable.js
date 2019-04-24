@@ -298,9 +298,17 @@ class ObjectsTable extends React.Component {
             dataRows.map(dr => dr.id)
         );
 
-        if (selectionInOtherPages.length > 0) {
+        if (selectedAllInAllPages) {
             messages.push({
-                message: i18n.t("There are {{count}} items on other pages selected.", {
+                message: i18n.t("There are {{count}} items selected in all pages.", {
+                    count: pager.total,
+                }),
+                link: i18n.t("Clear selection in all pages"),
+                action: this.clearSelection,
+            });
+        } else if (selectionInOtherPages.length > 0) {
+            messages.push({
+                message: i18n.t("There are {{count}} items selected on other pages.", {
                     count: selectionInOtherPages.length,
                 }),
                 link: i18n.t("Clear selection in all pages"),
@@ -366,7 +374,7 @@ class ObjectsTable extends React.Component {
 
                 <div style={styles.listDetailsWrap}>
                     <div style={styles.dataTableWrap} className="objects-table">
-                        {notificationMessages.length > 0 && (
+                        {dataRows.length > 0 && notificationMessages.length > 0 && (
                             <div style={styles.notificationPanel}>
                                 {notificationMessages.map((notification, index) => (
                                     <div style={styles.notification} key={"notification-" + index}>

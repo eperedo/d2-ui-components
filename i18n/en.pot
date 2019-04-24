@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-04-12T12:18:13.643Z\n"
-"PO-Revision-Date: 2019-04-12T12:18:13.643Z\n"
+"POT-Creation-Date: 2019-04-24T16:58:45.940Z\n"
+"PO-Revision-Date: 2019-04-24T16:58:45.940Z\n"
 
 msgid "Save"
 msgstr ""
@@ -49,6 +49,29 @@ msgstr ""
 
 msgid "selected"
 msgstr ""
+
+msgid "All {{count}} items on this page are selected."
+msgid_plural "All {{count}} items on this page are selected."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Select all {{count}} items in all pages"
+msgid_plural "Select all {{count}} items in all pages"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There are {{count}} items selected in all pages."
+msgid_plural "There are {{count}} items selected in all pages."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Clear selection in all pages"
+msgstr ""
+
+msgid "There are {{count}} items selected on other pages."
+msgid_plural "There are {{count}} items selected on other pages."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No results found"
 msgstr ""
