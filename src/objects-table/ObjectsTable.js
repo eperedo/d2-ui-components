@@ -198,11 +198,16 @@ class ObjectsTable extends React.Component {
     }
 
     toggleSelectAll = selectedHeaderChecked => {
-        const selection = new Set(
-            selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id)
+        const { selection, dataRows } = this.state;
+        const selectionInOtherPages = _.difference(
+            Array.from(selection),
+            dataRows.map(dr => dr.id)
         );
 
-        this.setState({ selection }, this.notifySelectionChange);
+        const currentPageItems = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
+        const newSelection = [...currentPageItems, ...selectionInOtherPages];
+
+        this.setState({ selection: new Set(newSelection) }, this.notifySelectionChange);
     };
 
     selectAllPages = () => {
@@ -363,8 +368,8 @@ class ObjectsTable extends React.Component {
                     <div style={styles.dataTableWrap} className="objects-table">
                         {notificationMessages.length > 0 && (
                             <div style={styles.notificationPanel}>
-                                {notificationMessages.map(notification => (
-                                    <div style={styles.notification}>
+                                {notificationMessages.map((notification, index) => (
+                                    <div style={styles.notification} key={"notification-" + index}>
                                         <span style={styles.notificationText}>
                                             {notification.message}
                                         </span>
