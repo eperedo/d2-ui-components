@@ -273,24 +273,13 @@ class ObjectsTable extends React.Component {
         const { allObjects, dataRows, selection, pager } = this.state;
         if (_.isEmpty(dataRows)) return [];
 
-        const selectAllImplemented = allObjects.size === pager.total;
-        const multiplePagesAvailable = pager.total > dataRows.length;
         const allSelected = selection.size === pager.total;
-        const allSelectedInPage = dataRows.every(row => selection.has(row.id));
         const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
+        const allSelectedInPage = dataRows.every(row => selection.has(row.id));
+        const multiplePagesAvailable = pager.total > dataRows.length;
+        const selectAllImplemented = allObjects.size === pager.total;
 
         return _.compact([
-            selectAllImplemented && allSelectedInPage && multiplePagesAvailable && !allSelected
-                ? {
-                      message: i18n.t("All {{total}} items on this page are selected.", {
-                          total: dataRows.length,
-                      }),
-                      link: i18n.t("Select all {{total}} items in all pages", {
-                          total: pager.total,
-                      }),
-                      action: this.selectAllPages,
-                  }
-                : null,
             allSelected
                 ? {
                       message: i18n.t("There are {{total}} items selected in all pages.", {
@@ -308,6 +297,17 @@ class ObjectsTable extends React.Component {
                       ),
                       link: i18n.t("Clear selection"),
                       action: this.clearSelection,
+                  }
+                : null,
+            !allSelected && allSelectedInPage && multiplePagesAvailable && selectAllImplemented
+                ? {
+                      message: i18n.t("All {{total}} items on this page are selected.", {
+                          total: dataRows.length,
+                      }),
+                      link: i18n.t("Select all {{total}} items in all pages", {
+                          total: pager.total,
+                      }),
+                      action: this.selectAllPages,
                   }
                 : null,
         ]);
