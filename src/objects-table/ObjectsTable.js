@@ -199,15 +199,20 @@ class ObjectsTable extends React.Component {
         );
 
         const currentPageItems = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
-        const newSelection = [...currentPageItems, ...selectionInOtherPages];
 
-        this.setState({ selection: new Set(newSelection) }, this.notifySelectionChange);
+        this.setState(
+            { selection: new Set([...currentPageItems, ...selectionInOtherPages]) },
+            this.notifySelectionChange
+        );
     };
 
     selectAllPages = () => {
-        const { allObjects } = this.state;
+        const { selection, allObjects } = this.state;
 
-        this.setState({ selection: new Set(allObjects) }, this.notifySelectionChange);
+        this.setState(
+            { selection: new Set([...selection, ...allObjects]) },
+            this.notifySelectionChange
+        );
     };
 
     clearSelection = () => {
@@ -269,15 +274,13 @@ class ObjectsTable extends React.Component {
         if (_.isEmpty(dataRows)) return [];
 
         const selectAllImplemented = allObjects.size === pager.total;
+        const multiplePagesAvailable = pager.total > dataRows.length;
         const allSelected = selection.size === pager.total;
         const allSelectedInPage = dataRows.every(row => selection.has(row.id));
-        const selectionInOtherPages = _.difference(
-            Array.from(selection),
-            dataRows.map(dr => dr.id)
-        );
+        const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
 
         return _.compact([
-            selectAllImplemented && allSelectedInPage && !allSelected
+            selectAllImplemented && allSelectedInPage && multiplePagesAvailable
                 ? {
                       message: i18n.t("All {{total}} items on this page are selected.", {
                           total: dataRows.length,
