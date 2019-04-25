@@ -280,7 +280,7 @@ class ObjectsTable extends React.Component {
         const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
 
         return _.compact([
-            selectAllImplemented && allSelectedInPage && multiplePagesAvailable
+            selectAllImplemented && allSelectedInPage && multiplePagesAvailable && !allSelected
                 ? {
                       message: i18n.t("All {{total}} items on this page are selected.", {
                           total: dataRows.length,
