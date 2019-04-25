@@ -214,10 +214,6 @@ class ObjectsTable extends React.Component {
         this.setState({ selection: new Set() }, this.notifySelectionChange);
     };
 
-    onActiveRowsChange = objs => {
-        this.setState({ selection: new Set(objs.map(obj => obj.id)) });
-    };
-
     onColumnSort = sorting => {
         this.setState({ sorting, isLoading: true }, this.getObjects);
     };
@@ -399,7 +395,6 @@ class ObjectsTable extends React.Component {
                             }
                             isContextActionAllowed={this.isContextActionAllowed}
                             activeRows={activeRows}
-                            onActiveRowsChange={this.onActiveRowsChange}
                             isMultipleSelectionAllowed={true}
                         />
 
