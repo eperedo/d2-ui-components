@@ -270,47 +270,48 @@ class ObjectsTable extends React.Component {
 
     getSelectionMessages = () => {
         const { allObjects, dataRows, selection, pager } = this.state;
-        const messages = [];
+        if (_.isEmpty(dataRows)) return [];
 
-        const selectedAllInCurrentPage =
-            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
-        const selectedAllInAllPages = selection.size === pager.total;
-        const selectInAllPagesImplemented = allObjects.size === pager.total;
-
-        if (selectedAllInCurrentPage && !selectedAllInAllPages && selectInAllPagesImplemented) {
-            messages.push({
-                message: i18n.t("All {{count}} items on this page are selected.", {
-                    count: dataRows.length,
-                }),
-                link: i18n.t("Select all {{count}} items in all pages", { count: pager.total }),
-                action: this.selectAllPages,
-            });
-        }
-
+        const selectAllImplemented = allObjects.size === pager.total;
+        const allSelected = selection.size === pager.total;
+        const allSelectedInPage = dataRows.every(row => selection.has(row.id));
         const selectionInOtherPages = _.difference(
             Array.from(selection),
             dataRows.map(dr => dr.id)
         );
 
-        if (selectedAllInAllPages) {
-            messages.push({
-                message: i18n.t("There are {{count}} items selected in all pages.", {
-                    count: pager.total,
-                }),
-                link: i18n.t("Clear selection"),
-                action: this.clearSelection,
-            });
-        } else if (selectionInOtherPages.length > 0) {
-            messages.push({
-                message: i18n.t("There are {{count}} items selected on other pages.", {
-                    count: selectionInOtherPages.length,
-                }),
-                link: i18n.t("Clear selection"),
-                action: this.clearSelection,
-            });
-        }
-
-        return messages;
+        return _.compact([
+            selectAllImplemented && allSelectedInPage && !allSelected
+                ? {
+                      message: i18n.t("All {{total}} items on this page are selected.", {
+                          total: dataRows.length,
+                      }),
+                      link: i18n.t("Select all {{total}} items in all pages", {
+                          total: pager.total,
+                      }),
+                      action: this.selectAllPages,
+                  }
+                : null,
+            allSelected
+                ? {
+                      message: i18n.t("There are {{total}} items selected in all pages.", {
+                          total: selection.size,
+                      }),
+                      link: i18n.t("Clear selection"),
+                      action: this.clearSelection,
+                  }
+                : null,
+            !allSelected && selectionInOtherPages.length > 0
+                ? {
+                      message: i18n.t(
+                          "There are {{count}} items selected ({{invisible}} on other pages).",
+                          { count: selection.size, invisible: selectionInOtherPages.length }
+                      ),
+                      link: i18n.t("Clear selection"),
+                      action: this.clearSelection,
+                  }
+                : null,
+        ]);
     };
 
     render() {
