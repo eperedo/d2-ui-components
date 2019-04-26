@@ -23,9 +23,9 @@ export function setupActions(actions, onClick) {
     };
 
     const contextActions = actions.map(action => {
-        const handler = data => {
-            const arg = action.multiple && !_.isArray(data) ? [data] : data;
-            onClick(action.name, arg);
+        const handler = objects => {
+            const arg = action.multiple ? objects : objects[0];
+            if (arg) onClick(action.name, arg);
         };
         return { name: action.name, text: action.text, fn: handler };
     });

@@ -76,8 +76,9 @@ class MultipleDataTableContextMenu extends React.Component {
         const fn = _(this.props.actions)
             .keyBy("name")
             .get([action, "fn"]);
-        fn.apply(this.props.actions, this.props.activeItems);
-        this.props.onRequestClose && this.props.onRequestClose();
+
+        fn(this.props.activeItems);
+        if (this.props.onRequestClose) this.props.onRequestClose();
     }
 }
 
