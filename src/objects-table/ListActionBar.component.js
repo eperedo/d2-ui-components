@@ -16,11 +16,16 @@ const styles = theme => ({
 class ListActionBar extends React.Component {
     static propTypes = {
         onClick: PropTypes.func.isRequired,
+        label: PropTypes.string,
+    };
+
+    static defaultProps = {
+        label: null,
     };
 
     render() {
-        const { classes, onClick } = this.props;
-
+        const { classes, label, onClick } = this.props;
+        const variant = label ? "extended" : "round";
         return (
             <div style={this.cssStyles}>
                 <Fab
@@ -30,12 +35,13 @@ class ListActionBar extends React.Component {
                     size="large"
                     onClick={onClick}
                     data-test="list-action-bar"
+                    variant={variant}
                 >
-                    <AddIcon />
+                    {label || <AddIcon />}
                 </Fab>
             </div>
         );
     }
 }
-
+//
 export default withStyles(styles)(ListActionBar);
