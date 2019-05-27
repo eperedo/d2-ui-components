@@ -16,7 +16,7 @@ const styles = theme => ({
 class ListActionBar extends React.Component {
     static propTypes = {
         onClick: PropTypes.func.isRequired,
-        label: PropTypes.string,
+        label: PropTypes.node,
     };
 
     static defaultProps = {
@@ -25,7 +25,8 @@ class ListActionBar extends React.Component {
 
     render() {
         const { classes, label, onClick } = this.props;
-        const variant = label ? "extended" : "round";
+        const variant = !label || React.isValidElement(label) ? "round" : "extended";
+
         return (
             <div style={this.cssStyles}>
                 <Fab

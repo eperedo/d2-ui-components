@@ -66,11 +66,12 @@ class ObjectsTable extends React.Component {
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
-        createButtonLabel: PropTypes.string,
+        createButtonLabel: PropTypes.node,
     };
 
     static defaultProps = {
         onSelectionChange: () => {},
+        createButtonLabel: null,
     };
 
     constructor(props) {
