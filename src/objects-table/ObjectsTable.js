@@ -66,12 +66,12 @@ class ObjectsTable extends React.Component {
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
-        createButtonLabel: PropTypes.node,
+        buttonLabel: PropTypes.node,
     };
 
     static defaultProps = {
         onSelectionChange: () => {},
-        createButtonLabel: null,
+        buttonLabel: null,
     };
 
     constructor(props) {
@@ -322,7 +322,7 @@ class ObjectsTable extends React.Component {
             detailsFields,
             model,
             customFiltersComponent,
-            createButtonLabel,
+            buttonLabel,
         } = this.props;
         const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
         const { contextActions, contextMenuIcons } = this.actions;
@@ -430,7 +430,7 @@ class ObjectsTable extends React.Component {
                     ) : null}
                 </div>
 
-                {onCreate && <ListActionBar onClick={onCreate} label={createButtonLabel} />}
+                {onCreate && <ListActionBar onClick={onCreate} label={buttonLabel} />}
             </div>
         );
     }
