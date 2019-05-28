@@ -67,11 +67,13 @@ class ObjectsTable extends React.Component {
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
         buttonLabel: PropTypes.node,
+        hideSearchBox: PropTypes.bool,
     };
 
     static defaultProps = {
         onSelectionChange: () => {},
         buttonLabel: null,
+        hideSearchBox: false,
     };
 
     constructor(props) {
@@ -323,6 +325,7 @@ class ObjectsTable extends React.Component {
             model,
             customFiltersComponent,
             buttonLabel,
+            hideSearchBox,
         } = this.props;
         const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
         const { contextActions, contextMenuIcons } = this.actions;
@@ -360,9 +363,11 @@ class ObjectsTable extends React.Component {
         return (
             <div>
                 <div>
-                    <div style={styles.searchBox}>
-                        <SearchBox onChange={this.onSearchChange} />
-                    </div>
+                    {!hideSearchBox && (
+                        <div style={styles.searchBox}>
+                            <SearchBox onChange={this.onSearchChange} />
+                        </div>
+                    )}
 
                     <CustomFilters />
 
