@@ -231,10 +231,13 @@ const MyObjectsTable = () => (
         pageSize={20}
         initialSorting={["displayName", "asc"]}
         actions={actions}
-        onCreate={true}
+        onButtonClick={() => console.log("Floating button clicked")}
+        buttonLabel={someString || <SomeComponent >}
         list={list} // list(d2, filters, pagination) -> {pager, objects}
         customFiltersComponent={CustomFilters}
         customFilters={{key1: "value1", key2: "value2}}
+        onSelectionChange={objectIds => console.log(objectIds)}
+        hideSearchBox={false}
     />
 );
 ```

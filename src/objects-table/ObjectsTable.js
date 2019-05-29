@@ -21,8 +21,7 @@ import { getFormatter } from "../helpers/d2";
 class ObjectsTable extends React.Component {
     static propTypes = {
         d2: PropTypes.object.isRequired,
-        name: PropTypes.string,
-        onCreate: PropTypes.func,
+        onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
         model: PropTypes.object.isRequired,
         initialSorting: PropTypes.array.isRequired, // [fieldName, "asc" | "desc"]
@@ -67,11 +66,13 @@ class ObjectsTable extends React.Component {
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
         buttonLabel: PropTypes.node,
+        hideSearchBox: PropTypes.bool,
     };
 
     static defaultProps = {
         onSelectionChange: () => {},
         buttonLabel: null,
+        hideSearchBox: false,
     };
 
     constructor(props) {
@@ -317,12 +318,13 @@ class ObjectsTable extends React.Component {
 
     render() {
         const {
-            onCreate,
+            onButtonClick,
             columns,
             detailsFields,
             model,
             customFiltersComponent,
             buttonLabel,
+            hideSearchBox,
         } = this.props;
         const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
         const { contextActions, contextMenuIcons } = this.actions;
@@ -360,9 +362,11 @@ class ObjectsTable extends React.Component {
         return (
             <div>
                 <div>
-                    <div style={styles.searchBox}>
-                        <SearchBox onChange={this.onSearchChange} />
-                    </div>
+                    {!hideSearchBox && (
+                        <div style={styles.searchBox}>
+                            <SearchBox onChange={this.onSearchChange} />
+                        </div>
+                    )}
 
                     <CustomFilters />
 
@@ -430,7 +434,7 @@ class ObjectsTable extends React.Component {
                     ) : null}
                 </div>
 
-                {onCreate && <ListActionBar onClick={onCreate} label={buttonLabel} />}
+                {onButtonClick && <ListActionBar onClick={onButtonClick} label={buttonLabel} />}
             </div>
         );
     }
