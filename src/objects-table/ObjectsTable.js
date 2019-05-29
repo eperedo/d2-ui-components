@@ -21,7 +21,6 @@ import { getFormatter } from "../helpers/d2";
 class ObjectsTable extends React.Component {
     static propTypes = {
         d2: PropTypes.object.isRequired,
-        name: PropTypes.string,
         onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
         model: PropTypes.object.isRequired,
