@@ -22,7 +22,7 @@ class ObjectsTable extends React.Component {
     static propTypes = {
         d2: PropTypes.object.isRequired,
         name: PropTypes.string,
-        onCreate: PropTypes.func,
+        onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
         model: PropTypes.object.isRequired,
         initialSorting: PropTypes.array.isRequired, // [fieldName, "asc" | "desc"]
@@ -319,7 +319,7 @@ class ObjectsTable extends React.Component {
 
     render() {
         const {
-            onCreate,
+            onButtonClick,
             columns,
             detailsFields,
             model,
@@ -435,7 +435,7 @@ class ObjectsTable extends React.Component {
                     ) : null}
                 </div>
 
-                {onCreate && <ListActionBar onClick={onCreate} label={buttonLabel} />}
+                {onButtonClick && <ListActionBar onClick={onButtonClick} label={buttonLabel} />}
             </div>
         );
     }
