@@ -14,7 +14,12 @@ export default class SnackbarProvider extends Component {
     }
 
     // level : "success" | "info" | "warning" | "error"
-    openSnackbar = (level, message, { autoHideDuration = 2000 } = {}) => {
+    // options : {autoHideDuration: NUMBER}
+    openSnackbar = (level, message, options = {}) => {
+        const defaultAutoHideDuration = level === "success" ? 2000 : 0;
+        const autoHideDuration = options.hasOwnProperty("autoHideDuration")
+            ? options.autoHideDuration
+            : defaultAutoHideDuration;
         this.setState({
             message,
             isOpen: true,
