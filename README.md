@@ -242,6 +242,62 @@ const MyObjectsTable = () => (
 );
 ```
 
+## Wizard
+
+Display a Step by Step customizable wizard
+
+```
+const getStepsBaseInfo = [
+    {
+        key: "general-info",
+        label: "General info",
+        component: GeneralInfoStep,
+        validationKeys: ["name"],
+        description: "Description for a wizard step",
+        help: "Help text",
+    },
+    {
+        key: "summary",
+        label: "Summary",
+        component: SaveStep,
+        validationKeys: [],
+        description: undefined,
+        help: undefined,
+    },
+];
+
+onStepChangeRequest = async currentStep => {
+    return getValidationMessages(
+        currentStep.validationKeys
+    );
+};
+
+const MyWizard = props => {
+    const steps = getStepsBaseInfo.map(step => ({
+        ...step,
+        props: {
+            onCancel: () => console.log("User wants to cancel the wizard!"),
+        },
+    }));
+
+    const urlHash = props.location.hash.slice(1);
+    const stepExists = steps.find(step => step.key === urlHash);
+    const firstStepKey = steps.map(step => step.key)[0];
+    const initialStepKey = stepExists ? urlHash : firstStepKey;
+    const lastClickableStepIndex = props.isEdit ? steps.length - 1 : 0;
+
+    return (
+        <Wizard
+            useSnackFeedback={true}
+            onStepChangeRequest={onStepChangeRequest}
+            initialStepKey={initialStepKey}
+            lastClickableStepIndex={lastClickableStepIndex}
+            steps={steps}
+        />
+    );
+};
+```
+
 # Setup
 
 ```
