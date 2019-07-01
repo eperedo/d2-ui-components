@@ -34,13 +34,13 @@ class MultipleDataTableRow extends React.Component {
             textOverflow: "ellipsis",
             overflow: "hidden",
             whiteSpace: "nowrap",
-            position: "absolute",
             wordBreak: "break-all",
             wordWrap: "break-word",
             top: 0,
             bottom: 0,
             lineHeight: "50px",
             paddingRight: "1rem",
+            verticalAlign: "middle",
         };
 
         const columns = this.props.columns.map((column, index) => {
