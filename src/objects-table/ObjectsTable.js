@@ -65,6 +65,7 @@ class ObjectsTable extends React.Component {
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
+        initialSelection: PropTypes.array,
         buttonLabel: PropTypes.node,
         hideSearchBox: PropTypes.bool,
     };
@@ -73,6 +74,7 @@ class ObjectsTable extends React.Component {
         onSelectionChange: () => {},
         buttonLabel: null,
         hideSearchBox: false,
+        initialSelection: []
     };
 
     constructor(props) {
@@ -131,7 +133,7 @@ class ObjectsTable extends React.Component {
             sorting: this.props.initialSorting,
             searchValue: null,
             detailsObject: null,
-            selection: new Set(),
+            selection: new Set(this.props.initialSelection),
             allObjects: new Set(),
         };
     }
