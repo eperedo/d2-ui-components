@@ -31,6 +31,7 @@ class ObjectsTable extends React.Component {
                 text: PropTypes.string.isRequired,
                 multiple: PropTypes.bool.isRequired,
                 isActive: PropTypes.func,
+                isPrimary: PropTypes.bool,
                 type: PropTypes.oneOf(["details"]),
                 onClick: PropTypes.func,
             })
@@ -74,7 +75,7 @@ class ObjectsTable extends React.Component {
         onSelectionChange: () => {},
         buttonLabel: null,
         hideSearchBox: false,
-        initialSelection: []
+        initialSelection: [],
     };
 
     constructor(props) {
@@ -361,6 +362,9 @@ class ObjectsTable extends React.Component {
             .at(dataRows.filter(dr => selection.has(dr.id)).map(dr => dr.id))
             .value();
 
+        const defaultAction = _(contextActions).find({ isPrimary: true }) || contextActions[0];
+        const primaryAction = defaultAction ? defaultAction.fn : undefined;
+
         return (
             <div>
                 <div>
@@ -408,9 +412,7 @@ class ObjectsTable extends React.Component {
                             onColumnSort={this.onColumnSort}
                             contextMenuActions={contextActions}
                             contextMenuIcons={contextMenuIcons}
-                            primaryAction={
-                                contextActions.length > 0 ? contextActions[0].fn : undefined
-                            }
+                            primaryAction={primaryAction}
                             isContextActionAllowed={this.isContextActionAllowed}
                             activeRows={activeRows}
                             isMultipleSelectionAllowed={true}
