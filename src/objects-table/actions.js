@@ -27,7 +27,7 @@ export function setupActions(actions, onClick) {
             const arg = action.multiple ? objects : objects[0];
             if (arg) onClick(action.name, arg);
         };
-        return { name: action.name, text: action.text, fn: handler };
+        return { name: action.name, text: action.text, fn: handler, isPrimary: action.isPrimary };
     });
 
     return { contextActions, contextMenuIcons, isContextActionAllowed };
