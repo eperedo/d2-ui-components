@@ -101,10 +101,18 @@ export default class OrgUnitsSelector extends React.Component {
         } else if (filter && !rootIds) {
             options = { filter, ...pagingOptions };
         } else if (filter && rootIds) {
+            // We cannot both filter by name and check inclusion on rootIds on the same request, so
+            // let's make a request filtering only by name and later check the rootIds
+            // in the response. Also, limit pageSize to avoid an uncontrolled big request.
             options = {
                 filter,
-                ...pagingOptions,
-                postFilter: orgUnit => rootIds.some(ouId => orgUnit.path.includes(ouId)),
+                paging: true,
+                pageSize: 1000,
+                postFilter: orgUnits =>
+                    _(orgUnits)
+                        .filter(orgUnit => rootIds.some(ouId => orgUnit.path.includes(ouId)))
+                        .take(pagingOptions.pageSize)
+                        .value(),
             };
         }
 
@@ -117,7 +125,8 @@ export default class OrgUnitsSelector extends React.Component {
 
         return d2.models.organisationUnits
             .list(listOptions)
-            .then(collection => collection.toArray().filter(options.postFilter || _.identity));
+            .then(collection => collection.toArray())
+            .then(options.postFilter || _.identity);
     }
 
     getChildContext() {
