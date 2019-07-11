@@ -79,7 +79,7 @@ export default class OrgUnitsSelector extends React.Component {
                       paging: false,
                       fields: "id,displayName",
                   }),
-            this.getRoots({}),
+            this.getRoots(),
         ]).then(([levels, groups, defaultRoots]) => {
             this.setState({
                 roots: defaultRoots,
@@ -89,7 +89,7 @@ export default class OrgUnitsSelector extends React.Component {
         });
     }
 
-    getRoots({ filter }) {
+    getRoots({ filter } = {}) {
         const { d2, listParams, rootIds } = this.props;
         const pagingOptions = { paging: true, pageSize: 10 };
         let options;
@@ -176,7 +176,7 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     filterOrgUnits = async value => {
-        const opts = !value ? {} : { filter: `displayName:ilike:${value}` };
+        const opts = value ? { filter: `displayName:ilike:${value}` } : undefined;
         const roots = await this.getRoots(opts);
         this.setState({ roots });
     };
