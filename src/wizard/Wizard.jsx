@@ -65,13 +65,16 @@ class Wizard extends React.Component {
     static propTypes = {
         initialStepKey: PropTypes.string.isRequired,
         onStepChangeRequest: PropTypes.func.isRequired,
+        onStepChange: PropTypes.func,
         useSnackFeedback: PropTypes.bool,
         snackbar: PropTypes.object.isRequired,
         steps: PropTypes.arrayOf(
             PropTypes.shape({
                 key: PropTypes.string.isRequired,
                 label: PropTypes.string.isRequired,
+                description: PropTypes.string,
                 component: PropTypes.func.isRequired,
+                helpDialogIsInitialOpen: PropTypes.bool,
             })
         ).isRequired,
         lastClickableStepIndex: PropTypes.number,
@@ -81,6 +84,10 @@ class Wizard extends React.Component {
         useSnackFeedback: false,
         lastClickableStepIndex: 0,
     };
+
+    componentDidMount() {
+        this.notifyStepChange(this.state.currentStepKey);
+    }
 
     getAdjacentSteps = () => {
         const { steps } = this.props;
@@ -115,6 +122,11 @@ class Wizard extends React.Component {
         );
     };
 
+    notifyStepChange(skepKey) {
+        const { onStepChange } = this.props;
+        if (onStepChange) onStepChange(skepKey);
+    }
+
     setStep = async newStepKey => {
         const { currentStepKey, lastClickableStepIndex } = this.state;
         const { onStepChangeRequest, steps } = this.props;
@@ -128,6 +140,7 @@ class Wizard extends React.Component {
 
         if (_(errorMessages).isEmpty()) {
             const newLastClickableStepIndex = Math.max(lastClickableStepIndex, newStepIndex);
+            this.notifyStepChange(newStepKey);
             this.setState({
                 currentStepKey: newStepKey,
                 lastClickableStepIndex: newLastClickableStepIndex,
@@ -160,6 +173,7 @@ class Wizard extends React.Component {
                 buttonComponent={Button}
                 title={`${step.label} - ${i18n.t("Help")}`}
                 contents={step.help}
+                initialIsOpen={step.helpDialogIsInitialOpen}
             />
         );
     };
