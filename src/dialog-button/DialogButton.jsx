@@ -8,11 +8,25 @@ class DialogButton extends React.Component {
         buttonComponent: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         contents: PropTypes.string.isRequired,
+        initialIsOpen: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        initialIsOpen: undefined,
     };
 
     state = {
-        isOpen: false,
+        isOpen: this.props.initialIsOpen,
+        props: this.props,
     };
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (prevState.props.initialIsOpen === undefined && nextProps.initialIsOpen !== undefined) {
+            return { isOpen: nextProps.initialIsOpen, props: nextProps };
+        } else {
+            return null;
+        }
+    }
 
     handleClickOpen = () => {
         this.setState({ isOpen: true });
@@ -31,7 +45,7 @@ class DialogButton extends React.Component {
                 <CustomButton onClick={this.handleClickOpen} />
 
                 <ConfirmationDialog
-                    isOpen={isOpen}
+                    isOpen={!!isOpen}
                     title={title}
                     description={contents}
                     onCancel={this.handleClose}
