@@ -9,10 +9,12 @@ class DialogButton extends React.Component {
         title: PropTypes.string.isRequired,
         contents: PropTypes.string.isRequired,
         initialIsOpen: PropTypes.bool,
+        isVisible: PropTypes.bool,
     };
 
     static defaultProps = {
         initialIsOpen: undefined,
+        isVisible: true,
     };
 
     state = {
@@ -37,8 +39,10 @@ class DialogButton extends React.Component {
     };
 
     render() {
-        const { buttonComponent: CustomButton, title, contents } = this.props;
+        const { buttonComponent: CustomButton, title, contents, isVisible } = this.props;
         const { isOpen } = this.state;
+
+        if (!isVisible) return null;
 
         return (
             <React.Fragment>
