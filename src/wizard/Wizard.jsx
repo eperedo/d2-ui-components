@@ -161,19 +161,14 @@ class Wizard extends React.Component {
         this.setStep(stepKey);
     });
 
-    renderHelp = ({ step }) => {
-        const Button = ({ onClick }) => (
-            <IconButton tooltip={i18n.t("Help")} onClick={onClick}>
-                <Icon color="primary">help</Icon>
-            </IconButton>
-        );
-
+    renderHelp = ({ step, currentStepKey }) => {
         return (
             <DialogButton
-                buttonComponent={Button}
+                buttonComponent={HelpButton}
                 title={`${step.label} - ${i18n.t("Help")}`}
                 contents={step.help}
                 initialIsOpen={step.helpDialogIsInitialOpen}
+                isVisible={step.help && step.key === currentStepKey}
             />
         );
     };
@@ -227,7 +222,7 @@ class Wizard extends React.Component {
                                 {step.label}
                             </StepButton>
 
-                            {step.help && step === currentStep ? <Help step={step} /> : null}
+                            <Help step={step} currentStepKey={currentStepKey} />
                         </Step>
                     ))}
                 </Stepper>
@@ -257,5 +252,11 @@ class Wizard extends React.Component {
         );
     }
 }
+
+const HelpButton = ({ onClick }) => (
+    <IconButton tooltip={i18n.t("Help")} onClick={onClick}>
+        <Icon color="primary">help</Icon>
+    </IconButton>
+);
 
 export default withSnackbar(withStyles(styles)(Wizard));
