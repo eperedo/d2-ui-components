@@ -18,12 +18,13 @@ class DialogButton extends React.Component {
     };
 
     state = {
-        isOpen: this.props.initialIsOpen,
+        isOpen: !!this.props.initialIsOpen,
         props: this.props,
     };
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (prevState.props.initialIsOpen === undefined && nextProps.initialIsOpen !== undefined) {
+        // Force the dialog opening only when initialIsOpen transitions from undefined to true
+        if (prevState.props.initialIsOpen === undefined && nextProps.initialIsOpen) {
             return { isOpen: nextProps.initialIsOpen, props: nextProps };
         } else {
             return null;
@@ -49,7 +50,7 @@ class DialogButton extends React.Component {
                 <CustomButton onClick={this.handleClickOpen} />
 
                 <ConfirmationDialog
-                    isOpen={!!isOpen}
+                    isOpen={isOpen}
                     title={title}
                     description={contents}
                     onCancel={this.handleClose}
