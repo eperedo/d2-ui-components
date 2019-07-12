@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classes from "classnames";
+import _ from "lodash";
 import FontIcon from "material-ui/FontIcon";
 import Paper from "material-ui/Paper";
 
@@ -26,10 +27,10 @@ class DetailsBox extends React.Component {
 
         return this.props.fields.map(field => {
             const fieldName = field.name;
-            const valueToRender =
-                (field.getValue
-                    ? field.getValue(this.props.object)
-                    : this.props.object[fieldName]) || "-";
+            const valueToRender = field.getValue
+                ? field.getValue(this.props.object)
+                : this.props.object[fieldName];
+            if (_.isNull(valueToRender)) return null;
 
             return (
                 <div key={fieldName} className="detail-field">
@@ -38,7 +39,7 @@ class DetailsBox extends React.Component {
                     </div>
 
                     <div className={`detail-field__value detail-field__${fieldName}`}>
-                        {valueToRender}
+                        {valueToRender || "-"}
                     </div>
                 </div>
             );
