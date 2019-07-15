@@ -222,7 +222,7 @@ class Wizard extends React.Component {
                                 {step.label}
                             </StepButton>
 
-                            <Help step={step} currentStepKey={currentStepKey} />
+                            {step.help && <Help step={step} currentStepKey={currentStepKey} />}
                         </Step>
                     ))}
                 </Stepper>
