@@ -8,11 +8,28 @@ class DialogButton extends React.Component {
         buttonComponent: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         contents: PropTypes.string.isRequired,
+        initialIsOpen: PropTypes.bool,
+        isVisible: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        initialIsOpen: undefined,
+        isVisible: true,
     };
 
     state = {
-        isOpen: false,
+        isOpen: !!this.props.initialIsOpen,
+        props: this.props,
     };
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        // Force the dialog opening only when initialIsOpen transitions from undefined to true
+        if (prevState.props.initialIsOpen === undefined && nextProps.initialIsOpen) {
+            return { isOpen: nextProps.initialIsOpen, props: nextProps };
+        } else {
+            return null;
+        }
+    }
 
     handleClickOpen = () => {
         this.setState({ isOpen: true });
@@ -23,8 +40,10 @@ class DialogButton extends React.Component {
     };
 
     render() {
-        const { buttonComponent: CustomButton, title, contents } = this.props;
+        const { buttonComponent: CustomButton, title, contents, isVisible } = this.props;
         const { isOpen } = this.state;
+
+        if (!isVisible) return null;
 
         return (
             <React.Fragment>
