@@ -99,6 +99,8 @@ const MyOrgUnitsSelector = () => (
         onChange={orgUnitsPaths => console.log("Selected orgUnitPaths", orgUnitsPaths)}
         selected={["/ImspTQPwCqd/O6uvpzGd5pu", "/ImspTQPwCqd/PMa2VCrupOd"]}
         levels={[1, 2]}
+        rootIds={["ImspTQPwCqd"]}
+        listParams={{ maxLevel: 4 }}
     />
 );
 ```

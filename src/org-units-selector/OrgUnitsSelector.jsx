@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
 import Card from "material-ui/Card/Card";
 import CardText from "material-ui/Card/CardText";
@@ -21,6 +22,8 @@ export default class OrgUnitsSelector extends React.Component {
         onChange: PropTypes.func.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string).isRequired,
         levels: PropTypes.arrayOf(PropTypes.number),
+        rootIds: PropTypes.arrayOf(PropTypes.string),
+        listParams: PropTypes.object,
         controls: PropTypes.shape({
             filterByLevel: PropTypes.bool,
             filterByGroup: PropTypes.bool,
@@ -76,7 +79,7 @@ export default class OrgUnitsSelector extends React.Component {
                       paging: false,
                       fields: "id,displayName",
                   }),
-            getDefaultRoots(props.d2),
+            this.getRoots(),
         ]).then(([levels, groups, defaultRoots]) => {
             this.setState({
                 roots: defaultRoots,
@@ -84,6 +87,46 @@ export default class OrgUnitsSelector extends React.Component {
                 groups,
             });
         });
+    }
+
+    getRoots({ filter } = {}) {
+        const { d2, listParams, rootIds } = this.props;
+        const pagingOptions = { paging: true, pageSize: 10 };
+        let options;
+
+        if (!filter && !rootIds) {
+            options = { level: 1, paging: false };
+        } else if (!filter && rootIds) {
+            options = { filter: `id:in:[${rootIds.join(",")}]`, paging: false };
+        } else if (filter && !rootIds) {
+            options = { filter, ...pagingOptions };
+        } else if (filter && rootIds) {
+            // We cannot both filter by name and check inclusion on rootIds on the same request, so
+            // let's make a request filtering only by name and later check the rootIds
+            // in the response. Also, limit pageSize to avoid an uncontrolled big request.
+            options = {
+                filter,
+                paging: true,
+                pageSize: 1000,
+                postFilter: orgUnits =>
+                    _(orgUnits)
+                        .filter(orgUnit => rootIds.some(ouId => orgUnit.path.includes(ouId)))
+                        .take(pagingOptions.pageSize)
+                        .value(),
+            };
+        }
+
+        const listOptions = {
+            paging: false,
+            fields: "id,displayName,path",
+            ...listParams,
+            ..._.omit(options, ["postFilter"]),
+        };
+
+        return d2.models.organisationUnits
+            .list(listOptions)
+            .then(collection => collection.toArray())
+            .then(options.postFilter || _.identity);
     }
 
     getChildContext() {
@@ -133,17 +176,8 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     filterOrgUnits = async value => {
-        const roots = await (!value
-            ? getDefaultRoots(this.props.d2)
-            : this.props.d2.models.organisationUnits
-                  .list({
-                      paging: true,
-                      pageSize: 10,
-                      fields: "id,displayName,path",
-                      filter: `displayName:ilike:${value}`,
-                  })
-                  .then(collection => collection.toArray()));
-
+        const opts = value ? { filter: `displayName:ilike:${value}` } : undefined;
+        const roots = await this.getRoots(opts);
         this.setState({ roots });
     };
 
@@ -260,16 +294,6 @@ function mergeChildren(root, children) {
         const parentPath = childPath.slice(0, childPath.length - 1);
         return assignChildren(root, parentPath, children);
     }
-}
-
-function getDefaultRoots(d2) {
-    return d2.models.organisationUnits
-        .list({
-            paging: false,
-            level: 1,
-            fields: "id,displayName,path,children::isNotEmpty",
-        })
-        .then(collection => collection.toArray());
 }
 
 const styles = {
