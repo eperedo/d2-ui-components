@@ -60,10 +60,8 @@ export function getFormatter(model, name) {
             return getValueForCollection;
         } else if (def.type === "URL") {
             return getValueForUrl;
-        } else {
-            return;
         }
     })();
 
-    return obj => (fn ? fn(obj[name]) : obj[name]);
+    return obj => (obj[name] && fn ? fn(obj[name]) : obj[name]);
 }
