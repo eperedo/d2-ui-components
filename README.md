@@ -320,9 +320,9 @@ $ yarn build && yarn publish build/
 
 ## i18n
 
-We use `@dhis2/i18n` with namespace `d2-ui-components`. Within this package, all components
-should import [src/utils/i18n.js](src/utils/i18n.js) and use
-`i18n.t("Some literal")`, which wraps the original i18n object with namespace `d2-ui-components`.
+-   Import i18n from utils module (`import i18n from "../utils/i18n";`) then use it: `i18n.t("Some literal")`. This uses `@dhis2/i18n` infrastructure with namespace `d2-ui-components`.
+
+-   Do not call `i18n.t("Some literal")` on module or class level, only within functions. At that point, the locale is not yet selected, and you'll get always the default English translations.
 
 ### Update an existing language
 
