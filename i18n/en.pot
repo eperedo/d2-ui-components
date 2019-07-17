@@ -5,13 +5,13 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-06-28T07:35:50.513Z\n"
-"PO-Revision-Date: 2019-06-28T07:35:50.513Z\n"
-
-msgid "Save"
-msgstr ""
+"POT-Creation-Date: 2019-07-17T05:25:09.952Z\n"
+"PO-Revision-Date: 2019-07-17T05:25:09.952Z\n"
 
 msgid "Cancel"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid "Actions"
