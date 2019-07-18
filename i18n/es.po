@@ -68,7 +68,7 @@ msgid "All {{total}} items on this page are selected."
 msgstr "Todos los {{total}} elementos en esta página están seleccionados"
 
 msgid "Select all {{total}} items in all pages"
-msgstr "Selecciona los {{total}} elementos en todas las páginas"
+msgstr "Seleccione todos los {{total}} elementos en todas las páginas"
 
 msgid "No results found"
 msgstr "No hay resultados"
