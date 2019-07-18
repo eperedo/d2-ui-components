@@ -18,7 +18,7 @@ msgid "Actions"
 msgstr "Opérations"
 
 msgid "of"
-msgstr "sur"
+msgstr "de"
 
 msgid "Close"
 msgstr "Fermer"
@@ -33,7 +33,7 @@ msgid "Private"
 msgstr "Privé"
 
 msgid "Metadata"
-msgstr "Metadata"
+msgstr "Métadonnées"
 
 msgid "Data"
 msgstr "Données"
@@ -68,7 +68,7 @@ msgid "All {{total}} items on this page are selected."
 msgstr "Tous les {{total}} éléments de cette page sont sélectionnés"
 
 msgid "Select all {{total}} items in all pages"
-msgstr "Sélectionnez les {{{total}}} éléments dans toutes les pages"
+msgstr "Sélectionnez tous les {{{total}}} éléments dans toutes les pages"
 
 msgid "No results found"
 msgstr "Aucun résultat trouvé"
@@ -92,10 +92,10 @@ msgid "Unselect all"
 msgstr "Désélectionner tout"
 
 msgid "Organisation Unit Level"
-msgstr "Niveau d'unité d'Organisation"
+msgstr "Niveau de l'Unité d'Organisation"
 
 msgid "Organisation Unit Group"
-msgstr "Groupe d'Unités d'Organisation"
+msgstr "Groupe de l'Unités d'Organisation"
 
 msgid "Search by name"
 msgstr "Rechercher par nom"
