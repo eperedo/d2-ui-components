@@ -1,108 +1,110 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2019-06-28T07:35:50.513Z\n"
+"POT-Creation-Date: 2019-07-17T05:25:09.952Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgid "Save"
-msgstr ""
-
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
+
+msgid "Save"
+msgstr "Enregistrer"
 
 msgid "Actions"
-msgstr ""
+msgstr "Opérations"
 
 msgid "of"
-msgstr ""
+msgstr "de"
 
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 msgid "R/W"
-msgstr ""
+msgstr "Éditable"
 
 msgid "Read"
-msgstr ""
+msgstr "Lecture"
 
 msgid "Private"
-msgstr ""
+msgstr "Privé"
 
 msgid "Metadata"
-msgstr ""
+msgstr "Métadonnées"
 
 msgid "Data"
-msgstr ""
+msgstr "Données"
 
 msgid "Assign all"
-msgstr ""
+msgstr "Assigner tout"
 
 msgid "Remove all"
-msgstr ""
+msgstr "Enlever tout"
 
 msgid "Hidden by filters"
-msgstr ""
+msgstr "Caché par des filtres"
 
 msgid "selected"
-msgstr ""
+msgstr "sélectionnés"
 
 msgid "There are {{total}} items selected in all pages."
-msgstr ""
+msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
 
 msgid "Clear selection"
-msgstr ""
+msgstr "Effacer la sélection"
 
 msgid "There are {{count}} items selected ({{invisible}} on other pages)."
 msgid_plural ""
 "There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr[0] "There is one item selected on other pages."
-msgstr[1] "There are {{count}} items selected ({{invisible}} on other pages)."
+msgstr[0] ""
+"Il y a {{count}} élément sélectionné ({{invisible}} sur les autres pages)."
+msgstr[1] ""
+"Il y a {{count}} éléments sélectionnés ({{invisible}} sur les autres pages)."
 
 msgid "All {{total}} items on this page are selected."
-msgstr ""
+msgstr "Tous les {{total}} éléments de cette page sont sélectionnés"
 
 msgid "Select all {{total}} items in all pages"
-msgstr ""
+msgstr "Sélectionnez tous les {{{total}}} éléments dans toutes les pages"
 
 msgid "No results found"
-msgstr ""
+msgstr "Aucun résultat trouvé"
 
 msgid "For organisation units within"
-msgstr ""
+msgstr "Pour les unités d'organisation au sein de"
 
 msgid "For all organisation units"
-msgstr ""
+msgstr "Pour toutes les unités d'organisation"
 
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 msgid "Unselect"
-msgstr ""
+msgstr "Désélectionner"
 
 msgid "Select all"
-msgstr ""
+msgstr "Sélectionner tout"
 
 msgid "Unselect all"
-msgstr ""
+msgstr "Désélectionner tout"
 
 msgid "Organisation Unit Level"
-msgstr ""
+msgstr "Niveau de l'Unité d'Organisation"
 
 msgid "Organisation Unit Group"
-msgstr ""
+msgstr "Groupe de l'Unités d'Organisation"
 
 msgid "Search by name"
-msgstr ""
+msgstr "Rechercher par nom"
 
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 msgid "Next"
-msgstr ""
+msgstr "Suivant"

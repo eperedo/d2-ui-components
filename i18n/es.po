@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2019-06-28T07:35:50.513Z\n"
+"POT-Creation-Date: 2019-07-17T05:25:09.952Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgid "Save"
-msgstr "Guardar"
-
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgid "Save"
+msgstr "Guardar"
 
 msgid "Actions"
 msgstr "Acciones"
@@ -59,14 +59,16 @@ msgstr "Borrar selección"
 msgid "There are {{count}} items selected ({{invisible}} on other pages)."
 msgid_plural ""
 "There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr[0] "There is one item selected on other pages."
-msgstr[1] "There are {{count}} items selected ({{invisible}} on other pages)."
+msgstr[0] ""
+"Hay {{count}} elemento seleccionado ({{invisible}} en otras páginas)."
+msgstr[1] ""
+"Hay {{count}} elementos seleccionados ({{invisible}} en otras páginas)."
 
 msgid "All {{total}} items on this page are selected."
-msgstr ""
+msgstr "Todos los {{total}} elementos en esta página están seleccionados"
 
 msgid "Select all {{total}} items in all pages"
-msgstr ""
+msgstr "Seleccione todos los {{total}} elementos en todas las páginas"
 
 msgid "No results found"
 msgstr "No hay resultados"

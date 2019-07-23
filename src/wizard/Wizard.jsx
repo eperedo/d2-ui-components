@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import memoize from "nano-memoize";
-import i18n from "@dhis2/d2-i18n";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -14,6 +13,7 @@ import Icon from "@material-ui/core/Icon";
 
 import { withSnackbar } from "../snackbar";
 import DialogButton from "../dialog-button/DialogButton";
+import i18n from "../utils/i18n";
 
 const styles = theme => ({
     root: {

@@ -1,7 +1,7 @@
 import React from "react";
-import i18n from "@dhis2/d2-i18n";
 import PropTypes from "prop-types";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
+import i18n from "../utils/i18n";
 
 class ConfirmationDialog extends React.Component {
     static propTypes = {
@@ -13,11 +13,6 @@ class ConfirmationDialog extends React.Component {
         saveText: PropTypes.string,
         cancelText: PropTypes.string,
         disableSave: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        saveText: i18n.t("Save"),
-        cancelText: i18n.t("Cancel"),
     };
 
     render() {
@@ -52,12 +47,12 @@ class ConfirmationDialog extends React.Component {
                 <DialogActions>
                     {onCancel && (
                         <Button onClick={onCancel} autoFocus>
-                            {cancelText}
+                            {cancelText || i18n.t("Cancel")}
                         </Button>
                     )}
                     {onSave && (
                         <Button onClick={onSave} color="primary" disabled={disableSave}>
-                            {saveText}
+                            {saveText || i18n.t("Save")}
                         </Button>
                     )}
                 </DialogActions>
