@@ -193,6 +193,8 @@ Display D2 objects in a table with:
 -   Pagination.
 -   _Create_ button action.
 
+Whenever you want to update the objects table, pass a different `key` prop (i.e `new Date()`), as you would do with any other React component.
+
 ```
 const columns = [
     { name: "displayName", text: i18n.t("Name"), sortable: true },
