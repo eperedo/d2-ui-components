@@ -14,6 +14,7 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 import WarningIcon from "@material-ui/icons/Warning";
 import { withStyles } from "@material-ui/core/styles";
 import SnackbarContext from "./context";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
 const anchorOrigin = {
     vertical: "bottom",
@@ -54,6 +55,19 @@ const styles = theme => ({
     },
 });
 
+const theme = createMuiTheme({
+    typography: {
+        useNextVariants: true,
+    },
+    overrides: {
+        MuiSnackbarContent: {
+            message: {
+                maxWidth: "85%",
+            },
+        },
+    },
+});
+
 const SnackbarConsumer = props => {
     const { classes } = props;
 
@@ -66,36 +80,41 @@ const SnackbarConsumer = props => {
                 }
 
                 return (
-                    <Snackbar
-                        anchorOrigin={anchorOrigin}
-                        open={snackbarIsOpen}
-                        autoHideDuration={autoHideDuration}
-                        onClose={closeSnackbar}
-                    >
-                        <SnackbarContent
-                            className={classes[variant]}
-                            aria-describedby="client-snackbar"
-                            message={
-                                <span id="client-snackbar" className={classes.message}>
-                                    <Icon
-                                        className={classNames(classes.icon, classes.iconVariant)}
-                                    />
-                                    {message}
-                                </span>
-                            }
-                            action={[
-                                <IconButton
-                                    key="close"
-                                    aria-label="Close"
-                                    color="inherit"
-                                    className={classes.close}
-                                    onClick={closeSnackbar}
-                                >
-                                    <CloseIcon className={classes.icon} />
-                                </IconButton>,
-                            ]}
-                        />
-                    </Snackbar>
+                    <MuiThemeProvider theme={theme}>
+                        <Snackbar
+                            anchorOrigin={anchorOrigin}
+                            open={snackbarIsOpen}
+                            autoHideDuration={autoHideDuration}
+                            onClose={closeSnackbar}
+                        >
+                            <SnackbarContent
+                                className={classes[variant]}
+                                aria-describedby="client-snackbar"
+                                message={
+                                    <span id="client-snackbar" className={classes.message}>
+                                        <Icon
+                                            className={classNames(
+                                                classes.icon,
+                                                classes.iconVariant
+                                            )}
+                                        />
+                                        {message}
+                                    </span>
+                                }
+                                action={[
+                                    <IconButton
+                                        key="close"
+                                        aria-label="Close"
+                                        color="inherit"
+                                        className={classes.close}
+                                        onClick={closeSnackbar}
+                                    >
+                                        <CloseIcon className={classes.icon} />
+                                    </IconButton>,
+                                ]}
+                            />
+                        </Snackbar>
+                    </MuiThemeProvider>
                 );
             }}
         </SnackbarContext.Consumer>
