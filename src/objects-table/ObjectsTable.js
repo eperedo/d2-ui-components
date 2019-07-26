@@ -4,7 +4,6 @@ import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
-import memoize from "nano-memoize";
 
 import Pagination from "../data-table/Pagination.component";
 import DataTable from "../data-table/DataTable";
@@ -82,7 +81,10 @@ class ObjectsTable extends React.Component {
         super(props);
         this.state = this._getInitialState();
         this.actions = setupActions(props.actions, this.onContextAction);
-        this._getColumns = memoize(this.getColumns.bind(this));
+        this.columnsWithFormatter = props.columns.map(column => ({
+            ...column,
+            getValue: column.getValue || getFormatter(props.model, column.name),
+        }));
     }
 
     closeDetails = () => {
@@ -101,28 +103,31 @@ class ObjectsTable extends React.Component {
         }
     };
 
-    getColumns(columns, selectedHeaderChecked) {
-        const { model } = this.props;
+    getSelectColumn() {
+        const { actions } = this.props;
+        const isSomeActionMultiple = _(actions).some("multiple");
+
+        if (!isSomeActionMultiple) return null;
+
         const selectedColumnContents = (
             <SimpleCheckBox
-                checked={selectedHeaderChecked}
-                onClick={() => this.toggleSelectAll(selectedHeaderChecked)}
+                checked={this.allSelected()}
+                onClick={this.toggleSelectAll}
                 iconStyle={styles.selectColumn}
             />
         );
 
-        const selectColumn = {
+        return {
             name: "selected",
             style: { width: 20 },
             text: "",
             sortable: false,
             contents: selectedColumnContents,
         };
+    }
 
-        return [selectColumn].concat(columns).map(column => ({
-            ...column,
-            getValue: column.getValue || getFormatter(model, column.name),
-        }));
+    getColumns() {
+        return _.compact([this.getSelectColumn(), ...this.columnsWithFormatter]);
     }
 
     getDefaultSorting() {
@@ -205,14 +210,20 @@ class ObjectsTable extends React.Component {
         this.setState({ selection }, this.notifySelectionChange);
     }
 
-    toggleSelectAll = selectedHeaderChecked => {
-        const { selection, dataRows } = this.state;
+    allSelected() {
+        const { dataRows, selection } = this.state;
+        return !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
+    }
+
+    toggleSelectAll = () => {
+        const { dataRows, selection } = this.state;
+
         const selectionInOtherPages = _.difference(
             Array.from(selection),
             dataRows.map(dr => dr.id)
         );
 
-        const currentPageItems = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
+        const currentPageItems = this.allSelected() ? [] : this.state.dataRows.map(dr => dr.id);
 
         this.setState(
             { selection: new Set([...currentPageItems, ...selectionInOtherPages]) },
@@ -330,12 +341,11 @@ class ObjectsTable extends React.Component {
     render() {
         const {
             onButtonClick,
-            columns,
             detailsFields,
-            model,
             customFiltersComponent,
             buttonLabel,
             hideSearchBox,
+            model,
         } = this.props;
         const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
         const { contextActions, contextMenuIcons } = this.actions;
@@ -360,10 +370,7 @@ class ObjectsTable extends React.Component {
             getValue: field.getValue || getFormatter(model, field.name),
         }));
 
-        const selectedHeaderChecked =
-            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
-
-        const allColumns = this.getColumns(columns, selectedHeaderChecked);
+        const allColumns = this.getColumns();
 
         const activeRows = _(rows)
             .keyBy("id")
