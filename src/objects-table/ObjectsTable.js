@@ -381,7 +381,7 @@ class ObjectsTable extends React.Component {
         const primaryAction = defaultAction ? defaultAction.fn : undefined;
 
         return (
-            <div>
+            <div style={styles.mainWrapper}>
                 <div>
                     {!hideSearchBox && (
                         <div style={styles.searchBox}>
@@ -472,6 +472,7 @@ function calculatePageValue(pager, pageSize) {
 const styles = {
     searchBox: { float: "left", width: "33%" },
     pagination: { float: "right" },
+    mainWrapper: { marginTop: -10 },
     spinner: { float: "right" },
     clear: { clear: "both" },
     selectColumn: { width: "auto" },
