@@ -22,7 +22,7 @@ class ObjectsTable extends React.Component {
         d2: PropTypes.object.isRequired,
         onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
-        model: PropTypes.object.isRequired,
+        model: PropTypes.object,
         initialSorting: PropTypes.array, // [columnName: string, "asc" | "desc"]
         actions: PropTypes.arrayOf(
             PropTypes.shape({
