@@ -184,6 +184,7 @@ class ObjectsTable extends React.Component {
                 dataRows: objects,
                 page: newPage,
                 allObjects,
+                detailsObject: null,
             },
             this.notifySelectionChange
         );
