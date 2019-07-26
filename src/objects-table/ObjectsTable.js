@@ -444,9 +444,9 @@ class ObjectsTable extends React.Component {
     }
 }
 
-function calculatePageValue(pager, defaultPerPage) {
-    const { total, pageCount, page, query } = pager;
-    const pageSize = query ? query.pageSize : defaultPerPage;
+function calculatePageValue(pager, pageSize) {
+    const { total, page } = pager;
+    const pageCount = Math.ceil(total / pageSize);
     const pageCalculationValue = total - (total - (pageCount - (pageCount - page)) * pageSize);
     const startItem = 1 + pageCalculationValue - pageSize;
     const endItem = pageCalculationValue;
