@@ -24,7 +24,7 @@ class ObjectsTable extends React.Component {
         onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
         model: PropTypes.object.isRequired,
-        initialSorting: PropTypes.array.isRequired, // [fieldName, "asc" | "desc"]
+        initialSorting: PropTypes.array, // [columnName: string, "asc" | "desc"]
         actions: PropTypes.arrayOf(
             PropTypes.shape({
                 name: PropTypes.string.isRequired,
@@ -45,7 +45,7 @@ class ObjectsTable extends React.Component {
                 style: PropTypes.object,
                 contents: PropTypes.element,
             })
-        ),
+        ).isRequired,
         /*  list: async function that returns paginated D2 objects.
 
             list(
@@ -125,13 +125,21 @@ class ObjectsTable extends React.Component {
         }));
     }
 
+    getDefaultSorting() {
+        const columnName = _(this.props.columns)
+            .map(column => (column.sortable ? column.name : null))
+            .compact()
+            .first();
+        return columnName ? [columnName, "asc"] : null;
+    }
+
     _getInitialState() {
         return {
             isLoading: true,
             page: 1,
             pager: { total: 0 },
             dataRows: [],
-            sorting: this.props.initialSorting,
+            sorting: this.props.initialSorting || this.getDefaultSorting(),
             searchValue: null,
             detailsObject: null,
             selection: new Set(this.props.initialSelection),
