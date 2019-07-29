@@ -68,6 +68,7 @@ class ObjectsTable extends React.Component {
         initialSelection: PropTypes.array,
         buttonLabel: PropTypes.node,
         hideSearchBox: PropTypes.bool,
+        forceSelectionColumn: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -75,6 +76,7 @@ class ObjectsTable extends React.Component {
         buttonLabel: null,
         hideSearchBox: false,
         initialSelection: [],
+        forceSelectionColumn: undefined,
     };
 
     constructor(props) {
@@ -104,10 +106,12 @@ class ObjectsTable extends React.Component {
     };
 
     getSelectColumn() {
-        const { actions } = this.props;
+        const { actions, forceSelectionColumn } = this.props;
         const isSomeActionMultiple = _(actions).some("multiple");
+        const columnIsVisible =
+            forceSelectionColumn || (_.isNil(forceSelectionColumn) && isSomeActionMultiple);
 
-        if (!isSomeActionMultiple) return null;
+        if (!columnIsVisible) return null;
 
         const selectedColumnContents = (
             <SimpleCheckBox
