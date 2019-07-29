@@ -60,6 +60,8 @@ class DataTable extends React.Component {
             isContextActionAllowed(this.state.activeRows, action.name)
         );
 
+        if (actionsToShow.length === 0) return null;
+
         return (
             <MultipleDataTableContextMenu
                 target={this.state.contextMenuTarget}
