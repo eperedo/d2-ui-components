@@ -33,14 +33,14 @@ class DataTable extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this.getStateFromProps(props);
+        this.state = DataTable.getStateFromProps(props);
     }
 
-    componentWillReceiveProps(newProps) {
-        this.setState(this.getStateFromProps(newProps));
+    static getDerivedStateFromProps (props, state) {
+        return DataTable.getStateFromProps(props, state);
     }
 
-    getStateFromProps(props) {
+    static getStateFromProps(props, oldState = {}) {
         let dataRows = [];
 
         if (_.isArray(props.rows) || _.isMap(props.rows)) {
@@ -49,8 +49,8 @@ class DataTable extends React.Component {
 
         return {
             columns: props.columns,
-            activeRows: props.activeRows,
             dataRows,
+            activeRows: oldState.showContextMenu ? oldState.activeRows : props.activeRows,
         };
     }
 
