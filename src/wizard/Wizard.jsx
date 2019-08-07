@@ -29,6 +29,9 @@ const styles = theme => ({
         marginLeft: 3,
         fontSize: "1.1em",
         color: "#F00",
+        textAlign: "center",
+        backgroundColor: "#EEE",
+        padding: 20,
     },
     button: {
         margin: theme.spacing.unit,
