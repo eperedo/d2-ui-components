@@ -55,10 +55,7 @@ class DataTable extends React.Component {
     }
 
     renderContextMenu() {
-        const { contextMenuActions, isContextActionAllowed } = this.props;
-        const actionsToShow = contextMenuActions.filter(action =>
-            isContextActionAllowed(this.state.activeRows, action.name)
-        );
+        const actionsToShow = this.getActionsToShow(this.state.activeRows);
 
         return (
             <MultipleDataTableContextMenu
@@ -149,6 +146,12 @@ class DataTable extends React.Component {
         this.props.onActiveRowsChange(this.state.activeRows);
     };
 
+    getActionsToShow(activeRows) {
+        return this.props.contextMenuActions.filter(action =>
+            this.props.isContextActionAllowed(activeRows, action.name)
+        );
+    }
+
     handleRowClick = (event, rowSource) => {
         //Update activeRows according to click|ctlr+click
         var newActiveRows;
@@ -162,11 +165,10 @@ class DataTable extends React.Component {
             newActiveRows = [rowSource];
         }
 
-        //Update state
         this.setState(
             {
                 contextMenuTarget: event.currentTarget,
-                showContextMenu: true,
+                showContextMenu: this.getActionsToShow(newActiveRows).length > 0,
                 activeRows: newActiveRows,
             },
             this.notifyActiveRows
