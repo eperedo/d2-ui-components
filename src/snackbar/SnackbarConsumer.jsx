@@ -46,7 +46,7 @@ const styles = theme => ({
     },
     iconVariant: {
         opacity: 0.9,
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing.unit * 4, // Or anything between 30px and 38px
     },
     message: {
         display: "flex",
