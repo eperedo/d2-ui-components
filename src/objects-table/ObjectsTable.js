@@ -4,7 +4,6 @@ import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
-import memoize from "nano-memoize";
 
 import Pagination from "../data-table/Pagination.component";
 import DataTable from "../data-table/DataTable";
@@ -23,8 +22,8 @@ class ObjectsTable extends React.Component {
         d2: PropTypes.object.isRequired,
         onButtonClick: PropTypes.func,
         pageSize: PropTypes.number.isRequired,
-        model: PropTypes.object.isRequired,
-        initialSorting: PropTypes.array.isRequired, // [fieldName, "asc" | "desc"]
+        model: PropTypes.object,
+        initialSorting: PropTypes.array, // [columnName: string, "asc" | "desc"]
         actions: PropTypes.arrayOf(
             PropTypes.shape({
                 name: PropTypes.string.isRequired,
@@ -45,7 +44,7 @@ class ObjectsTable extends React.Component {
                 style: PropTypes.object,
                 contents: PropTypes.element,
             })
-        ),
+        ).isRequired,
         /*  list: async function that returns paginated D2 objects.
 
             list(
@@ -69,6 +68,7 @@ class ObjectsTable extends React.Component {
         initialSelection: PropTypes.array,
         buttonLabel: PropTypes.node,
         hideSearchBox: PropTypes.bool,
+        forceSelectionColumn: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -76,13 +76,17 @@ class ObjectsTable extends React.Component {
         buttonLabel: null,
         hideSearchBox: false,
         initialSelection: [],
+        forceSelectionColumn: undefined,
     };
 
     constructor(props) {
         super(props);
         this.state = this._getInitialState();
         this.actions = setupActions(props.actions, this.onContextAction);
-        this._getColumns = memoize(this.getColumns.bind(this));
+        this.columnsWithFormatter = props.columns.map(column => ({
+            ...column,
+            getValue: column.getValue || getFormatter(props.model, column.name),
+        }));
     }
 
     closeDetails = () => {
@@ -101,28 +105,41 @@ class ObjectsTable extends React.Component {
         }
     };
 
-    getColumns(columns, selectedHeaderChecked) {
-        const { model } = this.props;
+    getSelectColumn() {
+        const { actions, forceSelectionColumn } = this.props;
+        const isSomeActionMultiple = _(actions).some("multiple");
+        const columnIsVisible =
+            forceSelectionColumn || (_.isNil(forceSelectionColumn) && isSomeActionMultiple);
+
+        if (!columnIsVisible) return null;
+
         const selectedColumnContents = (
             <SimpleCheckBox
-                checked={selectedHeaderChecked}
-                onClick={() => this.toggleSelectAll(selectedHeaderChecked)}
+                checked={this.allSelected()}
+                onClick={this.toggleSelectAll}
                 iconStyle={styles.selectColumn}
             />
         );
 
-        const selectColumn = {
+        return {
             name: "selected",
             style: { width: 20 },
             text: "",
             sortable: false,
             contents: selectedColumnContents,
         };
+    }
 
-        return [selectColumn].concat(columns).map(column => ({
-            ...column,
-            getValue: column.getValue || getFormatter(model, column.name),
-        }));
+    getColumns() {
+        return _.compact([this.getSelectColumn(), ...this.columnsWithFormatter]);
+    }
+
+    getDefaultSorting() {
+        const columnName = _(this.props.columns)
+            .map(column => (column.sortable ? column.name : null))
+            .compact()
+            .first();
+        return columnName ? [columnName, "asc"] : null;
     }
 
     _getInitialState() {
@@ -131,7 +148,7 @@ class ObjectsTable extends React.Component {
             page: 1,
             pager: { total: 0 },
             dataRows: [],
-            sorting: this.props.initialSorting,
+            sorting: this.props.initialSorting || this.getDefaultSorting(),
             searchValue: null,
             detailsObject: null,
             selection: new Set(this.props.initialSelection),
@@ -171,6 +188,7 @@ class ObjectsTable extends React.Component {
                 dataRows: objects,
                 page: newPage,
                 allObjects,
+                detailsObject: null,
             },
             this.notifySelectionChange
         );
@@ -197,14 +215,20 @@ class ObjectsTable extends React.Component {
         this.setState({ selection }, this.notifySelectionChange);
     }
 
-    toggleSelectAll = selectedHeaderChecked => {
-        const { selection, dataRows } = this.state;
+    allSelected() {
+        const { dataRows, selection } = this.state;
+        return !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
+    }
+
+    toggleSelectAll = () => {
+        const { dataRows, selection } = this.state;
+
         const selectionInOtherPages = _.difference(
             Array.from(selection),
             dataRows.map(dr => dr.id)
         );
 
-        const currentPageItems = selectedHeaderChecked ? [] : this.state.dataRows.map(dr => dr.id);
+        const currentPageItems = this.allSelected() ? [] : this.state.dataRows.map(dr => dr.id);
 
         this.setState(
             { selection: new Set([...currentPageItems, ...selectionInOtherPages]) },
@@ -322,12 +346,11 @@ class ObjectsTable extends React.Component {
     render() {
         const {
             onButtonClick,
-            columns,
             detailsFields,
-            model,
             customFiltersComponent,
             buttonLabel,
             hideSearchBox,
+            model,
         } = this.props;
         const { dataRows, sorting, selection, isLoading, detailsObject } = this.state;
         const { contextActions, contextMenuIcons } = this.actions;
@@ -352,10 +375,7 @@ class ObjectsTable extends React.Component {
             getValue: field.getValue || getFormatter(model, field.name),
         }));
 
-        const selectedHeaderChecked =
-            !_.isEmpty(dataRows) && dataRows.every(row => selection.has(row.id));
-
-        const allColumns = this.getColumns(columns, selectedHeaderChecked);
+        const allColumns = this.getColumns();
 
         const activeRows = _(rows)
             .keyBy("id")
@@ -366,7 +386,7 @@ class ObjectsTable extends React.Component {
         const primaryAction = defaultAction ? defaultAction.fn : undefined;
 
         return (
-            <div>
+            <div style={styles.mainWrapper}>
                 <div>
                     {!hideSearchBox && (
                         <div style={styles.searchBox}>
@@ -444,9 +464,9 @@ class ObjectsTable extends React.Component {
     }
 }
 
-function calculatePageValue(pager, defaultPerPage) {
-    const { total, pageCount, page, query } = pager;
-    const pageSize = query ? query.pageSize : defaultPerPage;
+function calculatePageValue(pager, pageSize) {
+    const { total, page } = pager;
+    const pageCount = Math.ceil(total / pageSize);
     const pageCalculationValue = total - (total - (pageCount - (pageCount - page)) * pageSize);
     const startItem = 1 + pageCalculationValue - pageSize;
     const endItem = pageCalculationValue;
@@ -457,6 +477,7 @@ function calculatePageValue(pager, defaultPerPage) {
 const styles = {
     searchBox: { float: "left", width: "33%" },
     pagination: { float: "right" },
+    mainWrapper: { marginTop: -10 },
     spinner: { float: "right" },
     clear: { clear: "both" },
     selectColumn: { width: "auto" },
