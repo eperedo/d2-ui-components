@@ -48,6 +48,8 @@ function getValueForUrl(value) {
 }
 
 export function getFormatter(model, name) {
+    if (!model) return obj => obj[name];
+
     const def = model.modelValidations[name] || {};
     const isAccessField = def.type === "TEXT" && def.min === 8 && def.max === 8;
 
