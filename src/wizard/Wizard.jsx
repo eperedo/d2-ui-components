@@ -24,6 +24,15 @@ const styles = theme => ({
         marginLeft: 3,
         fontSize: "1.1em",
     },
+    warning: {
+        marginBottom: 15,
+        marginLeft: 3,
+        fontSize: "1.1em",
+        color: "#F00",
+        textAlign: "center",
+        backgroundColor: "#EEE",
+        padding: 20,
+    },
     button: {
         margin: theme.spacing.unit,
         marginRight: 5,
@@ -72,6 +81,7 @@ class Wizard extends React.Component {
             PropTypes.shape({
                 key: PropTypes.string.isRequired,
                 label: PropTypes.string.isRequired,
+                warning: PropTypes.string,
                 description: PropTypes.string,
                 component: PropTypes.func.isRequired,
                 helpDialogIsInitialOpen: PropTypes.bool,
@@ -230,6 +240,9 @@ class Wizard extends React.Component {
                 <FeedbackMessages />
 
                 <Paper className={classes.contents} data-wizard-contents={true}>
+                    {currentStep.warning && (
+                        <div className={classes.warning}>{currentStep.warning}</div>
+                    )}
                     {currentStep.description && (
                         <div className={classes.description}>{currentStep.description}</div>
                     )}
