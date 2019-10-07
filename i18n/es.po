@@ -48,7 +48,7 @@ msgid "Hidden by filters"
 msgstr "Ocultos por filtro"
 
 msgid "selected"
-msgstr "seleccionados"
+msgstr "seleccionado(s)"
 
 msgid "There are {{total}} items selected in all pages."
 msgstr "Hay {{total}} elementos seleccionados en todas las páginas."
@@ -57,11 +57,7 @@ msgid "Clear selection"
 msgstr "Borrar selección"
 
 msgid "There are {{count}} items selected ({{invisible}} on other pages)."
-msgid_plural ""
-"There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr[0] ""
-"Hay {{count}} elemento seleccionado ({{invisible}} en otras páginas)."
-msgstr[1] ""
+msgstr ""
 "Hay {{count}} elementos seleccionados ({{invisible}} en otras páginas)."
 
 msgid "All {{total}} items on this page are selected."
