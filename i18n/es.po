@@ -57,7 +57,11 @@ msgid "Clear selection"
 msgstr "Borrar selección"
 
 msgid "There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr ""
+msgid_plural ""
+"There are {{count}} items selected ({{invisible}} on other pages)."
+msgstr[0] ""
+"Hay {{count}} elemento seleccionado ({{invisible}} en otras páginas)."
+msgstr[1] ""
 "Hay {{count}} elementos seleccionados ({{invisible}} en otras páginas)."
 
 msgid "All {{total}} items on this page are selected."
