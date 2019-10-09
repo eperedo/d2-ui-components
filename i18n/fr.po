@@ -48,7 +48,7 @@ msgid "Hidden by filters"
 msgstr "Caché par des filtres"
 
 msgid "selected"
-msgstr "sélectionnés"
+msgstr "sélectionné(s)"
 
 msgid "There are {{total}} items selected in all pages."
 msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
@@ -95,7 +95,7 @@ msgid "Organisation Unit Level"
 msgstr "Niveau de l'Unité d'Organisation"
 
 msgid "Organisation Unit Group"
-msgstr "Groupe de l'Unités d'Organisation"
+msgstr "Groupe de l'Unité d'Organisation"
 
 msgid "Search by name"
 msgstr "Rechercher par nom"
