@@ -5,7 +5,7 @@ import SearchBox from "./search-box/SearchBox";
 import DialogButton from "./dialog-button/DialogButton";
 import ConfirmationDialog from "./confirmation-dialog/ConfirmationDialog";
 import OrgUnitsSelector from "./org-units-selector/OrgUnitsSelector";
-import { withSnackbar } from "./snackbar";
+import { withSnackbar, useSnackbar } from "./snackbar";
 import SnackbarProvider from "./snackbar/SnackbarProvider";
 import { withLoading } from "./loading";
 import LoadingProvider from "./loading/LoadingProvider";
@@ -24,6 +24,7 @@ export {
     OrgUnitsSelector,
     SnackbarProvider,
     withSnackbar,
+    useSnackbar,
     LoadingProvider,
     withLoading,
     ObjectsTable,

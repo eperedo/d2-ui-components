@@ -28,6 +28,21 @@ export default class SnackbarProvider extends Component {
         });
     };
 
+    byLevel = {
+        success: (message, options = {}) => {
+            this.openSnackbar("success", message, options);
+        },
+        info: (message, options = {}) => {
+            this.openSnackbar("info", message, options);
+        },
+        warning: (message, options = {}) => {
+            this.openSnackbar("warning", message, options);
+        },
+        error: (message, options = {}) => {
+            this.openSnackbar("error", message, options);
+        },
+    };
+
     closeSnackbar = () => {
         this.setState({
             message: "",
@@ -40,6 +55,7 @@ export default class SnackbarProvider extends Component {
 
         const value = {
             openSnackbar: this.openSnackbar,
+            byLevel: this.byLevel,
             closeSnackbar: this.closeSnackbar,
             snackbarIsOpen: this.state.isOpen,
             message: this.state.message,
