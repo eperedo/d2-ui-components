@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import snackbarContext from "./context";
-import _ from "lodash";
 
 export function withSnackbar(WrappedComponent) {
     return class extends React.Component {

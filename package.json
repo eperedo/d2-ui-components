@@ -74,6 +74,7 @@
         "build-css": "cd src && cp -a --parents **/*.css **/*.scss ../build",
         "build": "yarn code-quality && rm -rf build/* && yarn build-only",
         "build-dev": "yarn build-only --watch --verbose",
+        "prepare": "yarn build",
         "code-quality": "yarn lint && yarn prettify && yarn test",
         "extract-pot": "d2-i18n-extract -p src/ -o i18n/",
         "lint": "eslint src src/ --ext .js,.jsx",
