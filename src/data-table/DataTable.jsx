@@ -36,7 +36,7 @@ class DataTable extends React.Component {
         this.state = DataTable.getStateFromProps(props);
     }
 
-    static getDerivedStateFromProps (props, state) {
+    static getDerivedStateFromProps(props, state) {
         return DataTable.getStateFromProps(props, state);
     }
 
