@@ -29,6 +29,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: PropTypes.bool,
             selectAll: PropTypes.bool,
         }),
+        withElevation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -38,6 +39,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: true,
             selectAll: true,
         },
+        withElevation: true,
     };
 
     static childContextTypes = {
@@ -185,13 +187,17 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls } = this.props;
+        const { selected, controls, withElevation } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
         const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
+
+        if (!withElevation) {
+            styles.cardWide.boxShadow = "none";
+        }
 
         return (
             <div>

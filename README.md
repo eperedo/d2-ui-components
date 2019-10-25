@@ -101,6 +101,7 @@ const MyOrgUnitsSelector = () => (
         levels={[1, 2]}
         rootIds={["ImspTQPwCqd"]}
         listParams={{ maxLevel: 4 }}
+        withElevation={false}
     />
 );
 ```
