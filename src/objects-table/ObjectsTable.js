@@ -185,7 +185,7 @@ class ObjectsTable extends React.Component {
             const allObjectsPagination = { paging: false };
             const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
             allObjects = new Set(ids.map(dr => dr.id));
-            selection = selection;
+            selection = this.state.selection;
         } else {
             allObjects = [];
             selection = new Set();
@@ -313,7 +313,7 @@ class ObjectsTable extends React.Component {
     getSelectionMessages = () => {
         const { allObjects, dataRows, selection, pager } = this.state;
         const { disableMultiplePageSelection } = this.props;
-        if (_.isEmpty(dataRows) || disableMultiplePageSelection) return [];
+        if (!selection || _.isEmpty(dataRows) || disableMultiplePageSelection) return [];
 
         const allSelected = selection.size === pager.total;
         const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
