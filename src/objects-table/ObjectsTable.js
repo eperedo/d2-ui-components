@@ -62,6 +62,7 @@ class ObjectsTable extends React.Component {
             }
         */
         list: PropTypes.func.isRequired,
+        disableMultiplePageSelection: PropTypes.bool,
         customFiltersComponent: PropTypes.func,
         customFilters: PropTypes.object,
         onSelectionChange: PropTypes.func,
@@ -77,6 +78,7 @@ class ObjectsTable extends React.Component {
         hideSearchBox: false,
         initialSelection: [],
         forceSelectionColumn: undefined,
+        disableMultiplePageSelection: false,
     };
 
     constructor(props) {
@@ -169,17 +171,25 @@ class ObjectsTable extends React.Component {
     };
 
     async getObjects({ clearPage = true } = {}) {
-        const { d2, pageSize, list, customFilters } = this.props;
+        const { d2, pageSize, list, customFilters, disableMultiplePageSelection } = this.props;
         const { page, sorting, searchValue } = this.state;
         const newPage = clearPage ? 1 : page;
         const filters = { search: searchValue, ...customFilters };
         const pagination = { page: newPage, pageSize: pageSize, sorting };
         const { pager, objects } = await list(d2, filters, pagination);
 
-        const allObjectsFilters = { ...filters, fields: ["id"] };
-        const allObjectsPagination = { paging: false };
-        const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
-        const allObjects = new Set(ids.map(dr => dr.id));
+        let selection,
+            allObjects = [];
+        if (!disableMultiplePageSelection) {
+            const allObjectsFilters = { ...filters, fields: ["id"] };
+            const allObjectsPagination = { paging: false };
+            const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
+            allObjects = new Set(ids.map(dr => dr.id));
+            selection = selection;
+        } else {
+            allObjects = [];
+            selection = new Set();
+        }
 
         this.setState(
             {
@@ -189,6 +199,7 @@ class ObjectsTable extends React.Component {
                 page: newPage,
                 allObjects,
                 detailsObject: null,
+                selection,
             },
             this.notifySelectionChange
         );
@@ -301,7 +312,8 @@ class ObjectsTable extends React.Component {
 
     getSelectionMessages = () => {
         const { allObjects, dataRows, selection, pager } = this.state;
-        if (_.isEmpty(dataRows)) return [];
+        const { disableMultiplePageSelection } = this.props;
+        if (_.isEmpty(dataRows) || disableMultiplePageSelection) return [];
 
         const allSelected = selection.size === pager.total;
         const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));

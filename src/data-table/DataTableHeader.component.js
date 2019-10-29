@@ -28,12 +28,13 @@ class DataTableHeader extends React.Component {
 
     _renderSorting() {
         const style = { width: 16, height: 16 };
+        const { sorting, name } = this.props;
 
-        switch (this.props.sorting) {
+        switch (sorting) {
             case "desc":
-                return <ArrowDown style={style} />;
+                return <ArrowDown data-test={`${name}-sorting-desc`} style={style} />;
             case "asc":
-                return <ArrowUp style={style} />;
+                return <ArrowUp data-test={`${name}-sorting-asc`} style={style} />;
             default:
                 // When not visible, render the component anyway to reserve space
                 return <ArrowUp style={Object.assign({}, style, { visibility: "hidden" })} />;
