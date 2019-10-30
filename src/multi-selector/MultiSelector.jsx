@@ -35,12 +35,14 @@ class MultiSelector extends React.Component {
         options: optionsPropType.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string),
         onChange: PropTypes.func.isRequired,
+        searchFilterLabel: PropTypes.string,
     };
 
     static defaultProps = {
         height: 300,
         ordered: true,
         selected: undefined,
+        searchFilterLabel: undefined,
     };
 
     // Required by <GroupEditor>
