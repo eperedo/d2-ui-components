@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
 
 import Pagination from "../data-table/Pagination.component";
@@ -185,7 +184,7 @@ class ObjectsTable extends React.Component {
             const allObjectsPagination = { paging: false };
             const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
             allObjects = new Set(ids.map(dr => dr.id));
-            selection = selection;
+            selection = this.state.selection;
         } else {
             allObjects = [];
             selection = new Set();
@@ -537,4 +536,4 @@ const styles = {
     },
 };
 
-export default withRouter(ObjectsTable);
+export default ObjectsTable;

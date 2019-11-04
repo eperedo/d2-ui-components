@@ -4,7 +4,7 @@ import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import { Dictionary } from "lodash";
 
-import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "material-ui-pickers";
+import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "@material-ui/pickers";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import cyan from "@material-ui/core/colors/cyan";
 
@@ -38,9 +38,6 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
 
     getMaterialTheme = (isFilter: boolean, colors: Dictionary<string>) =>
         createMuiTheme({
-            typography: {
-                useNextVariants: true,
-            },
             overrides: {
                 ...(isFilter && {
                     MuiFormControl: {
@@ -98,6 +95,15 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
                         onChange={onChange}
                         clearable={true}
                         autoOk={true}
+                        onBlur={() => {}}
+                        onFocus={() => {}}
+                        className="something"
+                        ref={null}
+                        innerRef={null}
+                        rows={1}
+                        rowsMax={1}
+                        variant="dialog"
+                        style={{}}
                     />
                 </MuiPickersUtilsProvider>
             </MuiThemeProvider>
