@@ -195,13 +195,11 @@ export default class OrgUnitsSelector extends React.Component {
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
         const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
-        if (!withElevation) {
-            styles.cardWide.boxShadow = "none";
-        }
-
+        const cardWideStyle = withElevation ? styles.cardWide : {...styles.cardWide, boxShadow: "none"}
+ 
         return (
             <div>
-                <Card style={styles.cardWide}>
+                <Card style={cardWideStyle}>
                     <CardText style={styles.cardText}>
                         <div style={styles.searchBox}>
                             <SearchBox onChange={this.filterOrgUnits} />
