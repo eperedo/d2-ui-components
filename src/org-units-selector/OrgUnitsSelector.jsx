@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-import Card from "material-ui/Card/Card";
-import CardText from "material-ui/Card/CardText";
+import { Card, CardContent } from "@material-ui/core";
 
 import { OrgUnitTree } from "@dhis2/d2-ui-org-unit-tree";
 import { OrgUnitSelectByLevel } from "@dhis2/d2-ui-org-unit-select";
@@ -196,7 +195,7 @@ export default class OrgUnitsSelector extends React.Component {
         return (
             <div>
                 <Card style={styles.cardWide}>
-                    <CardText style={styles.cardText}>
+                    <CardContent style={styles.cardText}>
                         <div style={styles.searchBox}>
                             <SearchBox onChange={this.filterOrgUnits} />
                         </div>
@@ -259,7 +258,7 @@ export default class OrgUnitsSelector extends React.Component {
                                 </div>
                             </div>
                         )}
-                    </CardText>
+                    </CardContent>
                 </Card>
             </div>
         );
