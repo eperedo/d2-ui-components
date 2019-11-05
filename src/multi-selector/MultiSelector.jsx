@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import GroupEditor from "@dhis2/d2-ui-group-editor/GroupEditor.component";
-import GroupEditorWithOrdering from "@dhis2/d2-ui-group-editor/GroupEditorWithOrdering.component";
 import { Store } from "@dhis2/d2-ui-core";
 import { withStyles } from "@material-ui/core/styles";
+
+import GroupEditor from "../group-editor/GroupEditor.component";
+import GroupEditorWithOrdering from "../group-editor/GroupEditorWithOrdering.component";
 import i18n from "../utils/i18n";
 
 const styles = () => ({

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
-import IconButton from "material-ui/IconButton/IconButton";
+import Icon from "@material-ui/core/Icon";
+import IconButton from "@material-ui/core/IconButton";
 import log from "loglevel";
+
 import GroupEditor from "./GroupEditor.component";
+import i18n from "../utils/i18n";
 
 function moveItemOneSpotDownIn(currentlySelected) {
     return itemToFind => {
@@ -103,19 +106,18 @@ class GroupEditorWithOrdering extends Component {
                 <div style={styles.arrowsDiv}>
                     <IconButton
                         style={styles.arrow}
-                        iconClassName="material-icons"
-                        tooltip="Move up"
+                        tilte={i18n.t("Move up")}
                         onClick={this.moveUp}
                     >
-                        arrow_upward
+                        <Icon>arrow_upward</Icon>
                     </IconButton>
+
                     <IconButton
                         style={styles.arrow}
-                        iconClassName="material-icons"
-                        tooltip="Move down"
+                        tilte={i18n.t("Move down")}
                         onClick={this.moveDown}
                     >
-                        arrow_downward
+                        <Icon>arrow_downward</Icon>
                     </IconButton>
                 </div>
             </div>

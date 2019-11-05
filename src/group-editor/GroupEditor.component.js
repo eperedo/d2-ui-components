@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
-import { CircularProgress } from "@dhis2/d2-ui-core";
 
 import i18n from "../utils/i18n";
-import { Paper } from "@material-ui/core";
+import { Paper, CircularProgress } from "@material-ui/core";
 
 // TODO: TOAST!
 // TODO: Undo support (in TOAST?)
@@ -412,11 +411,7 @@ export default class GroupEditor extends Component {
                         ←
                     </Button>
                     <div style={styles.status}>
-                        {this.state.loading ? (
-                            <CircularProgress small style={{ width: 60, height: 60 }} />
-                        ) : (
-                            undefined
-                        )}
+                        {this.state.loading ? <CircularProgress size={30} /> : undefined}
                     </div>
                 </div>
                 <div style={styles.right}>
