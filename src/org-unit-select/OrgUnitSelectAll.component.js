@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import log from "loglevel";
-import RaisedButton from "material-ui/RaisedButton/RaisedButton";
+import Button from "@material-ui/core/Button";
+import i18n from "../utils/i18n";
 
 import { addToSelection, removeFromSelection } from "./common";
 
@@ -33,9 +34,6 @@ class OrgUnitSelectAll extends React.Component {
 
         this.handleSelectAll = this.handleSelectAll.bind(this);
         this.handleDeselectAll = this.handleDeselectAll.bind(this);
-
-        const i18n = context.d2.i18n;
-        this.getTranslation = i18n.getTranslation.bind(i18n);
     }
 
     handleSelectAll() {
@@ -92,18 +90,23 @@ class OrgUnitSelectAll extends React.Component {
     render() {
         return (
             <div>
-                <RaisedButton
+                <Button
+                    variant="contained"
                     style={style.button1}
-                    label={this.getTranslation("select_all")}
                     onClick={this.handleSelectAll}
                     disabled={this.state.loading}
-                />
-                <RaisedButton
+                >
+                    {i18n.t("Select all")}
+                </Button>
+
+                <Button
+                    variant="contained"
                     style={style.button}
-                    label={this.getTranslation("deselect_all")}
                     onClick={this.handleDeselectAll}
                     disabled={this.state.loading}
-                />
+                >
+                    {i18n.t("Deselect all")}
+                </Button>
             </div>
         );
     }

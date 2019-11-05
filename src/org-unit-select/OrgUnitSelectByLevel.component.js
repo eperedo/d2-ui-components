@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import log from "loglevel";
+
 import {
     addToSelection,
     removeFromSelection,
@@ -8,6 +9,9 @@ import {
     renderDropdown,
     renderControls,
 } from "./common";
+
+import i18n from "../utils/i18n";
+import "./common.css";
 
 class OrgUnitSelectByLevel extends React.Component {
     constructor(props, context) {
@@ -27,9 +31,6 @@ class OrgUnitSelectByLevel extends React.Component {
         this.getOrgUnitsForLevel = this.getOrgUnitsForLevel.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
-
-        const i18n = context.d2.i18n;
-        this.getTranslation = i18n.getTranslation.bind(i18n);
     }
 
     getOrgUnitsForLevel(level, ignoreCache = false) {
@@ -113,7 +114,7 @@ class OrgUnitSelectByLevel extends React.Component {
         )
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
-        const label = "organisation_unit_level";
+        const label = i18n.t("Organisation Unit Level");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value

@@ -10,6 +10,9 @@ import {
     renderControls,
 } from "./common";
 
+import i18n from "../utils/i18n";
+import "./common.css";
+
 class OrgUnitSelectByGroup extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -28,9 +31,6 @@ class OrgUnitSelectByGroup extends React.Component {
         this.getOrgUnitsForGroup = this.getOrgUnitsForGroup.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
-
-        const i18n = context.d2.i18n;
-        this.getTranslation = i18n.getTranslation.bind(i18n);
     }
 
     getOrgUnitsForGroup(groupId, ignoreCache = false) {
@@ -101,7 +101,7 @@ class OrgUnitSelectByGroup extends React.Component {
         const menuItems =
             (Array.isArray(this.props.groups) && this.props.groups) || this.props.groups.toArray();
 
-        const label = "organisation_unit_group";
+        const label = i18n.t("Organisation unit group");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value

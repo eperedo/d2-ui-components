@@ -4,11 +4,11 @@ import _ from "lodash";
 
 import { Card, CardContent } from "@material-ui/core";
 
-import { OrgUnitTree } from "@dhis2/d2-ui-org-unit-tree";
-import { OrgUnitSelectByLevel } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectByGroup } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectAll } from "@dhis2/d2-ui-org-unit-select";
-import { incrementMemberCount, decrementMemberCount } from "@dhis2/d2-ui-org-unit-tree";
+import { OrgUnitTree } from "../org-unit-tree";
+import { OrgUnitSelectByLevel } from "../org-unit-select";
+import { OrgUnitSelectByGroup } from "../org-unit-select";
+import { OrgUnitSelectAll } from "../org-unit-select";
+import { incrementMemberCount, decrementMemberCount } from "../org-unit-tree";
 
 import i18n from "../utils/i18n";
 import SearchBox from "../search-box/SearchBox";
@@ -130,7 +130,7 @@ export default class OrgUnitsSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
+            d2: this.props.d2,
         };
     }
 
@@ -347,7 +347,7 @@ const styles = {
     },
     selectByLevel: {
         marginBottom: -24,
-        marginTop: -16,
+        marginTop: 0,
     },
     selectAll: {
         position: "absolute",
@@ -355,12 +355,3 @@ const styles = {
         right: 0,
     },
 };
-
-const d2UiTranslations = () => ({
-    select: i18n.t("Select"),
-    deselect: i18n.t("Unselect"),
-    select_all: i18n.t("Select all"),
-    deselect_all: i18n.t("Unselect all"),
-    organisation_unit_level: i18n.t("Organisation Unit Level"),
-    organisation_unit_group: i18n.t("Organisation Unit Group"),
-});
