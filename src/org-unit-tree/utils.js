@@ -22,7 +22,14 @@ export function forEachOnPath(root, path, op) {
  * @param orgUnit
  */
 export function decrementMemberCount(root, orgUnit) {
-    forEachOnPath(root, orgUnit.path.substr(1).split('/').slice(1), ou => ou.memberCount--);
+    forEachOnPath(
+        root,
+        orgUnit.path
+            .substr(1)
+            .split("/")
+            .slice(1),
+        ou => ou.memberCount--
+    );
 }
 
 /**
@@ -32,7 +39,14 @@ export function decrementMemberCount(root, orgUnit) {
  * @param orgUnit
  */
 export function incrementMemberCount(root, orgUnit) {
-    forEachOnPath(root, orgUnit.path.substr(1).split('/').slice(1), ou => ou.memberCount++);
+    forEachOnPath(
+        root,
+        orgUnit.path
+            .substr(1)
+            .split("/")
+            .slice(1),
+        ou => ou.memberCount++
+    );
 }
 
 /**
@@ -50,8 +64,10 @@ export function mergeChildren(root, children) {
         return root;
     }
 
-    const childPath = children.toArray()[0].path.substr(1).split('/');
+    const childPath = children
+        .toArray()[0]
+        .path.substr(1)
+        .split("/");
     childPath.splice(-1, 1);
     return assignChildren(root, childPath.slice(1), children);
 }
-

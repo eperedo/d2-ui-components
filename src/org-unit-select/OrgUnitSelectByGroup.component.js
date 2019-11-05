@@ -1,9 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import log from 'loglevel';
+import React from "react";
+import PropTypes from "prop-types";
+import log from "loglevel";
 
-import { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown, renderControls } from './common';
-
+import {
+    addToSelection,
+    removeFromSelection,
+    handleChangeSelection,
+    renderDropdown,
+    renderControls,
+} from "./common";
 
 class OrgUnitSelectByGroup extends React.Component {
     constructor(props, context) {
@@ -30,21 +35,30 @@ class OrgUnitSelectByGroup extends React.Component {
 
     getOrgUnitsForGroup(groupId, ignoreCache = false) {
         const d2 = this.context.d2;
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             if (this.props.currentRoot) {
-                log.debug(`Loading org units for group ${groupId} within ${this.props.currentRoot.displayName}`);
+                log.debug(
+                    `Loading org units for group ${groupId} within ${
+                        this.props.currentRoot.displayName
+                    }`
+                );
                 this.setState({ loading: true });
 
-                d2.models.organisationUnits.list({
-                    root: this.props.currentRoot.id,
-                    paging: false,
-                    includeDescendants: true,
-                    fields: 'id,path',
-                    filter: `organisationUnitGroups.id:eq:${groupId}`,
-                })
+                d2.models.organisationUnits
+                    .list({
+                        root: this.props.currentRoot.id,
+                        paging: false,
+                        includeDescendants: true,
+                        fields: "id,path",
+                        filter: `organisationUnitGroups.id:eq:${groupId}`,
+                    })
                     .then(orgUnits => orgUnits.toArray())
-                    .then((orgUnits) => {
-                        log.debug(`Loaded ${orgUnits.length} org units for group ${groupId} within ${this.props.currentRoot.displayName}`);
+                    .then(orgUnits => {
+                        log.debug(
+                            `Loaded ${orgUnits.length} org units for group ${groupId} within ${
+                                this.props.currentRoot.displayName
+                            }`
+                        );
                         this.setState({ loading: false });
 
                         resolve(orgUnits.slice());
@@ -56,9 +70,10 @@ class OrgUnitSelectByGroup extends React.Component {
                 this.setState({ loading: true });
 
                 const d2 = this.context.d2;
-                d2.models.organisationUnitGroups.get(groupId, { fields: 'organisationUnits[id,path]' })
+                d2.models.organisationUnitGroups
+                    .get(groupId, { fields: "organisationUnits[id,path]" })
                     .then(orgUnitGroups => orgUnitGroups.organisationUnits.toArray())
-                    .then((orgUnits) => {
+                    .then(orgUnits => {
                         log.debug(`Loaded ${orgUnits.length} org units for group ${groupId}`);
                         this.setState({ loading: false });
                         this.groupCache[groupId] = orgUnits;
@@ -66,7 +81,7 @@ class OrgUnitSelectByGroup extends React.Component {
                         // Make a copy of the returned array to ensure that the cache won't be modified from elsewhere
                         resolve(orgUnits.slice());
                     })
-                    .catch((err) => {
+                    .catch(err => {
                         this.setState({ loading: false });
                         log.error(`Failed to load org units in group ${groupId}:`, err);
                     });
@@ -83,9 +98,10 @@ class OrgUnitSelectByGroup extends React.Component {
     }
 
     render() {
-        const menuItems = (Array.isArray(this.props.groups) && this.props.groups || this.props.groups.toArray());
+        const menuItems =
+            (Array.isArray(this.props.groups) && this.props.groups) || this.props.groups.toArray();
 
-        const label = 'organisation_unit_group';
+        const label = "organisation_unit_group";
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value
@@ -96,10 +112,7 @@ class OrgUnitSelectByGroup extends React.Component {
 OrgUnitSelectByGroup.propTypes = {
     // groups is an array of either ModelCollection objects or plain objects,
     // where each object should contain `id` and `displayName` properties
-    groups: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-    ]).isRequired,
+    groups: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 
     // selected is an array of selected organisation unit IDs
     selected: PropTypes.array.isRequired,

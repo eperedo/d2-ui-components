@@ -1,8 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import log from 'loglevel';
-import { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown, renderControls } from './common';
-
+import React from "react";
+import PropTypes from "prop-types";
+import log from "loglevel";
+import {
+    addToSelection,
+    removeFromSelection,
+    handleChangeSelection,
+    renderDropdown,
+    renderControls,
+} from "./common";
 
 class OrgUnitSelectByLevel extends React.Component {
     constructor(props, context) {
@@ -29,28 +34,32 @@ class OrgUnitSelectByLevel extends React.Component {
 
     getOrgUnitsForLevel(level, ignoreCache = false) {
         const d2 = this.context.d2;
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             if (this.props.currentRoot) {
-                const rootLevel = this.props.currentRoot.level || this.props.currentRoot.path
-                    ? this.props.currentRoot.path.match(/\//g).length
-                    : NaN;
+                const rootLevel =
+                    this.props.currentRoot.level || this.props.currentRoot.path
+                        ? this.props.currentRoot.path.match(/\//g).length
+                        : NaN;
                 const relativeLevel = level - rootLevel;
                 if (isNaN(relativeLevel) || relativeLevel < 0) {
-                    log.info('Unable to select org unit levels higher up in the hierarchy than the current root');
+                    log.info(
+                        "Unable to select org unit levels higher up in the hierarchy than the current root"
+                    );
                     return resolve([]);
                 }
 
-                d2.models.organisationUnits.list({
-                    paging: false,
-                    level: level - rootLevel,
-                    fields: 'id,path',
-                    root: this.props.currentRoot.id,
-                })
+                d2.models.organisationUnits
+                    .list({
+                        paging: false,
+                        level: level - rootLevel,
+                        fields: "id,path",
+                        root: this.props.currentRoot.id,
+                    })
                     .then(orgUnits => orgUnits.toArray())
-                    .then((orgUnitArray) => {
+                    .then(orgUnitArray => {
                         log.debug(
                             `Loaded ${orgUnitArray.length} org units for level ` +
-                            `${relativeLevel} under ${this.props.currentRoot.displayName}`,
+                                `${relativeLevel} under ${this.props.currentRoot.displayName}`
                         );
                         this.setState({ loading: false });
                         resolve(orgUnitArray);
@@ -61,9 +70,10 @@ class OrgUnitSelectByLevel extends React.Component {
                 log.debug(`Loading org units for level ${level}`);
                 this.setState({ loading: true });
 
-                d2.models.organisationUnits.list({ paging: false, level, fields: 'id,path' })
+                d2.models.organisationUnits
+                    .list({ paging: false, level, fields: "id,path" })
                     .then(orgUnits => orgUnits.toArray())
-                    .then((orgUnitArray) => {
+                    .then(orgUnitArray => {
                         log.debug(`Loaded ${orgUnitArray.length} org units for level ${level}`);
                         this.setState({ loading: false });
                         this.levelCache[level] = orgUnitArray;
@@ -71,7 +81,7 @@ class OrgUnitSelectByLevel extends React.Component {
                         // Make a copy of the returned array to ensure that the cache won't be modified from elsewhere
                         resolve(orgUnitArray.slice());
                     })
-                    .catch((err) => {
+                    .catch(err => {
                         this.setState({ loading: false });
                         log.error(`Failed to load org units in level ${level}:`, err);
                     });
@@ -80,27 +90,30 @@ class OrgUnitSelectByLevel extends React.Component {
     }
 
     handleSelect() {
-        this.getOrgUnitsForLevel(this.state.selection)
-            .then((orgUnits) => {
-                this.addToSelection(orgUnits);
-            });
+        this.getOrgUnitsForLevel(this.state.selection).then(orgUnits => {
+            this.addToSelection(orgUnits);
+        });
     }
 
     handleDeselect() {
-        this.getOrgUnitsForLevel(this.state.selection)
-            .then((orgUnits) => {
-                this.removeFromSelection(orgUnits);
-            });
+        this.getOrgUnitsForLevel(this.state.selection).then(orgUnits => {
+            this.removeFromSelection(orgUnits);
+        });
     }
 
     render() {
         const currentRoot = this.props.currentRoot;
-        const currentRootLevel = currentRoot ? currentRoot.level || currentRoot.path.match(/\//g).length : 1;
+        const currentRootLevel = currentRoot
+            ? currentRoot.level || currentRoot.path.match(/\//g).length
+            : 1;
 
-        const menuItems = (Array.isArray(this.props.levels) && this.props.levels || this.props.levels.toArray())
+        const menuItems = (
+            (Array.isArray(this.props.levels) && this.props.levels) ||
+            this.props.levels.toArray()
+        )
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
-        const label = 'organisation_unit_level';
+        const label = "organisation_unit_level";
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value
@@ -111,10 +124,7 @@ class OrgUnitSelectByLevel extends React.Component {
 OrgUnitSelectByLevel.propTypes = {
     // levels is an array of either ModelCollection objects or plain objects,
     // where each object should contain `level` and `displayName` properties
-    levels: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-    ]).isRequired,
+    levels: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 
     // selected is an array of selected organisation unit IDs
     selected: PropTypes.array.isRequired,
@@ -127,12 +137,15 @@ OrgUnitSelectByLevel.propTypes = {
     // current root org unit will be added to or removed from the selection
     currentRoot: (props, propName) => {
         if (props[propName]) {
-            if (!props[propName].hasOwnProperty('id')) {
-                return new Error('currentRoot must have an `id` property');
+            if (!props[propName].hasOwnProperty("id")) {
+                return new Error("currentRoot must have an `id` property");
             }
 
-            if (!props[propName].hasOwnProperty('level') && !props[propName].hasOwnProperty('path')) {
-                return new Error('currentRoot must have either a `level` or a `path` property');
+            if (
+                !props[propName].hasOwnProperty("level") &&
+                !props[propName].hasOwnProperty("path")
+            ) {
+                return new Error("currentRoot must have either a `level` or a `path` property");
             }
         }
     },

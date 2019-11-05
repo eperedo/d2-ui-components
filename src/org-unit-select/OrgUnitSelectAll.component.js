@@ -1,20 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import log from 'loglevel';
-import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
+import React from "react";
+import PropTypes from "prop-types";
+import log from "loglevel";
+import RaisedButton from "material-ui/RaisedButton/RaisedButton";
 
-import { addToSelection, removeFromSelection } from './common';
-
+import { addToSelection, removeFromSelection } from "./common";
 
 const style = {
     button: {
-        position: 'relative',
+        position: "relative",
         top: 3,
         marginLeft: 16,
     },
     progress: {
         height: 2,
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: "rgba(0,0,0,0)",
         top: 46,
     },
 };
@@ -42,7 +41,7 @@ class OrgUnitSelectAll extends React.Component {
     handleSelectAll() {
         if (this.props.currentRoot) {
             this.setState({ loading: true });
-            this.getDescendantOrgUnits().then((orgUnits) => {
+            this.getDescendantOrgUnits().then(orgUnits => {
                 this.setState({ loading: false });
                 this.addToSelection(orgUnits);
             });
@@ -51,8 +50,9 @@ class OrgUnitSelectAll extends React.Component {
         } else {
             this.setState({ loading: true });
 
-            this.context.d2.models.organisationUnits.list({ fields: 'id,path', paging: false })
-                .then((orgUnits) => {
+            this.context.d2.models.organisationUnits
+                .list({ fields: "id,path", paging: false })
+                .then(orgUnits => {
                     const ous = orgUnits.toArray().map(ou => ou.path);
                     this.setState({
                         cache: ous,
@@ -61,9 +61,9 @@ class OrgUnitSelectAll extends React.Component {
 
                     this.props.onUpdateSelection(ous.slice());
                 })
-                .catch((err) => {
+                .catch(err => {
                     this.setState({ loading: false });
-                    log.error('Failed to load all org units:', err);
+                    log.error("Failed to load all org units:", err);
                 });
         }
     }
@@ -73,14 +73,14 @@ class OrgUnitSelectAll extends React.Component {
             root: this.props.currentRoot.id,
             paging: false,
             includeDescendants: true,
-            fields: 'id,path',
+            fields: "id,path",
         });
     }
 
     handleDeselectAll() {
         if (this.props.currentRoot) {
             this.setState({ loading: true });
-            this.getDescendantOrgUnits().then((orgUnits) => {
+            this.getDescendantOrgUnits().then(orgUnits => {
                 this.setState({ loading: false });
                 this.removeFromSelection(orgUnits);
             });
@@ -94,13 +94,13 @@ class OrgUnitSelectAll extends React.Component {
             <div>
                 <RaisedButton
                     style={style.button1}
-                    label={this.getTranslation('select_all')}
+                    label={this.getTranslation("select_all")}
                     onClick={this.handleSelectAll}
                     disabled={this.state.loading}
                 />
                 <RaisedButton
                     style={style.button}
-                    label={this.getTranslation('deselect_all')}
+                    label={this.getTranslation("deselect_all")}
                     onClick={this.handleDeselectAll}
                     disabled={this.state.loading}
                 />

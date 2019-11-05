@@ -1,50 +1,49 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import LinearProgress from 'material-ui/LinearProgress';
+import React from "react";
+import PropTypes from "prop-types";
+import LinearProgress from "material-ui/LinearProgress";
 
-import ModelBase from 'd2/lib/model/Model';
-import ModelCollection from 'd2/lib/model/ModelCollection';
+import ModelBase from "d2/lib/model/Model";
+import ModelCollection from "d2/lib/model/ModelCollection";
 
-import { TreeView } from '@dhis2/d2-ui-core';
-
+import { TreeView } from "@dhis2/d2-ui-core";
 
 const styles = {
     progress: {
-        position: 'absolute',
-        display: 'inline-block',
-        width: '100%',
+        position: "absolute",
+        display: "inline-block",
+        width: "100%",
         left: -8,
     },
     progressBar: {
         height: 2,
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
     },
     spacer: {
-        position: 'relative',
-        display: 'inline-block',
-        width: '1.2rem',
-        height: '1rem',
+        position: "relative",
+        display: "inline-block",
+        width: "1.2rem",
+        height: "1rem",
     },
     label: {
-        display: 'inline-block',
-        outline: 'none',
+        display: "inline-block",
+        outline: "none",
     },
     ouContainer: {
-        borderColor: 'transparent',
-        borderStyle: 'solid',
-        borderWidth: '1px',
+        borderColor: "transparent",
+        borderStyle: "solid",
+        borderWidth: "1px",
         borderRightWidth: 0,
-        borderRadius: '3px 0 0 3px',
-        background: 'transparent',
+        borderRadius: "3px 0 0 3px",
+        background: "transparent",
         paddingLeft: 2,
-        outline: 'none',
+        outline: "none",
     },
     currentOuContainer: {
-        background: 'rgba(0,0,0,0.05)',
-        borderColor: 'rgba(0,0,0,0.1)',
+        background: "rgba(0,0,0,0.05)",
+        borderColor: "rgba(0,0,0,0.1)",
     },
     memberCount: {
-        fontSize: '0.75rem',
+        fontSize: "0.75rem",
         marginLeft: 4,
     },
 };
@@ -54,15 +53,17 @@ class OrgUnitTree extends React.Component {
         super(props);
 
         this.state = {
-            children: (
+            children:
                 props.root.children === false ||
-                Array.isArray(props.root.children) && props.root.children.length === 0
-            )
-                ? []
-                : undefined,
+                (Array.isArray(props.root.children) && props.root.children.length === 0)
+                    ? []
+                    : undefined,
             loading: false,
         };
-        if (props.root.children instanceof ModelCollection && !props.root.children.hasUnloadedData) {
+        if (
+            props.root.children instanceof ModelCollection &&
+            !props.root.children.hasUnloadedData
+        ) {
             this.state.children = props.root.children
                 .toArray()
                 // Sort here since the API returns nested children in random order
@@ -80,8 +81,10 @@ class OrgUnitTree extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.initiallyExpanded.some(ou => ou.includes(`/${newProps.root.id}`)) ||
-            newProps.idsThatShouldBeReloaded.includes(newProps.root.id)) {
+        if (
+            newProps.initiallyExpanded.some(ou => ou.includes(`/${newProps.root.id}`)) ||
+            newProps.idsThatShouldBeReloaded.includes(newProps.root.id)
+        ) {
             this.loadChildren();
         }
     }
@@ -97,14 +100,18 @@ class OrgUnitTree extends React.Component {
     }
 
     loadChildren() {
-        if ((this.state.children === undefined && !this.state.loading) ||
-            this.props.idsThatShouldBeReloaded.indexOf(this.props.root.id) >= 0) {
+        if (
+            (this.state.children === undefined && !this.state.loading) ||
+            this.props.idsThatShouldBeReloaded.indexOf(this.props.root.id) >= 0
+        ) {
             this.setState({ loading: true });
 
             const root = this.props.root;
-            root.children.load({ fields: 'id,displayName,children::isNotEmpty,path,parent' }).then((children) => {
-                this.setChildState(children);
-            });
+            root.children
+                .load({ fields: "id,displayName,children::isNotEmpty,path,parent" })
+                .then(children => {
+                    this.setChildState(children);
+                });
         }
     }
 
@@ -119,7 +126,7 @@ class OrgUnitTree extends React.Component {
         if (!this.props.orgUnitsPathsToInclude || this.props.orgUnitsPathsToInclude.length === 0) {
             return true;
         }
-        return !!(this.props.orgUnitsPathsToInclude.some(ou => ou.includes(`/${orgUnit.id}`)));
+        return !!this.props.orgUnitsPathsToInclude.some(ou => ou.includes(`/${orgUnit.id}`));
     }
 
     renderChild(orgUnit, expandedProp) {
@@ -152,14 +159,20 @@ class OrgUnitTree extends React.Component {
         // If it's a string, pass it on unless it's the current root id
         const expandedProp = Array.isArray(this.props.initiallyExpanded)
             ? this.props.initiallyExpanded.filter(id => id !== this.props.root.id)
-            : (this.props.initiallyExpanded !== this.props.root.id && this.props.initiallyExpanded) || [];
+            : (this.props.initiallyExpanded !== this.props.root.id &&
+                  this.props.initiallyExpanded) ||
+              [];
 
         if (Array.isArray(this.state.children) && this.state.children.length > 0) {
             return this.state.children.map(orgUnit => this.renderChild(orgUnit, expandedProp));
         }
 
         if (this.state.loading) {
-            return <div style={styles.progress}><LinearProgress style={styles.progressBar} /></div>;
+            return (
+                <div style={styles.progress}>
+                    <LinearProgress style={styles.progressBar} />
+                </div>
+            );
         }
 
         return null;
@@ -169,39 +182,54 @@ class OrgUnitTree extends React.Component {
         const currentOu = this.props.root;
 
         // True if this OU has children = is not a leaf node
-        const hasChildren = this.state.children === undefined ||
+        const hasChildren =
+            this.state.children === undefined ||
             (Array.isArray(this.state.children) && this.state.children.length > 0);
         // True if a click handler exists
         const isSelectable = !!this.props.onSelectClick;
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
-        const isSelected = this.props.selected && this.props.selected.some(ou => pathRegEx.test(ou));
+        const isSelected =
+            this.props.selected && this.props.selected.some(ou => pathRegEx.test(ou));
         // True if this OU is the current root
         const isCurrentRoot = this.props.currentRoot && this.props.currentRoot.id === currentOu.id;
         // True if this OU should be expanded by default
-        const isInitiallyExpanded = this.props.initiallyExpanded.some(ou => ou.includes(`/${currentOu.id}`));
+        const isInitiallyExpanded = this.props.initiallyExpanded.some(ou =>
+            ou.includes(`/${currentOu.id}`)
+        );
         // True if this OU can BECOME the current root, which means that:
         // 1) there is a change root handler
         // 2) this OU is not already the current root
         // 3) this OU has children (is not a leaf node)
-        const canBecomeCurrentRoot = this.props.onChangeCurrentRoot && !isCurrentRoot && hasChildren;
+        const canBecomeCurrentRoot =
+            this.props.onChangeCurrentRoot && !isCurrentRoot && hasChildren;
 
-        const memberCount = this.props.selected !== undefined
-            ? this.props.selected.filter(ou => memberRegEx.test(ou)).length
-            : currentOu.memberCount;
+        const memberCount =
+            this.props.selected !== undefined
+                ? this.props.selected.filter(ou => memberRegEx.test(ou)).length
+                : currentOu.memberCount;
 
         // Hard coded styles for OU name labels - can be overridden with the selectedLabelStyle and labelStyle props
-        const labelStyle = Object.assign({}, styles.label, {
-            fontWeight: isSelected ? 500 : 300,
-            color: isSelected ? 'orange' : 'inherit',
-            cursor: canBecomeCurrentRoot ? 'pointer' : 'default',
-        }, isSelected ? this.props.selectedLabelStyle : this.props.labelStyle);
+        const labelStyle = Object.assign(
+            {},
+            styles.label,
+            {
+                fontWeight: isSelected ? 500 : 300,
+                color: isSelected ? "orange" : "inherit",
+                cursor: canBecomeCurrentRoot ? "pointer" : "default",
+            },
+            isSelected ? this.props.selectedLabelStyle : this.props.labelStyle
+        );
 
         // Styles for this OU and OUs contained within it
-        const ouContainerStyle = Object.assign({}, styles.ouContainer, isCurrentRoot ? styles.currentOuContainer : {});
+        const ouContainerStyle = Object.assign(
+            {},
+            styles.ouContainer,
+            isCurrentRoot ? styles.currentOuContainer : {}
+        );
 
         // Wrap the change root click handler in order to stop event propagation
-        const setCurrentRoot = (e) => {
+        const setCurrentRoot = e => {
             e.stopPropagation();
             this.props.onChangeCurrentRoot(currentOu);
         };
@@ -209,7 +237,10 @@ class OrgUnitTree extends React.Component {
         const label = (
             <div
                 style={labelStyle}
-                onClick={(canBecomeCurrentRoot && setCurrentRoot) || (isSelectable && this.handleSelectClick)}
+                onClick={
+                    (canBecomeCurrentRoot && setCurrentRoot) ||
+                    (isSelectable && this.handleSelectClick)
+                }
                 role="button"
                 tabIndex={0}
             >
@@ -262,7 +293,11 @@ class OrgUnitTree extends React.Component {
 
 function orgUnitPathPropValidator(propValue, key, compName, location, propFullName) {
     if (!/(\/[a-zA-Z][a-zA-Z0-9]{10})+/.test(propValue[key])) {
-        return new Error(`Invalid org unit path \`${propValue[key]}\` supplied to \`${compName}.${propFullName}\``);
+        return new Error(
+            `Invalid org unit path \`${
+                propValue[key]
+            }\` supplied to \`${compName}.${propFullName}\``
+        );
     }
     return undefined;
 }

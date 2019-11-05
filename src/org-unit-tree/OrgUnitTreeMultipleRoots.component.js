@@ -1,31 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import OrgUnitTree from './OrgUnitTree.component';
+import React from "react";
+import PropTypes from "prop-types";
+import OrgUnitTree from "./OrgUnitTree.component";
 
 export default function OrgUnitTreeMultipleRoots(props) {
     if (props.roots) {
         return (
             <div>
-                {props.roots
-                    .map((root, index) => (<OrgUnitTree
+                {props.roots.map((root, index) => (
+                    <OrgUnitTree
                         key={index}
                         {...props}
                         root={root}
                         onSelectClick={props.onSelectClick}
-                    />))
-                }
+                    />
+                ))}
             </div>
         );
     }
 
     const root = props.root;
-    return (
-        <OrgUnitTree root={root} {...props} />
-    );
+    return <OrgUnitTree root={root} {...props} />;
 }
 
 function isOrgUnitModel(obj) {
-    return obj && obj.modelDefinition && obj.modelDefinition.plural === 'organisationUnits';
+    return obj && obj.modelDefinition && obj.modelDefinition.plural === "organisationUnits";
 }
 
 function OrgUnitModelValidator(props, propName, componentName) {
@@ -40,9 +38,7 @@ function OrgUnitModelArrayElementValidator(propValue, key, componentName, locati
     }
 }
 
-OrgUnitTreeMultipleRoots.propTypes = Object.assign({}, OrgUnitTree.propTypes,
-    {
-        root: OrgUnitModelValidator,
-        roots: PropTypes.arrayOf(OrgUnitModelArrayElementValidator),
-    },
-);
+OrgUnitTreeMultipleRoots.propTypes = Object.assign({}, OrgUnitTree.propTypes, {
+    root: OrgUnitModelValidator,
+    roots: PropTypes.arrayOf(OrgUnitModelArrayElementValidator),
+});
