@@ -1,32 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
-// Material UI
-import Paper from "material-ui/Paper/Paper";
-import RaisedButton from "material-ui/RaisedButton/RaisedButton";
-
-// D2
-import { config } from "d2/lib/d2";
-
-// D2-UI
+import Button from "@material-ui/core/Button";
 import { CircularProgress } from "@dhis2/d2-ui-core";
+
+import i18n from "../utils/i18n";
+import { Paper } from "@material-ui/core";
 
 // TODO: TOAST!
 // TODO: Undo support (in TOAST?)
 
-config.i18n.strings.add("selected");
-config.i18n.strings.add("assign_all");
-config.i18n.strings.add("remove_all");
-config.i18n.strings.add("hidden_by_filters");
-
 export default class GroupEditor extends Component {
-    constructor(props, context) {
-        super(props, context);
-
-        const i18n = this.context.d2.i18n;
-        this.getTranslation = i18n.getTranslation.bind(i18n);
-    }
-
     state = {
         // Number of items selected in the left/right columns
         selectedLeft: 0,
@@ -359,13 +342,11 @@ export default class GroupEditor extends Component {
 
         const hiddenLabel = itemCount =>
             this.getItemCount() > 0 && this.getFilterText().length > 0
-                ? `${itemCount} ${this.getTranslation("hidden_by_filters")}`
+                ? `${itemCount} ${i18n.t("Hidden by filters")}`
                 : "";
 
         const selectedLabel = () =>
-            this.getSelectedCount() > 0
-                ? `${this.getSelectedCount()} ${this.getTranslation("selected")}`
-                : "";
+            this.getSelectedCount() > 0 ? `${this.getSelectedCount()} ${i18n.t("Selected")}` : "";
 
         return (
             <div style={styles.container}>
@@ -394,36 +375,42 @@ export default class GroupEditor extends Component {
                             ))}
                         </select>
                     </Paper>
-                    <RaisedButton
-                        label={`${this.getTranslation("assign_all")} ${
-                            this.getAvailableItemsUnfilteredCount() === 0
-                                ? ""
-                                : this.getAvailableItemsUnfilteredCount()
-                        } \u2192`}
+                    <Button
+                        variant="contained"
                         disabled={
                             this.state.loading || this.getAvailableItemsUnfilteredCount() === 0
                         }
                         onClick={this.onAssignAll}
                         style={{ marginTop: "1rem" }}
                         secondary
-                    />
+                    >
+                        {`${i18n.t("Assign all")} ${
+                            this.getAvailableItemsUnfilteredCount() === 0
+                                ? ""
+                                : this.getAvailableItemsUnfilteredCount()
+                        } →`}
+                    </Button>
                 </div>
                 <div style={styles.middle}>
                     <div style={styles.selected}>{selectedLabel()}</div>
-                    <RaisedButton
-                        label="&rarr;"
+                    <Button
+                        variant="contained"
                         secondary
                         onClick={this.onAssignItems}
                         style={styles.buttons}
                         disabled={this.state.loading || this.state.selectedLeft === 0}
-                    />
-                    <RaisedButton
-                        label="&larr;"
+                    >
+                        →
+                    </Button>
+                    <Button
+                        variant="contained"
                         secondary
                         onClick={this.onRemoveItems}
                         style={styles.buttons}
                         disabled={this.state.loading || this.state.selectedRight === 0}
-                    />
+                    >
+                        ←
+                    </Button>
                     <div style={styles.status}>
                         {this.state.loading ? (
                             <CircularProgress small style={{ width: 60, height: 60 }} />
@@ -459,19 +446,21 @@ export default class GroupEditor extends Component {
                                 ))}
                         </select>
                     </Paper>
-                    <RaisedButton
-                        label={`\u2190 ${this.getTranslation("remove_all")} ${
-                            this.getAssignedItemsUnfilteredCount() > 0
-                                ? this.getAssignedItemsUnfilteredCount()
-                                : ""
-                        }`}
+                    <Button
+                        variant="contained"
                         style={{ float: "right", marginTop: "1rem" }}
                         disabled={
                             this.state.loading || this.getAssignedItemsUnfilteredCount() === 0
                         }
                         onClick={this.onRemoveAll}
                         secondary
-                    />
+                    >
+                        {`\u2190 ${i18n.t("Remove all")} ${
+                            this.getAssignedItemsUnfilteredCount() > 0
+                                ? this.getAssignedItemsUnfilteredCount()
+                                : ""
+                        }`}
+                    </Button>
                 </div>
             </div>
         );

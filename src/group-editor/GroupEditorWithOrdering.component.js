@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import PropTypes from "prop-types";
 import IconButton from "material-ui/IconButton/IconButton";
 import log from "loglevel";
@@ -94,7 +95,7 @@ class GroupEditorWithOrdering extends Component {
     };
 
     render() {
-        const { onOrderChanged, ...other } = this.props;
+        const other = _.omit(this.props, ["onOrderChanged"]);
 
         return (
             <div style={styles.wrapper}>
