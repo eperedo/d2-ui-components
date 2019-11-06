@@ -2,14 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-import Card from "material-ui/Card/Card";
-import CardText from "material-ui/Card/CardText";
+import { Card, CardContent } from "@material-ui/core";
 
-import { OrgUnitTree } from "@dhis2/d2-ui-org-unit-tree";
-import { OrgUnitSelectByLevel } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectByGroup } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectAll } from "@dhis2/d2-ui-org-unit-select";
-import { incrementMemberCount, decrementMemberCount } from "@dhis2/d2-ui-org-unit-tree";
+import { OrgUnitTree } from "../org-unit-tree";
+import { OrgUnitSelectByLevel } from "../org-unit-select";
+import { OrgUnitSelectByGroup } from "../org-unit-select";
+import { OrgUnitSelectAll } from "../org-unit-select";
+import { incrementMemberCount, decrementMemberCount } from "../org-unit-tree";
 
 import i18n from "../utils/i18n";
 import SearchBox from "../search-box/SearchBox";
@@ -29,6 +28,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: PropTypes.bool,
             selectAll: PropTypes.bool,
         }),
+        withElevation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -38,6 +38,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: true,
             selectAll: true,
         },
+        withElevation: true,
     };
 
     static childContextTypes = {
@@ -131,7 +132,7 @@ export default class OrgUnitsSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
+            d2: this.props.d2,
         };
     }
 
@@ -185,7 +186,7 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls } = this.props;
+        const { selected, controls, withElevation } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -193,10 +194,14 @@ export default class OrgUnitsSelector extends React.Component {
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
         const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
+        const cardWideStyle = withElevation
+            ? styles.cardWide
+            : { ...styles.cardWide, boxShadow: "none" };
+
         return (
             <div>
-                <Card style={styles.cardWide}>
-                    <CardText style={styles.cardText}>
+                <Card style={cardWideStyle}>
+                    <CardContent style={styles.cardText}>
                         <div style={styles.searchBox}>
                             <SearchBox onChange={this.filterOrgUnits} />
                         </div>
@@ -259,7 +264,7 @@ export default class OrgUnitsSelector extends React.Component {
                                 </div>
                             </div>
                         )}
-                    </CardText>
+                    </CardContent>
                 </Card>
             </div>
         );
@@ -348,7 +353,7 @@ const styles = {
     },
     selectByLevel: {
         marginBottom: -24,
-        marginTop: -16,
+        marginTop: 0,
     },
     selectAll: {
         position: "absolute",
@@ -356,12 +361,3 @@ const styles = {
         right: 0,
     },
 };
-
-const d2UiTranslations = () => ({
-    select: i18n.t("Select"),
-    deselect: i18n.t("Unselect"),
-    select_all: i18n.t("Select all"),
-    deselect_all: i18n.t("Unselect all"),
-    organisation_unit_level: i18n.t("Organisation Unit Level"),
-    organisation_unit_group: i18n.t("Organisation Unit Group"),
-});

@@ -46,7 +46,7 @@ const styles = theme => ({
     },
     iconVariant: {
         opacity: 0.9,
-        marginRight: theme.spacing.unit * 4, // Or anything between 30px and 38px
+        marginRight: theme.spacing(4), // Or anything between 30px and 38px
     },
     message: {
         display: "flex",
@@ -56,9 +56,6 @@ const styles = theme => ({
 });
 
 const theme = createMuiTheme({
-    typography: {
-        useNextVariants: true,
-    },
     overrides: {
         MuiSnackbarContent: {
             message: {

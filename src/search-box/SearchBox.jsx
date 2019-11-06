@@ -1,7 +1,7 @@
 import React from "react";
 import { debounce } from "throttle-debounce";
 import PropTypes from "prop-types";
-import TextField from "material-ui/TextField";
+import TextField from "@material-ui/core/TextField";
 import i18n from "../utils/i18n";
 
 class SearchBox extends React.Component {
@@ -24,10 +24,11 @@ class SearchBox extends React.Component {
         return (
             <TextField
                 value={this.state.value}
+                style={{ paddingTop: 8 }}
                 fullWidth
                 type="search"
                 onChange={this.onKeyUp}
-                hintText={i18n.t("Search by name")}
+                placeholder={i18n.t("Search by name")}
                 data-test="search"
             />
         );

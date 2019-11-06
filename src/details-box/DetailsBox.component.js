@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import classes from "classnames";
 import _ from "lodash";
-import FontIcon from "material-ui/FontIcon";
-import Paper from "material-ui/Paper";
+import Paper from "@material-ui/core/Paper";
+import Icon from "@material-ui/core/Icon";
 
 import "./DetailsBox.scss";
 
@@ -50,14 +50,11 @@ class DetailsBox extends React.Component {
         const classList = classes("details-box");
 
         return (
-            <Paper zDepth={1} rounded={false}>
+            <Paper>
                 <div className={classList}>
-                    <FontIcon
-                        className="details-box__close-button material-icons"
-                        onClick={this.props.onClose}
-                    >
+                    <Icon className="details-box__close-button" onClick={this.props.onClose}>
                         close
-                    </FontIcon>
+                    </Icon>
                     <div>{this.getDetailBoxContent()}</div>
                 </div>
             </Paper>

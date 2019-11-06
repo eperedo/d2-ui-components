@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
 
 import Pagination from "../data-table/Pagination.component";
@@ -537,4 +536,4 @@ const styles = {
     },
 };
 
-export default withRouter(ObjectsTable);
+export default ObjectsTable;

@@ -6,10 +6,10 @@ import AddIcon from "@material-ui/icons/Add";
 
 const styles = theme => ({
     fab: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
         position: "fixed",
-        bottom: theme.spacing.unit * 5,
-        right: theme.spacing.unit * 9,
+        bottom: theme.spacing(5),
+        right: theme.spacing(9),
     },
 });
 
