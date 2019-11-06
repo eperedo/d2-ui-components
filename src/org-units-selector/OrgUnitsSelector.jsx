@@ -28,6 +28,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: PropTypes.bool,
             selectAll: PropTypes.bool,
         }),
+        withElevation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -37,6 +38,7 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: true,
             selectAll: true,
         },
+        withElevation: true,
     };
 
     static childContextTypes = {
@@ -184,7 +186,7 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls } = this.props;
+        const { selected, controls, withElevation } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -192,9 +194,13 @@ export default class OrgUnitsSelector extends React.Component {
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
         const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
+        const cardWideStyle = withElevation
+            ? styles.cardWide
+            : { ...styles.cardWide, boxShadow: "none" };
+
         return (
             <div>
-                <Card style={styles.cardWide}>
+                <Card style={cardWideStyle}>
                     <CardContent style={styles.cardText}>
                         <div style={styles.searchBox}>
                             <SearchBox onChange={this.filterOrgUnits} />
