@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2019-11-06T04:11:29.812Z\n"
+"POT-Creation-Date: 2019-11-06T08:19:32.278Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,9 +26,8 @@ msgstr "Cerrar"
 msgid "Hidden by filters"
 msgstr "Ocultos por filtro"
 
-#, fuzzy
 msgid "Selected"
-msgstr "seleccionado(s)"
+msgstr "Seleccionado(s)"
 
 msgid "Assign all"
 msgstr "Asignar todos"
@@ -37,10 +36,10 @@ msgid "Remove all"
 msgstr "Quitar todos"
 
 msgid "Move up"
-msgstr ""
+msgstr "Mover arriba"
 
 msgid "Move down"
-msgstr ""
+msgstr "Move abajo"
 
 msgid "R/W"
 msgstr "R/W"
@@ -56,6 +55,9 @@ msgstr "Metadatos"
 
 msgid "Data"
 msgstr "Datos"
+
+msgid "Search available/selected items"
+msgstr "Buscar elementos disponibles/seleccionados"
 
 msgid "selected"
 msgstr "seleccionado(s)"
@@ -86,11 +88,9 @@ msgstr "No hay resultados"
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#, fuzzy
 msgid "Deselect all"
 msgstr "Deseleccionar todo"
 
-#, fuzzy
 msgid "Organisation unit group"
 msgstr "Grupo de unidad organizativa"
 
@@ -100,9 +100,8 @@ msgstr "Nivel de unidad organizativa"
 msgid "Select"
 msgstr "Seleccionar"
 
-#, fuzzy
 msgid "Deselect"
-msgstr "seleccionado(s)"
+msgstr "Deseleccionar"
 
 msgid "For organisation units within"
 msgstr "Para unidades organizativas dentro de"
@@ -121,6 +120,3 @@ msgstr "Anterior"
 
 msgid "Next"
 msgstr "Siguiente"
-
-#~ msgid "Unselect"
-#~ msgstr "Deseleccionar"

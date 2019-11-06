@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { LinearProgress } from "@material-ui/core";
 
-import ModelBase from "d2/lib/model/Model";
-import ModelCollection from "d2/lib/model/ModelCollection";
+import ModelBase from "d2/model/Model";
+import ModelCollection from "d2/model/ModelCollection";
 
 import { TreeView } from "@dhis2/d2-ui-core";
 
@@ -80,7 +80,7 @@ class OrgUnitTree extends React.Component {
         }
     }
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (
             newProps.initiallyExpanded.some(ou => ou.includes(`/${newProps.root.id}`)) ||
             newProps.idsThatShouldBeReloaded.includes(newProps.root.id)

@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-11-06T04:11:29.812Z\n"
-"PO-Revision-Date: 2019-11-06T04:11:29.812Z\n"
+"POT-Creation-Date: 2019-11-06T08:19:32.278Z\n"
+"PO-Revision-Date: 2019-11-06T08:19:32.278Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -44,16 +44,19 @@ msgstr ""
 msgid "R/W"
 msgstr ""
 
-msgid "Read"
+msgid "Selected"
 msgstr ""
 
-msgid "Private"
+msgid "Assign all"
 msgstr ""
 
-msgid "Metadata"
+msgid "Remove all"
 msgstr ""
 
-msgid "Data"
+msgid "Move up"
+msgstr ""
+
+msgid "Search available/selected items"
 msgstr ""
 
 msgid "selected"
