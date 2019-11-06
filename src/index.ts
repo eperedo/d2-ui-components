@@ -10,7 +10,6 @@ import SnackbarProvider from "./snackbar/SnackbarProvider";
 import { withLoading } from "./loading";
 import LoadingProvider from "./loading/LoadingProvider";
 import OldObjectsTable from "./old-objects-table/ObjectsTable";
-import ObjectsTable from "./data-table/ObjectsTable";
 import Wizard from "./wizard/Wizard";
 
 import "./locales";
@@ -29,7 +28,6 @@ export {
     LoadingProvider,
     withLoading,
     OldObjectsTable,
-    ObjectsTable,
     Wizard,
 };
 
