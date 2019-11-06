@@ -154,7 +154,7 @@ class DataTable extends React.Component {
 
     handleRowClick = (event, rowSource) => {
         //Update activeRows according to click|ctlr+click
-        var newActiveRows;
+        let newActiveRows;
         if (event.isIconMenuClick) {
             newActiveRows = [rowSource];
         } else if (this.isEventCtrlClick(event) || this.isRowActive(rowSource)) {

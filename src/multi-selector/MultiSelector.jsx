@@ -56,7 +56,7 @@ class MultiSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
+            d2: this.props.d2,
         };
     }
 
@@ -139,12 +139,5 @@ class MultiSelector extends React.Component {
         );
     }
 }
-
-const d2UiTranslations = () => ({
-    assign_all: i18n.t("Assign all"),
-    remove_all: i18n.t("Remove all"),
-    hidden_by_filters: i18n.t("Hidden by filters"),
-    selected: i18n.t("selected"),
-});
 
 export default withStyles(styles)(MultiSelector);
