@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import GroupEditor from "../group-editor/GroupEditor.component";
 import GroupEditorWithOrdering from "../group-editor/GroupEditorWithOrdering.component";
+import TextField from "@material-ui/core/TextField";
 import i18n from "../utils/i18n";
 
 const styles = () => ({
@@ -25,6 +26,7 @@ class MultiSelector extends React.Component {
 
     state = {
         selected: [],
+        filterText: "",
     };
 
     static propTypes = {
@@ -34,12 +36,14 @@ class MultiSelector extends React.Component {
         options: optionsPropType.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string),
         onChange: PropTypes.func.isRequired,
+        searchFilterLabel: PropTypes.string,
     };
 
     static defaultProps = {
         height: 300,
         ordered: true,
         selected: undefined,
+        searchFilterLabel: undefined,
     };
 
     // Required by <GroupEditor>
@@ -82,8 +86,13 @@ class MultiSelector extends React.Component {
         return this.updateSelected(_selected => values);
     };
 
+    textFilterChange = event => {
+        this.setState({ filterText: event.target.value });
+    };
+
     render() {
-        const { height, options, classes, ordered } = this.props;
+        const { height, options, classes, ordered, searchFilterLabel } = this.props;
+        const { filterText } = this.state;
 
         const selected = this.getSelected();
         const itemStore = Store.create();
@@ -97,12 +106,28 @@ class MultiSelector extends React.Component {
 
         return (
             <div className={classes.wrapper} data-multi-selector={true}>
+                {searchFilterLabel && (
+                    <TextField
+                        value={filterText}
+                        type="search"
+                        onChange={this.textFilterChange}
+                        floatingLabelText={
+                            searchFilterLabel === true
+                                ? i18n.t("Search available/selected items")
+                                : searchFilterLabel
+                        }
+                        data-test="search"
+                        fullWidth
+                    />
+                )}
+
                 <GroupEditorComponent
                     itemStore={itemStore}
                     assignedItemStore={assignedItemStore}
                     onAssignItems={this.assignItems}
                     onRemoveItems={this.removeItems}
                     height={height}
+                    filterText={filterText}
                     {...extraProps}
                 />
             </div>
