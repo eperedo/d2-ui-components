@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: off */
+/* eslint @typescript-eslint/no-unused-vars: off */
 import React from "react";
 import Paper from "material-ui/Paper";
 import Popover from "material-ui/Popover";
@@ -10,16 +12,16 @@ class PopoverNoFlicker extends Popover {
         const {
             animated,
             animation,
-            anchorEl, // eslint-disable-line no-unused-vars
-            anchorOrigin, // eslint-disable-line no-unused-vars
-            autoCloseWhenOffScreen, // eslint-disable-line no-unused-vars
-            canAutoPosition, // eslint-disable-line no-unused-vars
+            anchorEl,
+            anchorOrigin,
+            autoCloseWhenOffScreen,
+            canAutoPosition,
             children,
-            onRequestClose, // eslint-disable-line no-unused-vars
+            onRequestClose,
             style,
             targetOrigin,
-            useLayerForClickAway, // eslint-disable-line no-unused-vars
-            scrollableContainer, // eslint-disable-line no-unused-vars
+            useLayerForClickAway,
+            scrollableContainer,
             ...other
         } = this.props;
 

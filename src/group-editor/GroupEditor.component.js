@@ -381,6 +381,7 @@ export default class GroupEditor extends Component {
                         }
                         onClick={this.onAssignAll}
                         style={{ marginTop: "1rem" }}
+                        color="secondary"
                     >
                         {`${i18n.t("Assign all")} ${
                             this.getAvailableItemsUnfilteredCount() === 0
@@ -395,6 +396,7 @@ export default class GroupEditor extends Component {
                         variant="contained"
                         onClick={this.onAssignItems}
                         style={styles.buttons}
+                        color="secondary"
                         disabled={this.state.loading || this.state.selectedLeft === 0}
                     >
                         →
@@ -403,6 +405,7 @@ export default class GroupEditor extends Component {
                         variant="contained"
                         onClick={this.onRemoveItems}
                         style={styles.buttons}
+                        color="secondary"
                         disabled={this.state.loading || this.state.selectedRight === 0}
                     >
                         ←
@@ -445,6 +448,7 @@ export default class GroupEditor extends Component {
                             this.state.loading || this.getAssignedItemsUnfilteredCount() === 0
                         }
                         onClick={this.onRemoveAll}
+                        color="secondary"
                     >
                         {`\u2190 ${i18n.t("Remove all")} ${
                             this.getAssignedItemsUnfilteredCount() > 0
