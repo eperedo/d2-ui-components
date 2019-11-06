@@ -9,6 +9,9 @@ import TextField from "@material-ui/core/TextField";
 import i18n from "../utils/i18n";
 
 const styles = () => ({
+    searchField: {
+        marginTop: 10,
+    },
     wrapper: {
         paddingBottom: 20,
     },
@@ -36,14 +39,14 @@ class MultiSelector extends React.Component {
         options: optionsPropType.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string),
         onChange: PropTypes.func.isRequired,
-        searchFilterLabel: PropTypes.string,
+        searchFilterLabel: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
     };
 
     static defaultProps = {
         height: 300,
         ordered: true,
         selected: undefined,
-        searchFilterLabel: undefined,
+        searchFilterLabel: false,
     };
 
     // Required by <GroupEditor>
@@ -104,18 +107,20 @@ class MultiSelector extends React.Component {
             ? [GroupEditorWithOrdering, { onOrderChanged: this.orderChanged }]
             : [GroupEditor, {}];
 
+        const placeholder =
+            searchFilterLabel === true
+                ? i18n.t("Search available/selected items")
+                : searchFilterLabel;
+
         return (
             <div className={classes.wrapper} data-multi-selector={true}>
                 {searchFilterLabel && (
                     <TextField
+                        className={classes.searchField}
                         value={filterText}
                         type="search"
                         onChange={this.textFilterChange}
-                        floatingLabelText={
-                            searchFilterLabel === true
-                                ? i18n.t("Search available/selected items")
-                                : searchFilterLabel
-                        }
+                        placeholder={placeholder}
                         data-test="search"
                         fullWidth
                     />

@@ -54,7 +54,7 @@ const styles = {
         right: 0,
     },
     arrow: {
-        color: "rgb(33, 150, 243)",
+        color: "#000000de",
     },
 };
 
