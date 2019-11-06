@@ -80,7 +80,7 @@ class OrgUnitTree extends React.Component {
         }
     }
 
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (
             newProps.initiallyExpanded.some(ou => ou.includes(`/${newProps.root.id}`)) ||
             newProps.idsThatShouldBeReloaded.includes(newProps.root.id)

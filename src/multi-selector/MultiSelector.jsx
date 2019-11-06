@@ -39,7 +39,7 @@ class MultiSelector extends React.Component {
         options: optionsPropType.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string),
         onChange: PropTypes.func.isRequired,
-        searchFilterLabel: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
+        searchFilterLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     };
 
     static defaultProps = {

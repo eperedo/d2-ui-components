@@ -27,7 +27,7 @@ export default class GroupEditor extends Component {
         this.disposables.push(this.props.assignedItemStore.subscribe(() => this.forceUpdate()));
     }
 
-    componentWillReceiveProps(props) {
+    UNSAFE_componentWillReceiveProps(props) {
         if (props.hasOwnProperty("filterText") && this.leftSelect && this.rightSelect) {
             this.setState({
                 selectedLeft: [].filter.call(
@@ -381,7 +381,6 @@ export default class GroupEditor extends Component {
                         }
                         onClick={this.onAssignAll}
                         style={{ marginTop: "1rem" }}
-                        secondary
                     >
                         {`${i18n.t("Assign all")} ${
                             this.getAvailableItemsUnfilteredCount() === 0
@@ -394,7 +393,6 @@ export default class GroupEditor extends Component {
                     <div style={styles.selected}>{selectedLabel()}</div>
                     <Button
                         variant="contained"
-                        secondary
                         onClick={this.onAssignItems}
                         style={styles.buttons}
                         disabled={this.state.loading || this.state.selectedLeft === 0}
@@ -403,7 +401,6 @@ export default class GroupEditor extends Component {
                     </Button>
                     <Button
                         variant="contained"
-                        secondary
                         onClick={this.onRemoveItems}
                         style={styles.buttons}
                         disabled={this.state.loading || this.state.selectedRight === 0}
@@ -448,7 +445,6 @@ export default class GroupEditor extends Component {
                             this.state.loading || this.getAssignedItemsUnfilteredCount() === 0
                         }
                         onClick={this.onRemoveAll}
-                        secondary
                     >
                         {`\u2190 ${i18n.t("Remove all")} ${
                             this.getAssignedItemsUnfilteredCount() > 0

@@ -57,7 +57,7 @@ class PopoverNoFlicker extends Popover {
         );
     };
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.open === this.props.open) {
             return;
         }
