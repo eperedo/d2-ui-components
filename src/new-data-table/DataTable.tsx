@@ -167,13 +167,15 @@ export default function NewDataTable<T extends ReferenceObject = TableObject>(
     return (
         <div className={classes.root}>
             <Toolbar className={classes.toolbar}>
-                {filterComponents}
-                <div className={classes.tablePagination}>
-                    <DataTablePagination
-                        pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
-                        onChange={handlePaginationChange}
-                    />
-                </div>
+                <React.Fragment>
+                    {filterComponents}
+                    <div className={classes.tablePagination}>
+                        <DataTablePagination
+                            pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
+                            onChange={handlePaginationChange}
+                        />
+                    </div>
+                </React.Fragment>
             </Toolbar>
             <div className={classes.tableWrapper}>
                 <Paper className={classes.paper} square>
