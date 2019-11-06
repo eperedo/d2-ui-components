@@ -9,7 +9,7 @@ import { withSnackbar, useSnackbar } from "./snackbar";
 import SnackbarProvider from "./snackbar/SnackbarProvider";
 import { withLoading } from "./loading";
 import LoadingProvider from "./loading/LoadingProvider";
-import ObjectsTable from "./objects-table/ObjectsTable";
+import OldObjectsTable from "./old-objects-table/ObjectsTable";
 import Wizard from "./wizard/Wizard";
 
 import "./locales";
@@ -27,10 +27,10 @@ export {
     useSnackbar,
     LoadingProvider,
     withLoading,
-    ObjectsTable,
+    OldObjectsTable,
     Wizard,
 };
 
-export * from "./new-data-table/DataTable";
-export * from "./new-data-table/ObjectsTable";
-export * from "./new-data-table/types";
+export * from "./data-table/DataTable";
+export * from "./data-table/ObjectsTable";
+export * from "./data-table/types";

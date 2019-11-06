@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import DetailsIcon from "@material-ui/icons/Details";
 import { SearchBox } from "..";
 
-import DataTable, { NewDataTableProps } from "./DataTable";
+import DataTable, { DataTableProps } from "./DataTable";
 import { DetailsBox } from "./DetailsBox";
 import { ActionButton } from "./ActionButton";
 import { filterObjects } from "./utils/filtering";
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export interface NewObjectsTableProps<T extends ReferenceObject> extends NewDataTableProps<T> {
+export interface ObjectsTableProps<T extends ReferenceObject> extends DataTableProps<T> {
     details?: ObjectsTableDetailField<T>[];
     initialSearch?: string;
     onChangeSearch?(search: string): void;
@@ -37,8 +37,8 @@ export interface NewObjectsTableProps<T extends ReferenceObject> extends NewData
     actionButtonLabel?: ReactNode;
 }
 
-export default function NewObjectsTable<T extends ReferenceObject = TableObject>(
-    props: NewObjectsTableProps<T>
+export default function ObjectsTable<T extends ReferenceObject = TableObject>(
+    props: ObjectsTableProps<T>
 ) {
     const {
         details = [],

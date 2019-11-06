@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export interface NewDataTableProps<T extends ReferenceObject> {
+export interface DataTableProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
     actions?: TableAction<T>[];
@@ -70,8 +70,8 @@ export interface NewDataTableProps<T extends ReferenceObject> {
     onChange?(state: TableState<T>): void;
 }
 
-export default function NewDataTable<T extends ReferenceObject = TableObject>(
-    props: NewDataTableProps<T>
+export default function DataTable<T extends ReferenceObject = TableObject>(
+    props: DataTableProps<T>
 ) {
     const classes = useStyles({});
     const {
