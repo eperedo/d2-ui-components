@@ -70,9 +70,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     onChange?(state: TableState<T>): void;
 }
 
-export default function DataTable<T extends ReferenceObject = TableObject>(
-    props: DataTableProps<T>
-) {
+export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
     const classes = useStyles({});
     const {
         rows,

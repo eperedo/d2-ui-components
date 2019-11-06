@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import DetailsIcon from "@material-ui/icons/Details";
 import { SearchBox } from "..";
 
-import DataTable, { DataTableProps } from "./DataTable";
+import { DataTable, DataTableProps } from "./DataTable";
 import { DetailsBox } from "./DetailsBox";
 import { ActionButton } from "./ActionButton";
 import { filterObjects } from "./utils/filtering";
@@ -37,9 +37,7 @@ export interface ObjectsTableProps<T extends ReferenceObject> extends DataTableP
     actionButtonLabel?: ReactNode;
 }
 
-export default function ObjectsTable<T extends ReferenceObject = TableObject>(
-    props: ObjectsTableProps<T>
-) {
+export function ObjectsTable<T extends ReferenceObject = TableObject>(props: ObjectsTableProps<T>) {
     const {
         details = [],
         initialSearch,
@@ -96,6 +94,7 @@ export default function ObjectsTable<T extends ReferenceObject = TableObject>(
     const sideComponents = detailsPaneObject
         ? [
               <DetailsBox
+                  key={"objects-table-details-box"}
                   details={details}
                   data={detailsPaneObject}
                   onClose={handleDetailsBoxClose}
