@@ -185,7 +185,7 @@ class ObjectsTable extends React.Component {
             const allObjectsPagination = { paging: false };
             const { objects: ids } = await list(d2, allObjectsFilters, allObjectsPagination);
             allObjects = new Set(ids.map(dr => dr.id));
-            selection = selection;
+            selection = this.state.selection;
         } else {
             allObjects = [];
             selection = new Set();
