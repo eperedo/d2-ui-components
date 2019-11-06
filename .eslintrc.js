@@ -12,13 +12,14 @@ module.exports = {
     ],
     rules: {
         "no-console": "off",
-        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
         "@typescript-eslint/explicit-function-return-type": ["off"],
+        "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
         "react/prop-types": "off",
     },
     env: {
-        "jest": true
+        jest: true,
     },
     settings: {
         react: {
