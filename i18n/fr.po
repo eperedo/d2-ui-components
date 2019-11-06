@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2019-11-06T08:19:32.278Z\n"
+"POT-Creation-Date: 2019-11-06T14:57:16.815Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,12 +13,6 @@ msgstr "Annuler"
 
 msgid "Save"
 msgstr "Enregistrer"
-
-msgid "Actions"
-msgstr "Opérations"
-
-msgid "of"
-msgstr "de"
 
 msgid "Close"
 msgstr "Fermer"
@@ -59,8 +53,11 @@ msgstr "Données"
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "selected"
-msgstr "sélectionné(s)"
+msgid "Actions"
+msgstr "Opérations"
+
+msgid "of"
+msgstr "de"
 
 msgid "There are {{total}} items selected in all pages."
 msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
@@ -120,3 +117,6 @@ msgstr "Précédent"
 
 msgid "Next"
 msgstr "Suivant"
+
+#~ msgid "selected"
+#~ msgstr "sélectionné(s)"

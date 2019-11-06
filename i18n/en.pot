@@ -5,19 +5,13 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-11-06T13:38:48.940Z\n"
-"PO-Revision-Date: 2019-11-06T13:38:48.940Z\n"
+"POT-Creation-Date: 2019-11-06T14:57:16.815Z\n"
+"PO-Revision-Date: 2019-11-06T14:57:16.815Z\n"
 
 msgid "Cancel"
 msgstr ""
 
 msgid "Save"
-msgstr ""
-
-msgid "Actions"
-msgstr ""
-
-msgid "of"
 msgstr ""
 
 msgid "Close"
@@ -59,7 +53,10 @@ msgstr ""
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "selected"
+msgid "Actions"
+msgstr ""
+
+msgid "of"
 msgstr ""
 
 msgid "There are {{total}} items selected in all pages."
