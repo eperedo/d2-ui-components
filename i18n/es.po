@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2019-07-17T05:25:09.952Z\n"
+"POT-Creation-Date: 2019-11-06T04:11:29.812Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,6 +23,25 @@ msgstr "de"
 msgid "Close"
 msgstr "Cerrar"
 
+msgid "Hidden by filters"
+msgstr "Ocultos por filtro"
+
+#, fuzzy
+msgid "Selected"
+msgstr "seleccionado(s)"
+
+msgid "Assign all"
+msgstr "Asignar todos"
+
+msgid "Remove all"
+msgstr "Quitar todos"
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
+msgstr ""
+
 msgid "R/W"
 msgstr "R/W"
 
@@ -37,15 +56,6 @@ msgstr "Metadatos"
 
 msgid "Data"
 msgstr "Datos"
-
-msgid "Assign all"
-msgstr "Asignar todos"
-
-msgid "Remove all"
-msgstr "Quitar todos"
-
-msgid "Hidden by filters"
-msgstr "Ocultos por filtro"
 
 msgid "selected"
 msgstr "seleccionado(s)"
@@ -73,29 +83,32 @@ msgstr "Seleccione todos los {{total}} elementos en todas las páginas"
 msgid "No results found"
 msgstr "No hay resultados"
 
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+#, fuzzy
+msgid "Deselect all"
+msgstr "Deseleccionar todo"
+
+#, fuzzy
+msgid "Organisation unit group"
+msgstr "Grupo de unidad organizativa"
+
+msgid "Organisation Unit Level"
+msgstr "Nivel de unidad organizativa"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+#, fuzzy
+msgid "Deselect"
+msgstr "seleccionado(s)"
+
 msgid "For organisation units within"
 msgstr "Para unidades organizativas dentro de"
 
 msgid "For all organisation units"
 msgstr "Para todas las unidades organizativas"
-
-msgid "Select"
-msgstr "Seleccionar"
-
-msgid "Unselect"
-msgstr "Deseleccionar"
-
-msgid "Select all"
-msgstr "Seleccionar todo"
-
-msgid "Unselect all"
-msgstr "Deseleccionar todo"
-
-msgid "Organisation Unit Level"
-msgstr "Nivel de unidad organizativa"
-
-msgid "Organisation Unit Group"
-msgstr "Grupo de unidad organizativa"
 
 msgid "Search by name"
 msgstr "Buscar por nombre"
@@ -108,3 +121,6 @@ msgstr "Anterior"
 
 msgid "Next"
 msgstr "Siguiente"
+
+#~ msgid "Unselect"
+#~ msgstr "Deseleccionar"

@@ -30,3 +30,7 @@ export {
     ObjectsTable,
     Wizard,
 };
+
+export * from "./new-data-table/DataTable";
+export * from "./new-data-table/ObjectsTable";
+export * from "./new-data-table/types";
