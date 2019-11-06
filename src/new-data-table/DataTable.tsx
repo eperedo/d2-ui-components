@@ -110,7 +110,7 @@ export default function NewDataTable<T extends ReferenceObject = TableObject>(
     const selection = controlledSelection || stateSelection;
     const pagination = controlledPagination || statePagination;
 
-    const rowObjects = sortObjects(rows, pagination, sorting);
+    const rowObjects = controlledPagination ? rows : sortObjects(rows, pagination, sorting);
     const primaryAction = _(availableActions).find({ primary: true }) || availableActions[0];
     const allSelected =
         rowObjects.length > 0 &&
