@@ -7,12 +7,12 @@ export function sortObjects<T extends ReferenceObject>(
     tablePagination: TablePagination,
     tableSorting: TableSorting<T>
 ) {
-    const { orderBy, order } = tableSorting;
+    const { field, order } = tableSorting;
     const { page, pageSize } = tablePagination;
     const realPage = page - 1;
 
     return _(rows)
-        .orderBy([orderBy], [order])
+        .orderBy([field], [order])
         .slice(realPage * pageSize, realPage * pageSize + pageSize)
         .value();
 }

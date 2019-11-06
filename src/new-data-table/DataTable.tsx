@@ -91,7 +91,7 @@ export default function NewDataTable<T extends ReferenceObject = TableObject>(
     } = props;
 
     const initialSorting = initialState.sorting || {
-        orderBy: columns[0].name,
+        field: columns[0].name,
         order: "asc" as const,
     };
     const initialSelection = initialState.selection || [];

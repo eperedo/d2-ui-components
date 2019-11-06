@@ -55,11 +55,11 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         enableMultipleAction,
     } = props;
 
-    const { orderBy, order } = sorting;
+    const { field, order } = sorting;
 
     const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
-        const isDesc = orderBy === property && order === "desc";
-        onChange({ orderBy: property, order: isDesc ? "asc" : "desc" });
+        const isDesc = field === property && order === "desc";
+        onChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
 
     return (
@@ -76,10 +76,10 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         key={`data-table-cell-${column.name}`}
                         align="left"
                         padding={enableMultipleAction ? "none" : undefined}
-                        sortDirection={orderBy === column.name ? order : false}
+                        sortDirection={field === column.name ? order : false}
                     >
                         <TableSortLabel
-                            active={orderBy === column.name}
+                            active={field === column.name}
                             direction={order}
                             onClick={createSortHandler(column.name)}
                             IconComponent={ExpandMoreIcon}

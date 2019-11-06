@@ -24,7 +24,7 @@ export interface TableAction<T extends ReferenceObject> {
 }
 
 export interface TableSorting<T extends ReferenceObject> {
-    orderBy: keyof T;
+    field: keyof T;
     order: "asc" | "desc";
 }
 
