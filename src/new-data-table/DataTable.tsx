@@ -138,7 +138,8 @@ export default function NewDataTable<T extends ReferenceObject = TableObject>(
 
     const handleSortingChange = (sorting: TableSorting<T>) => {
         updateSorting(sorting);
-        onChange({ selection, pagination, sorting });
+        const newPagination = { ...pagination, page: 1 };
+        onChange({ selection, pagination: newPagination, sorting });
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +170,7 @@ export default function NewDataTable<T extends ReferenceObject = TableObject>(
                 {filterComponents}
                 <div className={classes.tablePagination}>
                     <DataTablePagination
-                        pagination={{ ...pagination, total: rows.length }} // TODO: Verify this
+                        pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
                         onChange={handlePaginationChange}
                     />
                 </div>
