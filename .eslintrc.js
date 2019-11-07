@@ -17,6 +17,7 @@ module.exports = {
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
         "react/prop-types": "off",
+        "no-prototype-builtins": "off",
     },
     env: {
         jest: true,
