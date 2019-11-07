@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 export type ReferenceObject = { id: string };
 
 export interface TableObject extends ReferenceObject {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [key: string]: any;
 }
 

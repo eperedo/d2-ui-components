@@ -5,6 +5,7 @@ import { TableColumn, ReferenceObject } from "../types";
 
 const urlRegex = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#()?&//=]*)/;
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function defaultFormatter(value: any): ReactNode {
     if (Array.isArray(value)) {
         return (
