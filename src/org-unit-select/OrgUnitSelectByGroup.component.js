@@ -38,9 +38,7 @@ class OrgUnitSelectByGroup extends React.Component {
         return new Promise(resolve => {
             if (this.props.currentRoot) {
                 log.debug(
-                    `Loading org units for group ${groupId} within ${
-                        this.props.currentRoot.displayName
-                    }`
+                    `Loading org units for group ${groupId} within ${this.props.currentRoot.displayName}`
                 );
                 this.setState({ loading: true });
 
@@ -55,9 +53,7 @@ class OrgUnitSelectByGroup extends React.Component {
                     .then(orgUnits => orgUnits.toArray())
                     .then(orgUnits => {
                         log.debug(
-                            `Loaded ${orgUnits.length} org units for group ${groupId} within ${
-                                this.props.currentRoot.displayName
-                            }`
+                            `Loaded ${orgUnits.length} org units for group ${groupId} within ${this.props.currentRoot.displayName}`
                         );
                         this.setState({ loading: false });
 
