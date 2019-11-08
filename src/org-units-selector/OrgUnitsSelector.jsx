@@ -62,24 +62,24 @@ export default class OrgUnitsSelector extends React.Component {
             !filterByLevel
                 ? Promise.resolve([])
                 : props.d2.models.organisationUnitLevels.list({
-                      paging: false,
-                      fields: "id,level,displayName",
-                      order: "level:asc",
-                      // bug in old versions of dhis2, cannot use filter=level:in:[1,2] -> HTTP 500
-                      ...(props.levels
-                          ? {
-                                filter: props.levels.map(level => `level:eq:${level}`),
-                                rootJunction: "OR",
-                            }
-                          : {}),
-                  }),
+                    paging: false,
+                    fields: "id,level,displayName",
+                    order: "level:asc",
+                    // bug in old versions of dhis2, cannot use filter=level:in:[1,2] -> HTTP 500
+                    ...(props.levels
+                        ? {
+                            filter: props.levels.map(level => `level:eq:${level}`),
+                            rootJunction: "OR",
+                        }
+                        : {}),
+                }),
             !filterByGroup
                 ? Promise.resolve([])
                 : props.d2.models.organisationUnitGroups.list({
-                      pageSize: 1,
-                      paging: false,
-                      fields: "id,displayName",
-                  }),
+                    pageSize: 1,
+                    paging: false,
+                    fields: "id,displayName",
+                }),
             this.getRoots(),
         ]).then(([levels, groups, defaultRoots]) => {
             this.setState({
@@ -168,8 +168,8 @@ export default class OrgUnitsSelector extends React.Component {
                 <span style={styles.ouLabel}>{currentRoot.displayName}</span>:{" "}
             </div>
         ) : (
-            <div>{i18n.t("For all organisation units")}:</div>
-        );
+                <div>{i18n.t("For all organisation units")}:</div>
+            );
     };
 
     changeRoot = currentRoot => {
@@ -184,9 +184,8 @@ export default class OrgUnitsSelector extends React.Component {
 
     render() {
         if (!this.state.levels) return null;
-
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation } = this.props;
+        const { selected, controls, withElevation, selectableLevels } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -197,7 +196,6 @@ export default class OrgUnitsSelector extends React.Component {
         const cardWideStyle = withElevation
             ? styles.cardWide
             : { ...styles.cardWide, boxShadow: "none" };
-
         return (
             <div>
                 <Card style={cardWideStyle}>
@@ -211,10 +209,12 @@ export default class OrgUnitsSelector extends React.Component {
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
                                         root={root}
+                                        level={levels}
                                         selected={selected}
                                         currentRoot={currentRoot}
                                         initiallyExpanded={initiallyExpanded}
                                         onSelectClick={this.handleOrgUnitClick.bind(this, root)}
+                                        selectableLevels={selectableLevels}
                                         onChangeCurrentRoot={this.changeRoot}
                                         onChildrenLoaded={this.handleChildrenLoaded.bind(
                                             this,
