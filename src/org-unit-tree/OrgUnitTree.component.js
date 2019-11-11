@@ -55,7 +55,7 @@ class OrgUnitTree extends React.Component {
         this.state = {
             children:
                 props.root.children === false ||
-                    (Array.isArray(props.root.children) && props.root.children.length === 0)
+                (Array.isArray(props.root.children) && props.root.children.length === 0)
                     ? []
                     : undefined,
             loading: false,
@@ -160,8 +160,8 @@ class OrgUnitTree extends React.Component {
         const expandedProp = Array.isArray(this.props.initiallyExpanded)
             ? this.props.initiallyExpanded.filter(id => id !== this.props.root.id)
             : (this.props.initiallyExpanded !== this.props.root.id &&
-                this.props.initiallyExpanded) ||
-            [];
+                  this.props.initiallyExpanded) ||
+              [];
 
         if (Array.isArray(this.state.children) && this.state.children.length > 0) {
             return this.state.children.map(orgUnit => this.renderChild(orgUnit, expandedProp));
@@ -180,7 +180,6 @@ class OrgUnitTree extends React.Component {
 
     render() {
         const currentOu = this.props.root;
-        console.log(this.props);
         // True if this OU has children = is not a leaf node
         const hasChildren =
             this.state.children === undefined ||
@@ -322,7 +321,7 @@ function orgUnitPathPropValidator(propValue, key, compName, location, propFullNa
     if (!/(\/[a-zA-Z][a-zA-Z0-9]{10})+/.test(propValue[key])) {
         return new Error(
             `Invalid org unit path \`${
-            propValue[key]
+                propValue[key]
             }\` supplied to \`${compName}.${propFullName}\``
         );
     }
@@ -422,7 +421,6 @@ OrgUnitTree.defaultProps = {
     selected: [],
     initiallyExpanded: [],
     onSelectClick: undefined,
-    // selectableLevels: undefined,
     onChangeCurrentRoot: undefined,
     currentRoot: undefined,
     onChildrenLoaded: undefined,
