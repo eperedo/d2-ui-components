@@ -14,12 +14,6 @@ msgstr "Annuler"
 msgid "Save"
 msgstr "Enregistrer"
 
-msgid "Actions"
-msgstr "Opérations"
-
-msgid "of"
-msgstr "de"
-
 msgid "Close"
 msgstr "Fermer"
 
@@ -58,6 +52,12 @@ msgstr "Données"
 
 msgid "Search available/selected items"
 msgstr ""
+
+msgid "Actions"
+msgstr "Opérations"
+
+msgid "of"
+msgstr "de"
 
 msgid "There are {{total}} items selected in all pages."
 msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
@@ -117,6 +117,3 @@ msgstr "Précédent"
 
 msgid "Next"
 msgstr "Suivant"
-
-#~ msgid "selected"
-#~ msgstr "sélectionné(s)"
