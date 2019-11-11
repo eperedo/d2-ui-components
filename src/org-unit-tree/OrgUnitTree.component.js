@@ -121,13 +121,6 @@ class OrgUnitTree extends React.Component {
         }
         e.stopPropagation();
     }
-    // handleSelectableLevels(e) {
-    //     console.log(e)
-    //     // if (this.props.selectableLevels >= 3) {
-    //     //     this.props.selectableLevels(e, this.props.root);
-    //     // }
-    //     // e.stopPropagation();
-    // }
 
     shouldIncludeOrgUnit(orgUnit) {
         if (!this.props.orgUnitsPathsToInclude || this.props.orgUnitsPathsToInclude.length === 0) {
@@ -145,7 +138,6 @@ class OrgUnitTree extends React.Component {
                     selected={this.props.selected}
                     initiallyExpanded={expandedProp}
                     onSelectClick={this.props.onSelectClick}
-                    // selectableLevels={this.props.selectableLevels}
                     currentRoot={this.props.currentRoot}
                     onChangeCurrentRoot={this.props.onChangeCurrentRoot}
                     labelStyle={this.props.labelStyle}
