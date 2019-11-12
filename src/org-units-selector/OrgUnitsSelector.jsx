@@ -119,7 +119,7 @@ export default class OrgUnitsSelector extends React.Component {
 
         const listOptions = {
             paging: false,
-            fields: "id,displayName,path",
+            fields: "id,level, displayName,path",
             ...listParams,
             ..._.omit(options, ["postFilter"]),
         };
@@ -184,8 +184,9 @@ export default class OrgUnitsSelector extends React.Component {
 
     render() {
         if (!this.state.levels) return null;
+
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation, selectableLevels } = this.props;
+        const { selected, controls, withElevation, selectableLevel } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -196,6 +197,7 @@ export default class OrgUnitsSelector extends React.Component {
         const cardWideStyle = withElevation
             ? styles.cardWide
             : { ...styles.cardWide, boxShadow: "none" };
+
         return (
             <div>
                 <Card style={cardWideStyle}>
@@ -209,12 +211,11 @@ export default class OrgUnitsSelector extends React.Component {
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
                                         root={root}
-                                        level={levels}
                                         selected={selected}
                                         currentRoot={currentRoot}
                                         initiallyExpanded={initiallyExpanded}
                                         onSelectClick={this.handleOrgUnitClick.bind(this, root)}
-                                        selectableLevels={selectableLevels}
+                                        selectableLevel={selectableLevel}
                                         onChangeCurrentRoot={this.changeRoot}
                                         onChildrenLoaded={this.handleChildrenLoaded.bind(
                                             this,
