@@ -29,6 +29,9 @@ const variantIcon = {
 };
 
 const styles = theme => ({
+    root: {
+        bottom: 0,
+    },
     success: {
         backgroundColor: green[600],
     },
@@ -79,6 +82,7 @@ const SnackbarConsumer = props => {
                 return (
                     <MuiThemeProvider theme={theme}>
                         <Snackbar
+                            className={classes.root}
                             anchorOrigin={anchorOrigin}
                             open={snackbarIsOpen}
                             autoHideDuration={autoHideDuration}
