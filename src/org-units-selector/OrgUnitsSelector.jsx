@@ -186,7 +186,7 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation, selectableLevel } = this.props;
+        const { selected, controls, withElevation, selectableLevel, typeInput } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -216,6 +216,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         initiallyExpanded={initiallyExpanded}
                                         onSelectClick={this.handleOrgUnitClick.bind(this, root)}
                                         selectableLevel={selectableLevel}
+                                        typeInput={typeInput}
                                         onChangeCurrentRoot={this.changeRoot}
                                         onChildrenLoaded={this.handleChildrenLoaded.bind(
                                             this,

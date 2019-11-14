@@ -122,11 +122,11 @@ class OrgUnitTree extends React.Component {
         e.stopPropagation();
     }
 
-    handleSelectableLevel = selectableLevel => {
-        if (selectableLevel === undefined) {
+    handleSelectableLevel = (selectableLevel, currentOu) => {
+        if (selectableLevel.length === 0) {
             return !!this.props.onSelectClick;
         } else {
-            return !!this.props.onSelectClick && this.props.root.level === selectableLevel;
+            return !!this.props.onSelectClick && selectableLevel.includes(currentOu.level) === true;
         }
     };
 
@@ -147,6 +147,7 @@ class OrgUnitTree extends React.Component {
                     initiallyExpanded={expandedProp}
                     onSelectClick={this.props.onSelectClick}
                     selectableLevel={this.props.selectableLevel}
+                    typeInput={this.props.typeInput}
                     currentRoot={this.props.currentRoot}
                     onChangeCurrentRoot={this.props.onChangeCurrentRoot}
                     labelStyle={this.props.labelStyle}
@@ -191,11 +192,13 @@ class OrgUnitTree extends React.Component {
         // True if this OU has children = is not a leaf node
         const hasChildren =
             this.state.children === undefined ||
-            !currentOu.level === selectableLevel ||
+            !selectableLevel ||
             (Array.isArray(this.state.children) && this.state.children.length > 0);
         // True if a click handler exists
         const selectableLevel = this.props.selectableLevel;
-        const isSelectable = this.handleSelectableLevel(selectableLevel);
+        const maxSelectableLevel = Math.max(...selectableLevel);
+        const typeInput = this.props.typeInput;
+        const isSelectable = this.handleSelectableLevel(selectableLevel, currentOu);
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
         const isSelected =
@@ -243,14 +246,7 @@ class OrgUnitTree extends React.Component {
             e.stopPropagation();
             this.props.onChangeCurrentRoot(currentOu);
         };
-
-        const handleTypeLabel = () => {
-            if (selectableLevel !== undefined) {
-                return "radio";
-            } else {
-                return "checkbox";
-            }
-        };
+        const handletypeInput = typeInput !== undefined ? typeInput : "checkbox";
 
         const label = (
             <div
@@ -264,12 +260,11 @@ class OrgUnitTree extends React.Component {
             >
                 {isSelectable && !this.props.hideCheckboxes && (
                     <input
-                        type={handleTypeLabel()}
+                        type={handletypeInput}
                         readOnly
                         disabled={!isSelectable}
                         checked={isSelected}
                         onClick={this.handleSelectClick}
-                        name="radAnswer"
                     />
                 )}
                 {currentOu.displayName}
@@ -279,22 +274,7 @@ class OrgUnitTree extends React.Component {
             </div>
         );
 
-        if (currentOu.level === selectableLevel) {
-            return (
-                <div
-                    onClick={isSelectable && this.handleSelectClick}
-                    className="orgunit without-children"
-                    style={ouContainerStyle}
-                    role="button"
-                    tabIndex={0}
-                >
-                    <div style={styles.spacer} />
-                    {label}
-                </div>
-            );
-        }
-
-        if (hasChildren) {
+        if (hasChildren && currentOu.level !== maxSelectableLevel) {
             return (
                 <TreeView
                     label={label}
@@ -364,7 +344,8 @@ OrgUnitTree.propTypes = {
      * The onSelectClick callback will receive two arguments: The original click event, and the OU that was clicked
      */
     onSelectClick: PropTypes.func,
-    selectableLevel: PropTypes.func,
+    typeInput: PropTypes.string,
+    selectableLevel: PropTypes.arrayOf(PropTypes.number),
 
     /**
      * onChangeCurrentRoot callback, which is triggered when the change current root label is clicked. Setting this also
@@ -427,12 +408,13 @@ OrgUnitTree.defaultProps = {
     selected: [],
     initiallyExpanded: [],
     onSelectClick: undefined,
-    selectableLevel: undefined,
+    selectableLevel: [],
     onChangeCurrentRoot: undefined,
     currentRoot: undefined,
     onChildrenLoaded: undefined,
     labelStyle: {},
     selectedLabelStyle: {},
+    typeInput: undefined,
     idsThatShouldBeReloaded: [],
     arrowSymbol: undefined,
     hideCheckboxes: false,
