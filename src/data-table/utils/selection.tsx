@@ -52,7 +52,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
     pagination: TablePagination,
     ids: string[]
 ): TableNotification[] {
-    if (_.isEmpty(rows)) return [];
+    if (_.isEmpty(selection)) return [];
 
     const allSelected = selection.length === pagination.total;
     const selectionInOtherPages = _.difference(selection, rows.map(dr => dr.id));
