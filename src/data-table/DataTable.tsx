@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: "1 1 0%",
             overflowX: "auto",
             paddingBottom: theme.spacing(2),
+            marginTop: "5px",
         },
         table: {
             width: "100%",
