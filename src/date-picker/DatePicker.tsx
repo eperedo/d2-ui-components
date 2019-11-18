@@ -12,7 +12,7 @@ export interface DatePickerProps {
     label?: string;
     placeholder?: string;
     value?: Date;
-    onChange: (date: Date) => {};
+    onChange: (date: Date) => void;
     isFilter?: boolean;
 }
 
