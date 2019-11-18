@@ -5,15 +5,14 @@ import { D2ApiDataHookQuery, useD2ApiData, PaginatedObjects, NonPaginatedObjects
 
 export interface D2ObjectsTableProps<T extends ReferenceObject>
     extends Omit<ObjectsTableProps<T>, "rows"> {
-    fields: any; // TODO
-    apiMethod(options: any): D2ApiDataHookQuery<PaginatedObjects<T> | NonPaginatedObjects<T>>; // TODO
-    apiQuery?: any; // TODO
+    apiMethod(options: any): D2ApiDataHookQuery<PaginatedObjects<T> | NonPaginatedObjects<T>>; // TODO inference
+    apiQuery?: any; // TODO inference
 }
 
 export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
     props: D2ObjectsTableProps<T>
 ) {
-    const { fields, apiMethod, apiQuery = {}, initialState = {}, ...rest } = props;
+    const { apiMethod, apiQuery = {}, initialState = {}, ...rest } = props;
     const [search, updateSearch] = useState<string | undefined>(undefined);
     const [sorting, updateSorting] = useState(
         initialState.sorting || {
@@ -31,7 +30,6 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
 
     const { loading, data, error, refetch } = useD2ApiData(
         apiMethod({
-            fields: fields,
             order: `${sorting.field}:i${sorting.order}`,
             pageSize: pagination.pageSize,
             ...apiQuery,
@@ -42,7 +40,6 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
         () =>
             refetch(
                 apiMethod({
-                    fields: fields,
                     order: `${sorting.field}:i${sorting.order}`,
                     page: pagination.page,
                     pageSize: pagination.pageSize,
