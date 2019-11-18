@@ -15,7 +15,7 @@ const useStyles = makeStyles({
         padding: "1.5rem",
         opacity: 1,
         maxWidth: 500,
-        minWidth: 220,
+        minWidth: 350,
         height: "0%",
     },
     content: {
