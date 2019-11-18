@@ -75,7 +75,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         className={classes.cell}
                         key={`data-table-cell-${column.name}`}
                         align="left"
-                        padding={enableMultipleAction ? "none" : undefined}
+                        padding={"default"}
                         sortDirection={field === column.name ? order : false}
                     >
                         <TableSortLabel

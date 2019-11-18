@@ -5,9 +5,9 @@ import { D2ApiDataHookQuery, useD2ApiData, PaginatedObjects, NonPaginatedObjects
 
 export interface D2ObjectsTableProps<T extends ReferenceObject>
     extends Omit<ObjectsTableProps<T>, "rows"> {
-    fields: any;
-    apiMethod(options: any): D2ApiDataHookQuery<PaginatedObjects<T> | NonPaginatedObjects<T>>;
-    initialQuery?: any;
+    fields: any; // TODO
+    apiMethod(options: any): D2ApiDataHookQuery<PaginatedObjects<T> | NonPaginatedObjects<T>>; // TODO
+    initialQuery?: any; // TODO
 }
 
 export function D2ObjectsTable<T extends ReferenceObject = TableObject>(

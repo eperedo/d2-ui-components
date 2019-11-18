@@ -93,7 +93,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 className={classes.cell}
                                 key={`${labelId}-column-${column.name}`}
                                 scope="row"
-                                padding={enableMultipleAction ? "none" : undefined}
+                                padding={"default"}
                                 align="left"
                             >
                                 {formatRowValue(column, row)}
