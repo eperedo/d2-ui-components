@@ -1,28 +1,27 @@
-import React, { useState, ReactNode } from "react";
-import _ from "lodash";
+import { CircularProgress } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
-
 import Toolbar from "@material-ui/core/Toolbar";
-import Paper from "@material-ui/core/Paper";
-
-import { DataTableHeader } from "./DataTableHeader";
+import _ from "lodash";
+import React, { ReactNode, useState } from "react";
 import { ContextualMenu } from "./ContextualMenu";
+import { DataTableBody } from "./DataTableBody";
+import { DataTableHeader } from "./DataTableHeader";
+import { DataTablePagination } from "./DataTablePagination";
 import {
+    ReferenceObject,
+    TableAction,
+    TableColumn,
+    TableInitialState,
+    TableNotification,
     TableObject,
     TablePagination,
     TableSorting,
-    TableColumn,
-    TableAction,
-    TableNotification,
-    TableInitialState,
     TableState,
-    ReferenceObject,
 } from "./types";
-import { DataTablePagination } from "./DataTablePagination";
-import { DataTableBody } from "./DataTableBody";
+import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
-import { parseActions, getActionRows, getSelectionMessages } from "./utils/selection";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "100%",
             minWidth: 750,
         },
-        tablePagination: {
+        spacer: {
             flex: "1 1 auto",
         },
     })
@@ -64,6 +63,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     filterComponents?: ReactNode; // Portal to the navigation toolbar
     sideComponents?: ReactNode; // Portal to right-most of the Data Table
     ids?: string[]; // Enables selection in all pages (disabled with [])
+    loading?: boolean;
     // State controlled by parent
     sorting?: TableSorting<T>;
     selection?: string[];
@@ -83,6 +83,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         filterComponents,
         sideComponents,
         ids = rows.map(row => row.id),
+        loading = false,
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
@@ -169,12 +170,12 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
             <Toolbar className={classes.toolbar}>
                 <React.Fragment>
                     {filterComponents}
-                    <div className={classes.tablePagination}>
-                        <DataTablePagination
-                            pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
-                            onChange={handlePaginationChange}
-                        />
-                    </div>
+                    <div className={classes.spacer}></div>
+                    {loading && <CircularProgress size={30} />}
+                    <DataTablePagination
+                        pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
+                        onChange={handlePaginationChange}
+                    />
                 </React.Fragment>
             </Toolbar>
             <div className={classes.tableWrapper}>
@@ -198,6 +199,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             openContextualMenu={handleOpenContextualMenu}
                             primaryAction={primaryAction}
                             enableMultipleAction={enableMultipleAction}
+                            loading={loading}
                         />
                     </Table>
                 </Paper>

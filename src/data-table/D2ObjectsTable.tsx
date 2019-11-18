@@ -7,13 +7,13 @@ export interface D2ObjectsTableProps<T extends ReferenceObject>
     extends Omit<ObjectsTableProps<T>, "rows"> {
     fields: any; // TODO
     apiMethod(options: any): D2ApiDataHookQuery<PaginatedObjects<T> | NonPaginatedObjects<T>>; // TODO
-    initialQuery?: any; // TODO
+    apiQuery?: any; // TODO
 }
 
 export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
     props: D2ObjectsTableProps<T>
 ) {
-    const { fields, apiMethod, initialQuery, initialState = {}, ...rest } = props;
+    const { fields, apiMethod, apiQuery = {}, initialState = {}, ...rest } = props;
     const [search, updateSearch] = useState<string | undefined>(undefined);
     const [sorting, updateSorting] = useState(
         initialState.sorting || {
@@ -34,7 +34,7 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
             fields: fields,
             order: `${sorting.field}:i${sorting.order}`,
             pageSize: pagination.pageSize,
-            ...initialQuery,
+            ...apiQuery,
         })
     );
 
@@ -46,19 +46,20 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
                     order: `${sorting.field}:i${sorting.order}`,
                     page: pagination.page,
                     pageSize: pagination.pageSize,
+                    ...apiQuery,
                     filter: {
                         name: { ilike: search },
+                        ...apiQuery.filter,
                     },
                 })
             ),
         [apiMethod, refetch, sorting, pagination, search]
     );
 
-    if (loading || !data) return <p>{"Loading..."}</p>;
     if (error) return <p>{"Error: " + JSON.stringify(error)}</p>;
 
     // @ts-ignore @tokland How do we handle non-paginated inference here?
-    const { objects, pager } = data;
+    const { objects, pager } = data || { objects: [], pager: undefined };
 
     const handleTableChange = (tableState: TableState<T>) => {
         const { sorting, pagination } = tableState;
@@ -75,6 +76,7 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
             searchBoxLabel={i18n.t("Search by name")}
             pagination={pager}
             onChange={handleTableChange}
+            loading={loading}
             {...rest}
         />
     );

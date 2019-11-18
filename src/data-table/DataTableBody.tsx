@@ -1,28 +1,27 @@
-import React, { MouseEvent } from "react";
-import _ from "lodash";
+import i18n from "@dhis2/d2-i18n";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Tooltip from "@material-ui/core/Tooltip";
-import i18n from "@dhis2/d2-i18n";
-
-import { isEventCtrlClick, updateSelection } from "./utils/selection";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import _ from "lodash";
+import React, { MouseEvent } from "react";
+import { ReferenceObject, TableAction, TableColumn } from "./types";
 import { formatRowValue } from "./utils/formatting";
-import { ReferenceObject, TableColumn, TableAction } from "./types";
+import { isEventCtrlClick, updateSelection } from "./utils/selection";
 
 const useStyles = makeStyles({
-    cell: {
+    bottomBorder: {
         borderBottom: "2px solid #E0E0E0",
-        minHeight: "55px",
     },
     checkboxCell: {
-        borderBottom: "2px solid #E0E0E0",
-        minHeight: "55px",
         paddingLeft: "12px",
+    },
+    centerText: {
+        textAlign: "center",
     },
 });
 
@@ -34,6 +33,7 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     onChange?(newSelection: string[]): void;
     openContextualMenu?(row: T, positionLeft: number, positionTop: number): void;
     enableMultipleAction?: boolean;
+    loading?: boolean;
 }
 
 export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyProps<T>) {
@@ -45,6 +45,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         onChange = _.noop,
         openContextualMenu = _.noop,
         enableMultipleAction,
+        loading,
     } = props;
     const classes = useStyles({});
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
@@ -70,12 +71,20 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
     return (
         <TableBody>
+            {!loading && rows.length === 0 && (
+                <TableRow>
+                    <TableCell colSpan={columns.length + 2}>
+                        <p className={classes.centerText}>No results found</p>
+                    </TableCell>
+                </TableRow>
+            )}
             {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `data-table-row-${index}`;
 
                 return (
                     <TableRow
+                        className={classes.bottomBorder}
                         hover
                         onClick={event => handleClick(event, row)}
                         onContextMenu={event => handleClick(event, row)}
@@ -95,7 +104,6 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         )}
                         {columns.map(column => (
                             <TableCell
-                                className={classes.cell}
                                 key={`${labelId}-column-${column.name}`}
                                 scope="row"
                                 align="left"
@@ -103,12 +111,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 {formatRowValue(column, row)}
                             </TableCell>
                         ))}
-                        <TableCell
-                            className={classes.cell}
-                            key={`${labelId}-actions`}
-                            padding="none"
-                            align={"center"}
-                        >
+                        <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
                             {primaryAction && (
                                 <Tooltip title={i18n.t("Actions")}>
                                     <IconButton onClick={event => contextualAction(row, event)}>

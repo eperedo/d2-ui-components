@@ -22,7 +22,11 @@ function defaultFormatter(value: any): ReactNode {
         );
     } else if (value.displayName || value.name || value.id) {
         return value.displayName || value.name || value.id;
-    } else if (moment.isDate(value) || moment.isMoment(value) || moment(value, moment.ISO_8601, true).isValid()) {
+    } else if (
+        moment.isDate(value) ||
+        moment.isMoment(value) ||
+        moment(value, moment.ISO_8601, true).isValid()
+    ) {
         return moment(value).format("YYYY-MM-DD HH:mm:ss");
     } else if (urlRegex.test(value)) {
         return (
