@@ -19,6 +19,11 @@ const useStyles = makeStyles({
         borderBottom: "2px solid #E0E0E0",
         minHeight: "55px",
     },
+    checkboxCell: {
+        borderBottom: "2px solid #E0E0E0",
+        minHeight: "55px",
+        paddingLeft: "12px",
+    },
 });
 
 export interface DataTableBodyProps<T extends ReferenceObject> {
@@ -81,7 +86,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     >
                         {enableMultipleAction && (
                             <TableCell
-                                className={classes.cell}
+                                className={classes.checkboxCell}
                                 key={`${labelId}-checkbox`}
                                 padding="checkbox"
                             >
@@ -93,7 +98,6 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 className={classes.cell}
                                 key={`${labelId}-column-${column.name}`}
                                 scope="row"
-                                padding={"default"}
                                 align="left"
                             >
                                 {formatRowValue(column, row)}

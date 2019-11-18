@@ -29,6 +29,11 @@ const useStyles = makeStyles({
         borderBottom: "3px solid #E0E0E0",
         minHeight: "55px",
     },
+    checkboxCell: {
+        borderBottom: "3px solid #E0E0E0",
+        minHeight: "55px",
+        paddingLeft: "12px",
+    },
 });
 
 export interface DataTableHeaderProps<T extends ReferenceObject> {
@@ -66,7 +71,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         <TableHead>
             <TableRow>
                 {enableMultipleAction && (
-                    <TableCell className={classes.cell} padding="checkbox">
+                    <TableCell className={classes.checkboxCell} padding="checkbox">
                         <Checkbox checked={allSelected} onChange={onSelectAllClick} />
                     </TableCell>
                 )}
@@ -75,7 +80,6 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         className={classes.cell}
                         key={`data-table-cell-${column.name}`}
                         align="left"
-                        padding={"default"}
                         sortDirection={field === column.name ? order : false}
                     >
                         <TableSortLabel
