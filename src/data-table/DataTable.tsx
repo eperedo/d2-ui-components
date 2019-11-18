@@ -59,6 +59,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     actions?: TableAction<T>[];
     initialState?: TableInitialState<T>;
     forceSelectionColumn?: boolean;
+    hideSelectionMessages?: boolean;
     tableNotifications?: TableNotification[];
     filterComponents?: ReactNode; // Portal to the navigation toolbar
     sideComponents?: ReactNode; // Portal to right-most of the Data Table
@@ -79,6 +80,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         actions: availableActions = [],
         initialState = {},
         forceSelectionColumn,
+        hideSelectionMessages,
         tableNotifications = [],
         filterComponents,
         sideComponents,
@@ -120,7 +122,9 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         ? _.some(availableActions, "multiple")
         : forceSelectionColumn;
 
-    const selectionMessages = getSelectionMessages(rowObjects, selection, pagination, ids);
+    const selectionMessages = hideSelectionMessages
+        ? []
+        : getSelectionMessages(rowObjects, selection, pagination, ids);
 
     // Contextual menu
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
