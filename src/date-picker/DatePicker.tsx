@@ -6,13 +6,12 @@ import { Dictionary } from "lodash";
 
 import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "@material-ui/pickers";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import cyan from "@material-ui/core/colors/cyan";
 
 export interface DatePickerProps {
     label?: string;
     placeholder?: string;
-    value?: Date;
-    onChange: (date: Date) => void;
+    value?: Date | null;
+    onChange: (date: Date | null) => void;
     isFilter?: boolean;
 }
 
@@ -51,28 +50,11 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
                 MuiFormLabel: {
                     root: {
                         color: colors.grey,
-                        "&$focused": {
-                            color: cyan["500"],
-                        },
                     },
                 },
                 MuiInput: {
                     input: {
                         color: colors.input,
-                    },
-                    underline: {
-                        "&&&&:hover:before": {
-                            borderBottom: `1px solid #bdbdbd`,
-                        },
-                        "&:hover:not($disabled):before": {
-                            borderBottom: `1px solid ${colors.grey}`,
-                        },
-                        "&:after": {
-                            borderBottom: `2px solid ${cyan["500"]}`,
-                        },
-                        "&:before": {
-                            borderBottom: `1px solid #bdbdbd`,
-                        },
                     },
                 },
             },
