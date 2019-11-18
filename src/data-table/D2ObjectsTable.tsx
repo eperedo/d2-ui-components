@@ -1,7 +1,8 @@
 import i18n from "@dhis2/d2-i18n";
+import { D2ApiDataHookQuery, NonPaginatedObjects, PaginatedObjects, useD2ApiData } from "d2-api";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { ObjectsTable, ObjectsTableProps, ReferenceObject, TableObject, TableState } from "..";
-import { D2ApiDataHookQuery, useD2ApiData, PaginatedObjects, NonPaginatedObjects } from "d2-api";
 
 export interface D2ObjectsTableProps<T extends ReferenceObject>
     extends Omit<ObjectsTableProps<T>, "rows"> {
@@ -12,7 +13,7 @@ export interface D2ObjectsTableProps<T extends ReferenceObject>
 export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
     props: D2ObjectsTableProps<T>
 ) {
-    const { apiMethod, apiQuery = {}, initialState = {}, ...rest } = props;
+    const { apiMethod, apiQuery = {}, initialState = {}, onChange = _.noop, ...rest } = props;
     const [search, updateSearch] = useState<string | undefined>(undefined);
     const [sorting, updateSorting] = useState(
         initialState.sorting || {
@@ -62,6 +63,7 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
         const { sorting, pagination } = tableState;
         updateSorting(sorting);
         updatePagination(pagination);
+        onChange(tableState);
     };
 
     console.log("Rendering", objects, pager);
