@@ -1,7 +1,7 @@
 import i18n from "@dhis2/d2-i18n";
 import { D2ApiDataHookQuery, NonPaginatedObjects, PaginatedObjects, useD2ApiData } from "d2-api";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { ObjectsTable, ObjectsTableProps, ReferenceObject, TableObject, TableState } from "..";
 
 export interface D2ObjectsTableProps<T extends ReferenceObject>
@@ -10,32 +10,56 @@ export interface D2ObjectsTableProps<T extends ReferenceObject>
     apiQuery?: any; // TODO inference
 }
 
+const defaultState = {
+    sorting: {
+        field: "id" as const,
+        order: "asc" as const,
+    },
+    pagination: {
+        page: 1,
+        pageSize: 10,
+    },
+};
+
 export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
     props: D2ObjectsTableProps<T>
 ) {
-    const { apiMethod, apiQuery = {}, initialState = {}, onChange = _.noop, ...rest } = props;
+    const {
+        apiMethod,
+        apiQuery = {},
+        initialState = defaultState,
+        onChange = _.noop,
+        ...rest
+    } = props;
+    const [ids, updateIds] = useState<string[]>([]);
     const [search, updateSearch] = useState<string | undefined>(undefined);
-    const [sorting, updateSorting] = useState(
-        initialState.sorting || {
-            field: "displayName",
-            order: "asc" as const,
-        }
-    );
-
+    const [sorting, updateSorting] = useState(initialState.sorting || defaultState.sorting);
     const [pagination, updatePagination] = useState(
-        initialState.pagination || {
-            page: 1,
-            pageSize: 10,
-        }
+        initialState.pagination || defaultState.pagination
     );
 
-    const { loading, data, error, refetch } = useD2ApiData(
-        apiMethod({
-            order: `${sorting.field}:i${sorting.order}`,
-            pageSize: pagination.pageSize,
-            ...apiQuery,
-        })
+    const initialRequest = useMemo(
+        () =>
+            apiMethod({
+                order: `id:iasc`,
+                pageSize: 10,
+                ...apiQuery,
+            }),
+        [apiMethod, apiQuery]
     );
+
+    const { loading, data, error, refetch } = useD2ApiData(initialRequest);
+
+    useEffect(() => {
+        apiMethod({
+            paging: false,
+            fields: {
+                id: true as true,
+            },
+        })
+            .getData()
+            .then(({ objects }) => updateIds(_.map(objects, "id")));
+    }, [apiMethod]);
 
     useEffect(
         () =>
@@ -66,15 +90,15 @@ export function D2ObjectsTable<T extends ReferenceObject = TableObject>(
         onChange(tableState);
     };
 
-    console.log("Rendering", objects, pager);
-
     return (
         <ObjectsTable<T>
             rows={objects}
             onChangeSearch={updateSearch}
+            initialState={initialState}
             searchBoxLabel={i18n.t("Search by name")}
             pagination={pager}
             onChange={handleTableChange}
+            ids={ids}
             loading={loading}
             {...rest}
         />
