@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: "1 1 auto",
         },
         searchBox: {
-            maxWidth: "350px",
+            maxWidth: "550px",
             width: "33%",
         },
     })
