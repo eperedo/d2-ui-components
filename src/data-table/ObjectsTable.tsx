@@ -56,6 +56,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
 
     const [detailsPaneObject, setDetailsPaneObject] = useState<T | null>(null);
     const [searchValue, setSearchValue] = useState(initialSearch);
+    const showSearchBox = searchBoxColumns || onChangeSearch !== _.noop;
 
     const handleDetailsBoxClose = () => {
         setDetailsPaneObject(null);
@@ -78,7 +79,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         onChangeSearch(newSearch);
     };
 
-    const filterComponents = searchBoxColumns
+    const filterComponents = showSearchBox
         ? [
               <div key={"objects-table-search-box"} className={classes.searchBox}>
                   <SearchBox

@@ -44,10 +44,11 @@ export interface TableState<T extends ReferenceObject> {
     pagination: TablePagination;
 }
 
-export type TableInitialState<T extends ReferenceObject> = Optional<
-    TableState<T>,
-    "sorting" | "selection" | "pagination"
->;
+export interface TableInitialState<T extends ReferenceObject> {
+    selection?: string[];
+    sorting?: TableSorting<T>;
+    pagination?: Optional<TablePagination, "pageSizeOptions" | "pageSize" | "total" | "page">;
+}
 
 export interface TableNotification {
     // These props should be refactored and included everything into (...args) => ReactNode

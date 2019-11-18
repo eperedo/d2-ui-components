@@ -93,11 +93,12 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         order: "asc" as const,
     };
     const initialSelection = initialState.selection || [];
-    const initialPagination = initialState.pagination || {
+    const initialPagination: TablePagination = {
         pageSize: 10,
         total: rows.length,
         page: 1,
-        pageSizeOptions: [10],
+        pageSizeOptions: [10, 25, 50, 100],
+        ...initialState.pagination,
     };
 
     const [stateSorting, updateSorting] = useState(initialSorting);
