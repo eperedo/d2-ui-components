@@ -84,8 +84,12 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         }
     };
 
-    function createRow(row: T, index: number | string, level: number = 0) {
-        const isItemSelected = isSelected(row.id);
+    function createRow(
+        row: T,
+        index: number | string,
+        level: number = 0,
+        isParentSelected: boolean = false
+    ) {
         const labelId = `data-table-row-${index}`;
 
         const childrenRows = _(row)
@@ -94,10 +98,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             .flatten()
             .value();
 
+        const isItemSelected = isSelected(row.id);
         const isItemSelectedByChildren =
             !isSelected(row.id) &&
             childrenRows.length > 0 &&
             _.every(childrenRows, ({ id }) => isSelected(id));
+        const isCheckboxIndeterminate = !isItemSelected && (isParentSelected || isItemSelectedByChildren);
+        const isCheckboxChecked = isItemSelected || isCheckboxIndeterminate;
 
         const openChildrenRows = (event: MouseEvent<unknown>) => {
             event.stopPropagation();
@@ -125,8 +132,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                             <div className={classes.flex}>
                                 {enableMultipleAction && (
                                     <Checkbox
-                                        checked={isItemSelected || isItemSelectedByChildren}
-                                        indeterminate={isItemSelectedByChildren}
+                                        checked={isCheckboxChecked}
+                                        indeterminate={isCheckboxIndeterminate}
                                         indeterminateIcon={<CheckBoxTwoToneIcon />}
                                     />
                                 )}
@@ -168,7 +175,12 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
                 {expandedRows.includes(row.id) &&
                     childrenRows.map((childrenRow: T, childrenIndex: number) =>
-                        createRow(childrenRow, `${index}-${childrenIndex}`, level + 1)
+                        createRow(
+                            childrenRow,
+                            `${index}-${childrenIndex}`,
+                            level + 1,
+                            isItemSelected
+                        )
                     )}
             </React.Fragment>
         );
