@@ -119,7 +119,7 @@ export default class OrgUnitsSelector extends React.Component {
 
         const listOptions = {
             paging: false,
-            fields: "id,displayName,path",
+            fields: "id,level, displayName,path",
             ...listParams,
             ..._.omit(options, ["postFilter"]),
         };
@@ -186,7 +186,7 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation } = this.props;
+        const { selected, controls, withElevation, selectableLevels, typeInput } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -215,6 +215,8 @@ export default class OrgUnitsSelector extends React.Component {
                                         currentRoot={currentRoot}
                                         initiallyExpanded={initiallyExpanded}
                                         onSelectClick={this.handleOrgUnitClick.bind(this, root)}
+                                        selectableLevels={selectableLevels}
+                                        typeInput={typeInput}
                                         onChangeCurrentRoot={this.changeRoot}
                                         onChildrenLoaded={this.handleChildrenLoaded.bind(
                                             this,
