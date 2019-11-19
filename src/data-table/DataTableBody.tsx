@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
+import CheckBoxTwoToneIcon from "@material-ui/icons/CheckBoxTwoTone";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
@@ -93,7 +94,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             .flatten()
             .value();
 
-        const openChildrenRows = () =>
+        const isItemSelectedByChildren =
+            !isSelected(row.id) &&
+            childrenRows.length > 0 &&
+            _.every(childrenRows, ({ id }) => isSelected(id));
+
+        const openChildrenRows = (event: MouseEvent<unknown>) => {
+            event.stopPropagation();
             updateExpandedRows(expandedRows => {
                 if (expandedRows.includes(row.id)) {
                     return expandedRows.filter(id => id !== row.id);
@@ -101,6 +108,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     return [...expandedRows, row.id];
                 }
             });
+        };
 
         return (
             <React.Fragment key={`data-table-row-${index}`}>
@@ -115,7 +123,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     {(enableMultipleAction || childrenRows.length > 0) && (
                         <TableCell padding="checkbox" className={classes.checkboxCell}>
                             <div className={classes.flex}>
-                                {enableMultipleAction && <Checkbox checked={isItemSelected} />}
+                                {enableMultipleAction && (
+                                    <Checkbox
+                                        checked={isItemSelected || isItemSelectedByChildren}
+                                        indeterminate={isItemSelectedByChildren}
+                                        indeterminateIcon={<CheckBoxTwoToneIcon />}
+                                    />
+                                )}
                                 {childrenRows.length > 0 && (
                                     <IconButton
                                         style={{
