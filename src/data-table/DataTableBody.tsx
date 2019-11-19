@@ -6,9 +6,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useState } from "react";
 import { ReferenceObject, TableAction, TableColumn } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, updateSelection } from "./utils/selection";
@@ -17,12 +18,22 @@ const useStyles = makeStyles({
     bottomBorder: {
         borderBottom: "2px solid #E0E0E0",
     },
+    flex: {
+        display: "flex",
+    },
     checkboxCell: {
-        paddingLeft: "12px",
+        paddingLeft: 12,
     },
     centerText: {
         textAlign: "center",
     },
+    childrenRow: {
+        background: "#E0E0E0",
+    },
+});
+
+const rotateIconStyle = (isOpen: boolean) => ({
+    transform: isOpen ? "rotate(90deg)" : "none",
 });
 
 export interface DataTableBodyProps<T extends ReferenceObject> {
@@ -34,6 +45,7 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     openContextualMenu?(row: T, positionLeft: number, positionTop: number): void;
     enableMultipleAction?: boolean;
     loading?: boolean;
+    childrenTags?: string[];
 }
 
 export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyProps<T>) {
@@ -46,8 +58,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         openContextualMenu = _.noop,
         enableMultipleAction,
         loading,
+        childrenTags,
     } = props;
     const classes = useStyles({});
+    const [expandedRows, updateExpandedRows] = useState<string[]>([]);
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
     const contextualAction = (row: T, event: MouseEvent<unknown>) => {
@@ -69,8 +83,87 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         }
     };
 
+    function createRow(row: T, index: number | string, level: number = 0) {
+        const isItemSelected = isSelected(row.id);
+        const labelId = `data-table-row-${index}`;
+
+        const childrenRows = _(row)
+            .pick(childrenTags)
+            .values()
+            .flatten()
+            .value();
+
+        const openChildrenRows = () =>
+            updateExpandedRows(expandedRows => {
+                if (expandedRows.includes(row.id)) {
+                    return expandedRows.filter(id => id !== row.id);
+                } else {
+                    return [...expandedRows, row.id];
+                }
+            });
+
+        return (
+            <React.Fragment key={`data-table-row-${index}`}>
+                <TableRow
+                    className={level === 0 ? classes.bottomBorder : classes.childrenRow}
+                    onClick={event => handleClick(event, row)}
+                    onContextMenu={event => handleClick(event, row)}
+                    role="checkbox"
+                    selected={isItemSelected}
+                    hover
+                >
+                    {(enableMultipleAction || childrenRows.length > 0) && (
+                        <TableCell padding="checkbox" className={classes.checkboxCell}>
+                            <div className={classes.flex}>
+                                {enableMultipleAction && <Checkbox checked={isItemSelected} />}
+                                {childrenRows.length > 0 && (
+                                    <IconButton
+                                        style={{
+                                            transition: "all ease 200ms",
+                                            ...rotateIconStyle(expandedRows.includes(row.id)),
+                                        }}
+                                        onClick={openChildrenRows}
+                                    >
+                                        <ChevronRightIcon />
+                                    </IconButton>
+                                )}
+                            </div>
+                        </TableCell>
+                    )}
+
+                    {columns.map(column => (
+                        <TableCell
+                            key={`${labelId}-column-${column.name}`}
+                            scope="row"
+                            align="left"
+                        >
+                            {formatRowValue(column, row)}
+                        </TableCell>
+                    ))}
+
+                    <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
+                        {primaryAction && (
+                            <Tooltip title={i18n.t("Actions")}>
+                                <IconButton onClick={event => contextualAction(row, event)}>
+                                    <MoreVertIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </TableCell>
+                </TableRow>
+
+                {expandedRows.includes(row.id) &&
+                    childrenRows.map((childrenRow: T, childrenIndex: number) =>
+                        createRow(childrenRow, `${index}-${childrenIndex}`, level + 1)
+                    )}
+            </React.Fragment>
+        );
+    }
+
     return (
         <TableBody>
+            {rows.map((row, index) => createRow(row, index))}
+
             {!loading && rows.length === 0 && (
                 <TableRow>
                     <TableCell colSpan={columns.length + 2}>
@@ -78,51 +171,6 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     </TableCell>
                 </TableRow>
             )}
-            {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
-                const labelId = `data-table-row-${index}`;
-
-                return (
-                    <TableRow
-                        className={classes.bottomBorder}
-                        hover
-                        onClick={event => handleClick(event, row)}
-                        onContextMenu={event => handleClick(event, row)}
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={`table-row-${row.id}`}
-                        selected={isItemSelected}
-                    >
-                        {enableMultipleAction && (
-                            <TableCell
-                                className={classes.checkboxCell}
-                                key={`${labelId}-checkbox`}
-                                padding="checkbox"
-                            >
-                                <Checkbox checked={isItemSelected} />
-                            </TableCell>
-                        )}
-                        {columns.map(column => (
-                            <TableCell
-                                key={`${labelId}-column-${column.name}`}
-                                scope="row"
-                                align="left"
-                            >
-                                {formatRowValue(column, row)}
-                            </TableCell>
-                        ))}
-                        <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
-                            {primaryAction && (
-                                <Tooltip title={i18n.t("Actions")}>
-                                    <IconButton onClick={event => contextualAction(row, event)}>
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                        </TableCell>
-                    </TableRow>
-                );
-            })}
         </TableBody>
     );
 }
