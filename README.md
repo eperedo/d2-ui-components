@@ -104,6 +104,7 @@ const MyOrgUnitsSelector = () => (
         withElevation={false}
         typeInput="radio"
         selectableLevels=[1,3] // the biggest selectableLevel has not children in OrgUnitTree
+        controls={filterByLevel: false, filterByGroup: true, selectAll: true)
     />
 );
 ```
