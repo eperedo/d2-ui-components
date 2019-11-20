@@ -321,7 +321,17 @@ $ yarn code-quality
 To publish a new package to npmjs:
 
 ```
-$ yarn build && yarn publish build/
+$ yarn build 
+```
+
+Then run for alpha channel:
+```
+$ yarn publish build/ --new-version VERSION
+```
+
+or the following command for the beta channel:
+```
+$ yarn publish build/ --tag beta --new-version VERSION
 ```
 
 ## i18n
