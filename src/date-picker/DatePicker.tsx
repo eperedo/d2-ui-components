@@ -10,7 +10,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 export interface DatePickerProps {
     label?: string;
     placeholder?: string;
-    value?: Date | null;
+    value?: object | string | number | Date | null;
     onChange: (date: Date | null) => void;
     isFilter?: boolean;
 }
