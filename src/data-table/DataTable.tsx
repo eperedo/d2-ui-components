@@ -65,7 +65,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     sideComponents?: ReactNode; // Portal to right-most of the Data Table
     ids?: string[]; // Enables selection in all pages (disabled with [])
     loading?: boolean;
-    childrenTags?: string[];
+    childrenKeys?: string[];
     // State controlled by parent
     sorting?: TableSorting<T>;
     selection?: string[];
@@ -87,7 +87,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         sideComponents,
         ids = rows.map(row => row.id),
         loading = false,
-        childrenTags = [],
+        childrenKeys = [],
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
@@ -206,7 +206,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             primaryAction={primaryAction}
                             enableMultipleAction={enableMultipleAction}
                             loading={loading}
-                            childrenTags={childrenTags}
+                            childrenKeys={childrenKeys}
                         />
                     </Table>
                 </Paper>

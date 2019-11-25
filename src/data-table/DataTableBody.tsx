@@ -46,7 +46,7 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     openContextualMenu?(row: T, positionLeft: number, positionTop: number): void;
     enableMultipleAction?: boolean;
     loading?: boolean;
-    childrenTags?: string[];
+    childrenKeys?: string[];
 }
 
 export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyProps<T>) {
@@ -59,7 +59,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         openContextualMenu = _.noop,
         enableMultipleAction,
         loading,
-        childrenTags,
+        childrenKeys,
     } = props;
     const classes = useStyles({});
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
@@ -93,7 +93,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         const labelId = `data-table-row-${index}`;
 
         const childrenRows = _(row)
-            .pick(childrenTags)
+            .pick(childrenKeys)
             .values()
             .flatten()
             .value();
