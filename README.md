@@ -102,6 +102,9 @@ const MyOrgUnitsSelector = () => (
         rootIds={["ImspTQPwCqd"]}
         listParams={{ maxLevel: 4 }}
         withElevation={false}
+        typeInput="radio"
+        selectableLevels=[1,3] // the biggest selectableLevel has not children in OrgUnitTree
+        controls={filterByLevel: false, filterByGroup: true, selectAll: true)
     />
 );
 ```
@@ -318,7 +321,17 @@ $ yarn code-quality
 To publish a new package to npmjs:
 
 ```
-$ yarn build && yarn publish build/
+$ yarn build 
+```
+
+Then run for alpha channel:
+```
+$ yarn publish build/ --new-version VERSION
+```
+
+or the following command for the beta channel:
+```
+$ yarn publish build/ --tag beta --new-version VERSION
 ```
 
 ## i18n
