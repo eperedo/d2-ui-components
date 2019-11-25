@@ -33,5 +33,4 @@ export {
 
 export * from "./data-table/DataTable";
 export * from "./data-table/ObjectsTable";
-export * from "./data-table/D2ObjectsTable";
 export * from "./data-table/types";
