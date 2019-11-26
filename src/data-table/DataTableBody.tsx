@@ -84,7 +84,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         }
     };
 
-    function createRow(row: T, index: number | string, level = 0, isParentSelected = false) {
+    function createRow(row: T, index: number | string, level = 0, parentSelected = false) {
         const labelId = `data-table-row-${index}`;
 
         const childrenRows = _(row)
@@ -94,13 +94,12 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             .value();
 
         const isItemSelected = isSelected(row.id);
-        const isItemSelectedByChildren =
-            !isSelected(row.id) &&
-            childrenRows.length > 0 &&
-            _.every(childrenRows, ({ id }) => isSelected(id));
-        const isCheckboxIndeterminate =
-            !isItemSelected && (isParentSelected || isItemSelectedByChildren);
-        const isCheckboxChecked = isItemSelected || isCheckboxIndeterminate;
+        const allChildrenSelected =
+            childrenRows.length > 0 && _.every(childrenRows, ({ id }) => isSelected(id));
+        const someChildrenSelected =
+            childrenRows.length > 0 && _.some(childrenRows, ({ id }) => isSelected(id));
+        const isCheckboxChecked = isItemSelected || parentSelected || allChildrenSelected;
+        const isCheckboxIndeterminate = !isItemSelected && (parentSelected || someChildrenSelected);
 
         const openChildrenRows = (event: MouseEvent<unknown>) => {
             event.stopPropagation();
