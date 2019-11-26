@@ -25,9 +25,11 @@ const useStyles = makeStyles({
         top: 20,
         width: 1,
     },
-    cell: {
+    bottomBorder: {
         borderBottom: "3px solid #E0E0E0",
-        minHeight: "55px",
+    },
+    checkboxCell: {
+        paddingLeft: "12px",
     },
 });
 
@@ -64,18 +66,16 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
 
     return (
         <TableHead>
-            <TableRow>
+            <TableRow className={classes.bottomBorder}>
                 {enableMultipleAction && (
-                    <TableCell className={classes.cell} padding="checkbox">
+                    <TableCell className={classes.checkboxCell} padding="checkbox">
                         <Checkbox checked={allSelected} onChange={onSelectAllClick} />
                     </TableCell>
                 )}
                 {columns.map(column => (
                     <TableCell
-                        className={classes.cell}
                         key={`data-table-cell-${column.name}`}
                         align="left"
-                        padding={enableMultipleAction ? "none" : undefined}
                         sortDirection={field === column.name ? order : false}
                     >
                         <TableSortLabel
@@ -89,7 +89,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell className={classes.cell} padding="none" align={"center"}>
+                <TableCell padding="none" align={"center"}>
                     <IconButton>{false && <ViewColumnIcon />}</IconButton>
                 </TableCell>
             </TableRow>
