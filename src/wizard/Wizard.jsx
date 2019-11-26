@@ -215,27 +215,33 @@ class Wizard extends React.Component {
 
         return (
             <div className={classes.root}>
-                <Stepper nonLinear={true} activeStep={currentStepIndex} className={classes.stepper}>
-                    {steps.map((step, index) => (
-                        <Step
-                            key={step.key}
-                            completed={false}
-                            disabled={index > lastClickableStepIndex}
-                        >
-                            <StepButton
+                {steps.length > 1 && (
+                    <Stepper
+                        nonLinear={true}
+                        activeStep={currentStepIndex}
+                        className={classes.stepper}
+                    >
+                        {steps.map((step, index) => (
+                            <Step
                                 key={step.key}
-                                data-test-current={currentStep === step}
-                                onClick={this.onStepClicked(step.key)}
-                                classes={{ root: classes.stepButton }}
-                                className={currentStep === step ? "current-step" : ""}
+                                completed={false}
+                                disabled={index > lastClickableStepIndex}
                             >
-                                {step.label}
-                            </StepButton>
+                                <StepButton
+                                    key={step.key}
+                                    data-test-current={currentStep === step}
+                                    onClick={this.onStepClicked(step.key)}
+                                    classes={{ root: classes.stepButton }}
+                                    className={currentStep === step ? "current-step" : ""}
+                                >
+                                    {step.label}
+                                </StepButton>
 
-                            {step.help && <Help step={step} currentStepKey={currentStepKey} />}
-                        </Step>
-                    ))}
-                </Stepper>
+                                {step.help && <Help step={step} currentStepKey={currentStepKey} />}
+                            </Step>
+                        ))}
+                    </Stepper>
+                )}
 
                 <FeedbackMessages />
 
@@ -243,23 +249,28 @@ class Wizard extends React.Component {
                     {currentStep.warning && (
                         <div className={classes.warning}>{currentStep.warning}</div>
                     )}
+
                     {currentStep.description && (
                         <div className={classes.description}>{currentStep.description}</div>
                     )}
+                    
                     {<currentStep.component {...currentStep.props} />}
-                    <div className={classes.buttonContainer}>
-                        <NavigationButton
-                            stepKey={prevStepKey}
-                            onClick={this.prevStep}
-                            label={"← " + i18n.t("Previous")}
-                        />
 
-                        <NavigationButton
-                            stepKey={nextStepKey}
-                            onClick={this.nextStep}
-                            label={i18n.t("Next") + " →"}
-                        />
-                    </div>
+                    {steps.length > 1 && (
+                        <div className={classes.buttonContainer}>
+                            <NavigationButton
+                                stepKey={prevStepKey}
+                                onClick={this.prevStep}
+                                label={"← " + i18n.t("Previous")}
+                            />
+
+                            <NavigationButton
+                                stepKey={nextStepKey}
+                                onClick={this.nextStep}
+                                label={i18n.t("Next") + " →"}
+                            />
+                        </div>
+                    )}
                 </Paper>
             </div>
         );
