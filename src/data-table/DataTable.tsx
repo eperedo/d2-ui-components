@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
         paper: {
             flex: "1 1 0%",
             display: "inline-table",
+            margin: "5px",
         },
         tableWrapper: {
             display: "flex",
