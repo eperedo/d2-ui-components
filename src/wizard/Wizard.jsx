@@ -253,7 +253,7 @@ class Wizard extends React.Component {
                     {currentStep.description && (
                         <div className={classes.description}>{currentStep.description}</div>
                     )}
-                    
+
                     {<currentStep.component {...currentStep.props} />}
 
                     {steps.length > 1 && (
