@@ -3,16 +3,19 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import { Dictionary } from "lodash";
+import { CSSProperties } from "@material-ui/styles";
 
-import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "@material-ui/pickers";
+import {
+    MuiPickersUtilsProvider,
+    DatePicker as MuiDatePicker,
+    DatePickerProps as MuiDatePickerProps,
+} from "@material-ui/pickers";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
-export interface DatePickerProps {
-    label?: string;
-    placeholder?: string;
-    value?: object | string | number | Date | null;
-    onChange: (date: Date | null) => void;
+export interface DatePickerProps extends MuiDatePickerProps {
     isFilter?: boolean;
+    errorText?: string;
+    errorStyle?: CSSProperties;
 }
 
 const colors: { filter: Dictionary<string>; form: Dictionary<string> } = {
@@ -33,6 +36,14 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
         onChange: PropTypes.func.isRequired,
         placeholder: PropTypes.string,
         isFilter: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        margin: "normal",
+        variant: "dialog",
+        clearable: true,
+        autoOk: true,
+        format: moment.localeData().longDateFormat("L"),
     };
 
     getMaterialTheme = (isFilter: boolean, colors: Dictionary<string>) =>
@@ -61,32 +72,17 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
         });
 
     render() {
-        const { placeholder, value, onChange, isFilter, label } = this.props;
-        const format = moment.localeData().longDateFormat("L");
+        const { isFilter, errorStyle, errorText, ...datePickerProps } = this.props;
         const fieldColors = isFilter ? colors.filter : colors.form;
         const materialTheme = this.getMaterialTheme(isFilter, fieldColors);
+
         return (
             <MuiThemeProvider theme={materialTheme}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <MuiDatePicker
-                        margin="normal"
-                        label={label}
-                        placeholder={placeholder}
-                        value={value}
-                        format={format}
-                        onChange={onChange}
-                        clearable={true}
-                        autoOk={true}
-                        onBlur={() => {}}
-                        onFocus={() => {}}
-                        className="something"
-                        ref={null}
-                        innerRef={null}
-                        rows={1}
-                        rowsMax={1}
-                        variant="dialog"
-                        style={{}}
-                    />
+                    <React.Fragment>
+                        <MuiDatePicker {...datePickerProps} />
+                        {errorText && <div style={errorStyle}>{errorText}</div>}
+                    </React.Fragment>
                 </MuiPickersUtilsProvider>
             </MuiThemeProvider>
         );
