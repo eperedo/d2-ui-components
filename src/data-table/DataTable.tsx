@@ -101,7 +101,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
     const initialSelection = initialState.selection || [];
     const initialPagination: TablePagination = {
-        pageSize: 10,
+        pageSize: 25,
         total: undefined,
         page: 1,
         pageSizeOptions: [10, 25, 50, 100],
