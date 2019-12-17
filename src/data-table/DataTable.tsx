@@ -102,7 +102,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const initialSelection = initialState.selection || [];
     const initialPagination: TablePagination = {
         pageSize: 10,
-        total: rows.length,
+        total: undefined,
         page: 1,
         pageSizeOptions: [10, 25, 50, 100],
         ...initialState.pagination,
@@ -145,8 +145,9 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
 
     const handleSortingChange = (sorting: TableSorting<T>) => {
-        updateSorting(sorting);
         const newPagination = { ...pagination, page: 1 };
+        updateSorting(sorting);
+        updatePagination(newPagination);
         onChange({ selection, pagination: newPagination, sorting });
     };
 
@@ -180,7 +181,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     <div className={classes.spacer}></div>
                     {loading && <CircularProgress size={30} />}
                     <DataTablePagination
-                        pagination={{ total: rows.length, ...pagination }} // TODO: Verify this
+                        pagination={{ ...pagination, total: pagination.total || rows.length }}
                         onChange={handlePaginationChange}
                     />
                 </React.Fragment>
