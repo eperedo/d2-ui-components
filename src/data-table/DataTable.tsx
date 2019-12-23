@@ -70,7 +70,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     // State controlled by parent
     sorting?: TableSorting<T>;
     selection?: string[];
-    pagination?: TablePagination;
+    pagination?: Partial<TablePagination>;
     onChange?(state: TableState<T>): void;
 }
 
@@ -100,21 +100,19 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         order: "asc" as const,
     };
     const initialSelection = initialState.selection || [];
-    const initialPagination: TablePagination = {
-        pageSize: 25,
-        total: undefined,
-        page: 1,
-        pageSizeOptions: [10, 25, 50, 100],
-        ...initialState.pagination,
-    };
 
     const [stateSorting, updateSorting] = useState(initialSorting);
     const [stateSelection, updateSelection] = useState(initialSelection);
-    const [statePagination, updatePagination] = useState(initialPagination);
+    const [statePagination, updatePagination] = useState(initialState.pagination);
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
-    const pagination = controlledPagination || statePagination;
+    const pagination = _.merge({
+        pageSize: 25,
+        total: undefined,
+        page: 1,
+        pageSizeOptions: [10, 25, 50, 100]
+    }, statePagination, controlledPagination);
 
     const rowObjects = controlledPagination ? rows : sortObjects(rows, pagination, sorting);
     const primaryAction = _(availableActions).find({ primary: true }) || availableActions[0];
