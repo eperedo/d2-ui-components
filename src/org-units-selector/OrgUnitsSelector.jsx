@@ -29,6 +29,7 @@ export default class OrgUnitsSelector extends React.Component {
             selectAll: PropTypes.bool,
         }),
         withElevation: PropTypes.bool,
+        height: PropTypes.number,
     };
 
     static defaultProps = {
@@ -39,6 +40,7 @@ export default class OrgUnitsSelector extends React.Component {
             selectAll: true,
         },
         withElevation: true,
+        height: 350,
     };
 
     static childContextTypes = {
@@ -55,6 +57,7 @@ export default class OrgUnitsSelector extends React.Component {
             groups: null,
             currentRoot: null,
         };
+        this.contentsStyle = { ...styles.contents, height: props.height };
 
         const { filterByLevel, filterByGroup } = props.controls;
 
@@ -199,13 +202,13 @@ export default class OrgUnitsSelector extends React.Component {
             : { ...styles.cardWide, boxShadow: "none" };
 
         return (
-            <div>
-                <Card style={cardWideStyle}>
-                    <CardContent style={styles.cardText}>
-                        <div style={styles.searchBox}>
-                            <SearchBox onChange={this.filterOrgUnits} />
-                        </div>
+            <Card style={cardWideStyle}>
+                <CardContent style={styles.cardText}>
+                    <div style={styles.searchBox}>
+                        <SearchBox onChange={this.filterOrgUnits} />
+                    </div>
 
+                    <div style={this.contentsStyle}>
                         <div style={leftStyles}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
@@ -257,18 +260,20 @@ export default class OrgUnitsSelector extends React.Component {
                                     </div>
                                 )}
 
-                                <div style={styles.selectAll}>
-                                    <OrgUnitSelectAll
-                                        selected={selected}
-                                        currentRoot={currentRoot}
-                                        onUpdateSelection={this.handleSelectionUpdate}
-                                    />
-                                </div>
+                                {selectAll && (
+                                    <div style={styles.selectAll}>
+                                        <OrgUnitSelectAll
+                                            selected={selected}
+                                            currentRoot={currentRoot}
+                                            onUpdateSelection={this.handleSelectionUpdate}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         )}
-                    </CardContent>
-                </Card>
-            </div>
+                    </div>
+                </CardContent>
+            </Card>
         );
     }
 }
@@ -312,7 +317,7 @@ const styles = {
     },
     cardText: {
         paddingTop: 10,
-        height: 420,
+        height: "auto",
         position: "relative",
     },
     cardHeader: {
@@ -322,28 +327,29 @@ const styles = {
     },
     searchBox: {
         width: 300,
+        marginBottom: 10,
+    },
+    contents: {
+        height: 350,
+        position: "relative",
+        overflowY: "auto",
     },
     left: {
         display: "inline-block",
         position: "absolute",
-        height: 350,
         width: 500,
-        overflowY: "scroll",
-        marginBottom: 16,
+        overflowY: "auto",
     },
     leftFullWidth: {
         display: "inline-block",
         position: "absolute",
-        height: 350,
         width: 1000,
-        overflowY: "scroll",
-        marginBottom: 16,
+        overflowY: "auto",
     },
     right: {
         display: "inline-block",
         position: "absolute",
         width: 500,
-        height: "100%",
         right: 16,
     },
     ouLabel: {
@@ -352,14 +358,13 @@ const styles = {
         border: "1px solid rgba(0,0,0,0.1)",
         padding: "1px 6px 1px 3px",
         fontStyle: "italic",
+        margin: 4,
     },
     selectByLevel: {
         marginBottom: -24,
         marginTop: 0,
     },
     selectAll: {
-        position: "absolute",
-        bottom: 80,
-        right: 0,
+        marginTop: 20,
     },
 };
