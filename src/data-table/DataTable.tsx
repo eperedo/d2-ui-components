@@ -200,6 +200,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                         <DataTableBody
                             rows={rowObjects}
                             columns={columns}
+                            sorting={sorting}
                             selected={selection}
                             onChange={handleSelectionChange}
                             openContextualMenu={handleOpenContextualMenu}
