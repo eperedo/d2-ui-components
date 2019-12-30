@@ -107,12 +107,16 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
-    const pagination = _.merge({
-        pageSize: 25,
-        total: undefined,
-        page: 1,
-        pageSizeOptions: [10, 25, 50, 100]
-    }, statePagination, controlledPagination);
+    const pagination = _.merge(
+        {
+            pageSize: 25,
+            total: undefined,
+            page: 1,
+            pageSizeOptions: [10, 25, 50, 100],
+        },
+        statePagination,
+        controlledPagination
+    );
 
     const rowObjects = controlledPagination ? rows : sortObjects(rows, pagination, sorting);
     const primaryAction = _(availableActions).find({ primary: true }) || availableActions[0];
@@ -125,7 +129,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const selectionMessages = hideSelectionMessages
         ? []
-        : getSelectionMessages(rowObjects, selection, pagination, ids);
+        : getSelectionMessages(rowObjects, selection, pagination, ids, childrenKeys);
 
     // Contextual menu
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
