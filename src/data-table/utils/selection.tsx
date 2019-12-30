@@ -48,11 +48,25 @@ export function parseActions<T extends ReferenceObject>(
 
 export function getSelectionMessages<T extends ReferenceObject>(
     rows: T[],
-    selection: string[],
+    tableSelection: string[],
     pagination: TablePagination,
-    ids: string[]
+    ids: string[],
+    childrenKeys: string[]
 ): TableNotification[] {
-    if (_.isEmpty(selection)) return [];
+    if (_.isEmpty(tableSelection)) return [];
+
+    const childrenIds = _(rows)
+        .map(row =>
+            _(row)
+                .pick(childrenKeys)
+                .values()
+                .flatten()
+                .value()
+        )
+        .flatten()
+        .map(({id}) => id)
+        .value();
+    const selection = _.difference(tableSelection, childrenIds);
 
     const allSelected = selection.length === pagination.total;
     const selectionInOtherPages = _.difference(selection, rows.map(dr => dr.id));

@@ -11,7 +11,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
-import { ReferenceObject, TableAction, TableColumn } from "./types";
+import { ReferenceObject, TableAction, TableColumn, TableSorting } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, updateSelection } from "./utils/selection";
 
@@ -40,6 +40,7 @@ const rotateIconStyle = (isOpen: boolean) => ({
 export interface DataTableBodyProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
+    sorting: TableSorting<T>;
     primaryAction?: TableAction<T>;
     selected: string[];
     onChange?(newSelection: string[]): void;
@@ -53,6 +54,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const {
         rows,
         columns,
+        sorting,
         primaryAction,
         selected,
         onChange = _.noop,
@@ -64,6 +66,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const classes = useStyles({});
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
+    const { field, order } = sorting;
 
     const contextualAction = (row: T, event: MouseEvent<unknown>) => {
         event.stopPropagation();
@@ -91,6 +94,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             .pick(childrenKeys)
             .values()
             .flatten()
+            .orderBy([field], [order])
             .value();
 
         const isItemSelected = isSelected(row.id);

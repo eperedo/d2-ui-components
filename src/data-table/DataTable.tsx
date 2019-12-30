@@ -129,7 +129,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const selectionMessages = hideSelectionMessages
         ? []
-        : getSelectionMessages(rowObjects, selection, pagination, ids);
+        : getSelectionMessages(rowObjects, selection, pagination, ids, childrenKeys);
 
     // Contextual menu
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
@@ -204,6 +204,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                         <DataTableBody
                             rows={rowObjects}
                             columns={columns}
+                            sorting={sorting}
                             selected={selection}
                             onChange={handleSelectionChange}
                             openContextualMenu={handleOpenContextualMenu}
