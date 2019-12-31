@@ -40,6 +40,7 @@ const rotateIconStyle = (isOpen: boolean) => ({
 export interface DataTableBodyProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
+    visibleColumns: (keyof T)[];
     sorting: TableSorting<T>;
     primaryAction?: TableAction<T>;
     selected: string[];
@@ -54,6 +55,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const {
         rows,
         columns,
+        visibleColumns,
         sorting,
         primaryAction,
         selected,
@@ -151,15 +153,17 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         </TableCell>
                     )}
 
-                    {columns.map(column => (
-                        <TableCell
-                            key={`${labelId}-column-${column.name}`}
-                            scope="row"
-                            align="left"
-                        >
-                            {formatRowValue(column, row)}
-                        </TableCell>
-                    ))}
+                    {columns
+                        .filter(({ name }) => visibleColumns.includes(name))
+                        .map(column => (
+                            <TableCell
+                                key={`${labelId}-column-${column.name}`}
+                                scope="row"
+                                align="left"
+                            >
+                                {formatRowValue(column, row)}
+                            </TableCell>
+                        ))}
 
                     <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
                         {primaryAction && (

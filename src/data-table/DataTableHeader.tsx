@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "lodash";
 import { makeStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,6 +12,7 @@ import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import { TableSorting, TableColumn, TableNotification, ReferenceObject } from "./types";
 import IconButton from "@material-ui/core/IconButton";
 import { DataTableNotifications } from "./DataTableNotifications";
+import ColumnSelectorDialog from "./ColumnSelectorDialog";
 
 const useStyles = makeStyles({
     visuallyHidden: {
@@ -35,74 +36,101 @@ const useStyles = makeStyles({
 
 export interface DataTableHeaderProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
+    visibleColumns: (keyof T)[];
+    onVisibleColumnsChange?(newVisibleColumns: (keyof T)[]): void;
     sorting: TableSorting<T>;
-    onChange?(newSorting: TableSorting<T>): void;
+    onSortingChange?(newSorting: TableSorting<T>): void;
     allSelected?: boolean;
     tableNotifications?: TableNotification[];
     handleSelectionChange?(newSelection: string[]): void;
     onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
-    enableMultipleAction?: boolean;
+    enableMultipleAction: boolean;
+    hideColumnVisibilityOptions?: boolean;
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
     const classes = useStyles({});
     const {
-        onSelectAllClick,
-        sorting,
-        allSelected = false,
         columns,
-        onChange = _.noop,
+        visibleColumns,
+        onVisibleColumnsChange = _.noop,
+        sorting,
+        onSortingChange = _.noop,
+        allSelected = false,
         tableNotifications = [],
-        handleSelectionChange,
+        handleSelectionChange = _.noop,
+        onSelectAllClick = _.noop,
         enableMultipleAction,
+        hideColumnVisibilityOptions = true,
     } = props;
 
     const { field, order } = sorting;
+    const [openColumnReorder, setOpenColumnReorder] = useState<boolean>(false);
 
     const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
         const isDesc = field === property && order === "desc";
-        onChange({ field: property, order: isDesc ? "asc" : "desc" });
+        onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
 
     return (
-        <TableHead>
-            <TableRow className={classes.bottomBorder}>
-                {enableMultipleAction && (
-                    <TableCell className={classes.checkboxCell} padding="checkbox">
-                        <Checkbox checked={allSelected} onChange={onSelectAllClick} />
-                    </TableCell>
-                )}
-                {columns.map(column => (
+        <React.Fragment>
+            {openColumnReorder && (
+                <ColumnSelectorDialog
+                    columns={columns}
+                    visibleColumns={visibleColumns}
+                    onChange={onVisibleColumnsChange}
+                    onCancel={() => setOpenColumnReorder(false)}
+                />
+            )}
+            <TableHead>
+                <TableRow className={classes.bottomBorder}>
+                    {enableMultipleAction && (
+                        <TableCell className={classes.checkboxCell} padding="checkbox">
+                            <Checkbox checked={allSelected} onChange={onSelectAllClick} />
+                        </TableCell>
+                    )}
+                    {columns
+                        .filter(({ name }) => visibleColumns.includes(name))
+                        .map(column => (
+                            <TableCell
+                                key={`data-table-cell-${column.name}`}
+                                align="left"
+                                sortDirection={field === column.name ? order : false}
+                            >
+                                <TableSortLabel
+                                    active={field === column.name}
+                                    direction={order}
+                                    onClick={createSortHandler(column.name)}
+                                    IconComponent={ExpandMoreIcon}
+                                    disabled={column.sortable === false}
+                                >
+                                    {column.text}
+                                </TableSortLabel>
+                            </TableCell>
+                        ))}
                     <TableCell
-                        key={`data-table-cell-${column.name}`}
-                        align="left"
-                        sortDirection={field === column.name ? order : false}
+                        padding="none"
+                        align={"center"}
+                        onClick={() => !hideColumnVisibilityOptions && setOpenColumnReorder(true)}
                     >
-                        <TableSortLabel
-                            active={field === column.name}
-                            direction={order}
-                            onClick={createSortHandler(column.name)}
-                            IconComponent={ExpandMoreIcon}
-                            disabled={column.sortable === false}
-                        >
-                            {column.text}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-                <TableCell padding="none" align={"center"}>
-                    <IconButton>{false && <ViewColumnIcon />}</IconButton>
-                </TableCell>
-            </TableRow>
-            {tableNotifications.length > 0 && (
-                <TableRow>
-                    <TableCell padding="none" colSpan={columns.length + 2}>
-                        <DataTableNotifications
-                            messages={tableNotifications}
-                            updateSelection={handleSelectionChange}
-                        />
+                        {!hideColumnVisibilityOptions && (
+                            <IconButton>
+                                <ViewColumnIcon />
+                            </IconButton>
+                        )}
                     </TableCell>
                 </TableRow>
-            )}
-        </TableHead>
+                {tableNotifications.length > 0 && (
+                    <TableRow>
+                        <TableCell padding="none" colSpan={columns.length + 2}>
+                            <DataTableNotifications
+                                messages={tableNotifications}
+                                updateSelection={handleSelectionChange}
+                            />
+                        </TableCell>
+                    </TableRow>
+                )}
+            </TableHead>
+        </React.Fragment>
     );
 }

@@ -11,6 +11,7 @@ export interface TableColumn<T extends ReferenceObject> {
     name: keyof T;
     text: string;
     sortable?: boolean;
+    hidden?: boolean;
     getValue?(row: T, defaultValue: ReactNode): ReactNode;
 }
 

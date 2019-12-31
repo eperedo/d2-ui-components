@@ -61,6 +61,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     initialState?: TableInitialState<T>;
     forceSelectionColumn?: boolean;
     hideSelectionMessages?: boolean;
+    hideColumnVisibilityOptions?: boolean;
     tableNotifications?: TableNotification[];
     filterComponents?: ReactNode; // Portal to the navigation toolbar
     sideComponents?: ReactNode; // Portal to right-most of the Data Table
@@ -83,6 +84,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         initialState = {},
         forceSelectionColumn,
         hideSelectionMessages,
+        hideColumnVisibilityOptions,
         tableNotifications = [],
         filterComponents,
         sideComponents,
@@ -100,10 +102,13 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         order: "asc" as const,
     };
     const initialSelection = initialState.selection || [];
+    const initialPagination = initialState.pagination;
+    const initialVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
 
     const [stateSorting, updateSorting] = useState(initialSorting);
     const [stateSelection, updateSelection] = useState(initialSelection);
-    const [statePagination, updatePagination] = useState(initialState.pagination);
+    const [statePagination, updatePagination] = useState(initialPagination);
+    const [visibleColumns, updateVisibleColumns] = useState(initialVisibleColumns);
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
@@ -193,17 +198,21 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     <Table className={classes.table} size={"medium"}>
                         <DataTableHeader
                             columns={columns}
+                            visibleColumns={visibleColumns}
+                            onVisibleColumnsChange={updateVisibleColumns}
                             sorting={sorting}
-                            onChange={handleSortingChange}
+                            onSortingChange={handleSortingChange}
                             onSelectAllClick={handleSelectAllClick}
                             allSelected={allSelected}
                             tableNotifications={[...tableNotifications, ...selectionMessages]}
                             handleSelectionChange={handleSelectionChange}
                             enableMultipleAction={enableMultipleAction}
+                            hideColumnVisibilityOptions={hideColumnVisibilityOptions}
                         />
                         <DataTableBody
                             rows={rowObjects}
                             columns={columns}
+                            visibleColumns={visibleColumns}
                             sorting={sorting}
                             selected={selection}
                             onChange={handleSelectionChange}
