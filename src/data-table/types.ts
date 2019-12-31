@@ -8,7 +8,7 @@ export interface TableObject extends ReferenceObject {
 }
 
 export interface TableColumn<T extends ReferenceObject> {
-    name: keyof T;
+    name: keyof T | string;
     text: string;
     sortable?: boolean;
     hidden?: boolean;
