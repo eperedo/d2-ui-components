@@ -61,7 +61,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         handleSelectionChange = _.noop,
         onSelectAllClick = _.noop,
         enableMultipleAction,
-        hideColumnVisibilityOptions = true,
+        hideColumnVisibilityOptions = false,
     } = props;
 
     const { field, order } = sorting;
