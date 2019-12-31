@@ -123,7 +123,9 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         controlledPagination
     );
 
-    const rowObjects = controlledPagination ? rows : sortObjects(rows, pagination, sorting);
+    const rowObjects = controlledPagination
+        ? rows
+        : sortObjects(rows, columns, pagination, sorting);
     const primaryAction = _(availableActions).find({ primary: true }) || availableActions[0];
     const allSelected =
         rowObjects.length > 0 &&

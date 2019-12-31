@@ -11,8 +11,8 @@ import { DialogContent, Checkbox } from "@material-ui/core";
 
 interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
-    visibleColumns: (keyof T)[];
-    onChange: (visibleColumns: (keyof T)[]) => void;
+    visibleColumns: string[];
+    onChange: (visibleColumns: string[]) => void;
     onCancel: () => void;
 }
 
@@ -21,7 +21,7 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
 ) {
     const { columns, visibleColumns, onChange, onCancel } = props;
 
-    const toggleElement = (name: keyof T) => {
+    const toggleElement = (name: string) => {
         const newSelection = !visibleColumns.includes(name)
             ? [...visibleColumns, name]
             : visibleColumns.filter(item => item !== name);

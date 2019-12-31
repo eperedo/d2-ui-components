@@ -36,8 +36,8 @@ const useStyles = makeStyles({
 
 export interface DataTableHeaderProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
-    visibleColumns: (keyof T)[];
-    onVisibleColumnsChange?(newVisibleColumns: (keyof T)[]): void;
+    visibleColumns: string[];
+    onVisibleColumnsChange?(newVisibleColumns: string[]): void;
     sorting: TableSorting<T>;
     onSortingChange?(newSorting: TableSorting<T>): void;
     allSelected?: boolean;
@@ -67,7 +67,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
     const { field, order } = sorting;
     const [openColumnReorder, setOpenColumnReorder] = useState<boolean>(false);
 
-    const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: string) => (_event: React.MouseEvent<unknown>) => {
         const isDesc = field === property && order === "desc";
         onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };

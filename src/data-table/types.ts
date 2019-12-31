@@ -8,7 +8,7 @@ export interface TableObject extends ReferenceObject {
 }
 
 export interface TableColumn<T extends ReferenceObject> {
-    name: keyof T | string;
+    name: string;
     text: string;
     sortable?: boolean;
     hidden?: boolean;
@@ -26,7 +26,7 @@ export interface TableAction<T extends ReferenceObject> {
 }
 
 export interface TableSorting<T extends ReferenceObject> {
-    field: keyof T;
+    field: string;
     order: "asc" | "desc";
 }
 
