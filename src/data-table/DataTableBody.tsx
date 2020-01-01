@@ -13,7 +13,7 @@ import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
 import { ReferenceObject, TableAction, TableColumn, TableSorting } from "./types";
 import { formatRowValue } from "./utils/formatting";
-import { isEventCtrlClick, updateSelection } from "./utils/selection";
+import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
 
 const useStyles = makeStyles({
     bottomBorder: {
@@ -42,7 +42,7 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
     visibleColumns: string[];
     sorting: TableSorting<T>;
-    primaryAction?: TableAction<T>;
+    availableActions?: TableAction<T>[];
     selected: string[];
     onChange?(newSelection: string[]): void;
     openContextualMenu?(row: T, positionLeft: number, positionTop: number): void;
@@ -57,7 +57,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         columns,
         visibleColumns,
         sorting,
-        primaryAction,
+        availableActions,
         selected,
         onChange = _.noop,
         openContextualMenu = _.noop,
@@ -65,32 +65,35 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         loading,
         childrenKeys,
     } = props;
+    const { field, order } = sorting;
     const classes = useStyles({});
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
+
     const isSelected = (name: string) => selected.indexOf(name) !== -1;
-    const { field, order } = sorting;
-
-    const contextualAction = (row: T, event: MouseEvent<unknown>) => {
-        event.stopPropagation();
-        openContextualMenu(row, event.clientY, event.clientX);
-    };
-
-    const handleClick = (event: MouseEvent<unknown>, row: T) => {
-        const { tagName, type = null } = event.target as HTMLAnchorElement;
-        const isCheckboxClick = tagName.localeCompare("input") && type === "checkbox";
-
-        if (event.type === "contextmenu") {
-            event.preventDefault();
-            contextualAction(row, event);
-        } else if (enableMultipleAction && (isEventCtrlClick(event) || isCheckboxClick)) {
-            onChange(updateSelection(selected, row));
-        } else if (primaryAction && primaryAction.onClick) {
-            primaryAction.onClick([row]);
-        }
-    };
 
     function createRow(row: T, index: number | string, level = 0, parentSelected = false) {
         const labelId = `data-table-row-${index}`;
+        const defaultAction = parseActions([row], availableActions)[0];
+        const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
+
+        const contextualAction = (event: MouseEvent<unknown>) => {
+            event.stopPropagation();
+            openContextualMenu(row, event.clientY, event.clientX);
+        };
+
+        const handleClick = (event: MouseEvent<unknown>) => {
+            const { tagName, type = null } = event.target as HTMLAnchorElement;
+            const isCheckboxClick = tagName.localeCompare("input") && type === "checkbox";
+
+            if (event.type === "contextmenu") {
+                event.preventDefault();
+                contextualAction(event);
+            } else if (enableMultipleAction && (isEventCtrlClick(event) || isCheckboxClick)) {
+                onChange(updateSelection(selected, row));
+            } else if (primaryAction && primaryAction.onClick) {
+                primaryAction.onClick([row]);
+            }
+        };
 
         const childrenRows = _(row)
             .pick(childrenKeys)
@@ -122,8 +125,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             <React.Fragment key={`data-table-row-${index}`}>
                 <TableRow
                     className={level === 0 ? classes.bottomBorder : classes.childrenRow}
-                    onClick={event => handleClick(event, row)}
-                    onContextMenu={event => handleClick(event, row)}
+                    onClick={event => handleClick(event)}
+                    onContextMenu={event => handleClick(event)}
                     role="checkbox"
                     selected={isItemSelected}
                     hover
@@ -166,9 +169,9 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         ))}
 
                     <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
-                        {primaryAction && (
+                        {!!defaultAction && (
                             <Tooltip title={i18n.t("Actions")}>
-                                <IconButton onClick={event => contextualAction(row, event)}>
+                                <IconButton onClick={event => contextualAction(event)}>
                                     <MoreVertIcon />
                                 </IconButton>
                             </Tooltip>

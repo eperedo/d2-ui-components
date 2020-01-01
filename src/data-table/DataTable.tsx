@@ -126,7 +126,6 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const rowObjects = controlledPagination
         ? rows
         : sortObjects(rows, columns, pagination, sorting);
-    const primaryAction = _(availableActions).find({ primary: true }) || availableActions[0];
     const allSelected =
         rowObjects.length > 0 &&
         _.difference(rowObjects.map(row => row.id), selection).length === 0;
@@ -219,7 +218,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             selected={selection}
                             onChange={handleSelectionChange}
                             openContextualMenu={handleOpenContextualMenu}
-                            primaryAction={primaryAction}
+                            availableActions={availableActions}
                             enableMultipleAction={enableMultipleAction}
                             loading={loading}
                             childrenKeys={childrenKeys}
