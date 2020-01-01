@@ -56,4 +56,4 @@ export interface TableNotification {
     newSelection?: string[];
 }
 
-export type ObjectsTableDetailField<T extends ReferenceObject> = Omit<TableColumn<T>, "sortable">;
+export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<TableColumn<T>, "name" | "text" | "getValue">;
