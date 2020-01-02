@@ -64,7 +64,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
                 .value()
         )
         .flatten()
-        .map(({id}) => id)
+        .map(({ id }) => id)
         .value();
     const selection = _.difference(tableSelection, childrenIds);
 

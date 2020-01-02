@@ -8,9 +8,10 @@ export interface TableObject extends ReferenceObject {
 }
 
 export interface TableColumn<T extends ReferenceObject> {
-    name: keyof T;
+    name: string;
     text: string;
     sortable?: boolean;
+    hidden?: boolean;
     getValue?(row: T, defaultValue: ReactNode): ReactNode;
 }
 
@@ -25,7 +26,7 @@ export interface TableAction<T extends ReferenceObject> {
 }
 
 export interface TableSorting<T extends ReferenceObject> {
-    field: keyof T;
+    field: string;
     order: "asc" | "desc";
 }
 
@@ -55,4 +56,4 @@ export interface TableNotification {
     newSelection?: string[];
 }
 
-export type ObjectsTableDetailField<T extends ReferenceObject> = Omit<TableColumn<T>, "sortable">;
+export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<TableColumn<T>, "name" | "text" | "getValue">;
