@@ -68,8 +68,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const { field, order } = sorting;
     const classes = useStyles({});
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
-
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+    const isSelected = (name: string) => _.includes(selected, name);
 
     function createRow(row: T, index: number | string, level = 0, parentSelected = false) {
         const labelId = `data-table-row-${index}`;

@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "100%",
         },
         toolbar: {
+            display: "flex",
+            flexWrap: "wrap",
             paddingLeft: 0,
             paddingRight: 0,
         },
