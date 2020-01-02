@@ -29,6 +29,9 @@ const variantIcon = {
 };
 
 const styles = theme => ({
+    root: {
+        bottom: 0,
+    },
     success: {
         backgroundColor: green[600],
     },
@@ -46,7 +49,7 @@ const styles = theme => ({
     },
     iconVariant: {
         opacity: 0.9,
-        marginRight: theme.spacing.unit * 4, // Or anything between 30px and 38px
+        marginRight: theme.spacing(4), // Or anything between 30px and 38px
     },
     message: {
         display: "flex",
@@ -56,9 +59,6 @@ const styles = theme => ({
 });
 
 const theme = createMuiTheme({
-    typography: {
-        useNextVariants: true,
-    },
     overrides: {
         MuiSnackbarContent: {
             message: {
@@ -82,6 +82,7 @@ const SnackbarConsumer = props => {
                 return (
                     <MuiThemeProvider theme={theme}>
                         <Snackbar
+                            className={classes.root}
                             anchorOrigin={anchorOrigin}
                             open={snackbarIsOpen}
                             autoHideDuration={autoHideDuration}

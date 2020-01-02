@@ -3,17 +3,19 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import { Dictionary } from "lodash";
+import { CSSProperties } from "@material-ui/styles";
 
-import { MuiPickersUtilsProvider, DatePicker as MuiDatePicker } from "material-ui-pickers";
+import {
+    MuiPickersUtilsProvider,
+    DatePicker as MuiDatePicker,
+    DatePickerProps as MuiDatePickerProps,
+} from "@material-ui/pickers";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import cyan from "@material-ui/core/colors/cyan";
 
-export interface DatePickerProps {
-    label?: string;
-    placeholder?: string;
-    value?: Date;
-    onChange: (date: Date) => {};
+export interface DatePickerProps extends MuiDatePickerProps {
     isFilter?: boolean;
+    errorText?: string;
+    errorStyle?: CSSProperties;
 }
 
 const colors: { filter: Dictionary<string>; form: Dictionary<string> } = {
@@ -36,11 +38,16 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
         isFilter: PropTypes.bool,
     };
 
+    static defaultProps = {
+        margin: "normal",
+        variant: "dialog",
+        clearable: true,
+        autoOk: true,
+        format: moment.localeData().longDateFormat("L"),
+    };
+
     getMaterialTheme = (isFilter: boolean, colors: Dictionary<string>) =>
         createMuiTheme({
-            typography: {
-                useNextVariants: true,
-            },
             overrides: {
                 ...(isFilter && {
                     MuiFormControl: {
@@ -54,51 +61,28 @@ class DatePicker extends React.PureComponent<DatePickerProps> {
                 MuiFormLabel: {
                     root: {
                         color: colors.grey,
-                        "&$focused": {
-                            color: cyan["500"],
-                        },
                     },
                 },
                 MuiInput: {
                     input: {
                         color: colors.input,
                     },
-                    underline: {
-                        "&&&&:hover:before": {
-                            borderBottom: `1px solid #bdbdbd`,
-                        },
-                        "&:hover:not($disabled):before": {
-                            borderBottom: `1px solid ${colors.grey}`,
-                        },
-                        "&:after": {
-                            borderBottom: `2px solid ${cyan["500"]}`,
-                        },
-                        "&:before": {
-                            borderBottom: `1px solid #bdbdbd`,
-                        },
-                    },
                 },
             },
         });
 
     render() {
-        const { placeholder, value, onChange, isFilter, label } = this.props;
-        const format = moment.localeData().longDateFormat("L");
+        const { isFilter, errorStyle, errorText, ...datePickerProps } = this.props;
         const fieldColors = isFilter ? colors.filter : colors.form;
         const materialTheme = this.getMaterialTheme(isFilter, fieldColors);
+
         return (
             <MuiThemeProvider theme={materialTheme}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <MuiDatePicker
-                        margin="normal"
-                        label={label}
-                        placeholder={placeholder}
-                        value={value}
-                        format={format}
-                        onChange={onChange}
-                        clearable={true}
-                        autoOk={true}
-                    />
+                    <React.Fragment>
+                        <MuiDatePicker {...datePickerProps} />
+                        {errorText && <div style={errorStyle}>{errorText}</div>}
+                    </React.Fragment>
                 </MuiPickersUtilsProvider>
             </MuiThemeProvider>
         );

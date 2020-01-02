@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2019-07-17T05:25:09.952Z\n"
-"PO-Revision-Date: 2019-07-17T05:25:09.952Z\n"
+"POT-Creation-Date: 2019-11-06T16:20:05.928Z\n"
+"PO-Revision-Date: 2019-11-06T16:20:05.928Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -14,13 +14,25 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Actions"
-msgstr ""
-
-msgid "of"
-msgstr ""
-
 msgid "Close"
+msgstr ""
+
+msgid "Hidden by filters"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Assign all"
+msgstr ""
+
+msgid "Remove all"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
 msgstr ""
 
 msgid "R/W"
@@ -38,16 +50,13 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-msgid "Assign all"
+msgid "Search available/selected items"
 msgstr ""
 
-msgid "Remove all"
+msgid "Actions"
 msgstr ""
 
-msgid "Hidden by filters"
-msgstr ""
-
-msgid "selected"
+msgid "of"
 msgstr ""
 
 msgid "There are {{total}} items selected in all pages."
@@ -70,28 +79,28 @@ msgstr ""
 msgid "No results found"
 msgstr ""
 
-msgid "For organisation units within"
-msgstr ""
-
-msgid "For all organisation units"
-msgstr ""
-
-msgid "Select"
-msgstr ""
-
-msgid "Unselect"
-msgstr ""
-
 msgid "Select all"
 msgstr ""
 
-msgid "Unselect all"
+msgid "Deselect all"
+msgstr ""
+
+msgid "Organisation unit group"
 msgstr ""
 
 msgid "Organisation Unit Level"
 msgstr ""
 
-msgid "Organisation Unit Group"
+msgid "Select"
+msgstr ""
+
+msgid "Deselect"
+msgstr ""
+
+msgid "For organisation units within"
+msgstr ""
+
+msgid "For all organisation units"
 msgstr ""
 
 msgid "Search by name"

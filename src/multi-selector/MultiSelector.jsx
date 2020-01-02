@@ -1,12 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import GroupEditor from "@dhis2/d2-ui-group-editor/GroupEditor.component";
-import GroupEditorWithOrdering from "@dhis2/d2-ui-group-editor/GroupEditorWithOrdering.component";
 import { Store } from "@dhis2/d2-ui-core";
 import { withStyles } from "@material-ui/core/styles";
+
+import GroupEditor from "../group-editor/GroupEditor.component";
+import GroupEditorWithOrdering from "../group-editor/GroupEditorWithOrdering.component";
+import TextField from "@material-ui/core/TextField";
 import i18n from "../utils/i18n";
 
 const styles = () => ({
+    searchField: {
+        marginTop: 10,
+    },
     wrapper: {
         paddingBottom: 20,
     },
@@ -24,6 +29,7 @@ class MultiSelector extends React.Component {
 
     state = {
         selected: [],
+        filterText: "",
     };
 
     static propTypes = {
@@ -33,12 +39,14 @@ class MultiSelector extends React.Component {
         options: optionsPropType.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string),
         onChange: PropTypes.func.isRequired,
+        searchFilterLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     };
 
     static defaultProps = {
         height: 300,
         ordered: true,
         selected: undefined,
+        searchFilterLabel: false,
     };
 
     // Required by <GroupEditor>
@@ -48,7 +56,7 @@ class MultiSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
+            d2: this.props.d2,
         };
     }
 
@@ -81,8 +89,13 @@ class MultiSelector extends React.Component {
         return this.updateSelected(_selected => values);
     };
 
+    textFilterChange = event => {
+        this.setState({ filterText: event.target.value });
+    };
+
     render() {
-        const { height, options, classes, ordered } = this.props;
+        const { height, options, classes, ordered, searchFilterLabel } = this.props;
+        const { filterText } = this.state;
 
         const selected = this.getSelected();
         const itemStore = Store.create();
@@ -94,26 +107,37 @@ class MultiSelector extends React.Component {
             ? [GroupEditorWithOrdering, { onOrderChanged: this.orderChanged }]
             : [GroupEditor, {}];
 
+        const placeholder =
+            searchFilterLabel === true
+                ? i18n.t("Search available/selected items")
+                : searchFilterLabel;
+
         return (
             <div className={classes.wrapper} data-multi-selector={true}>
+                {searchFilterLabel && (
+                    <TextField
+                        className={classes.searchField}
+                        value={filterText}
+                        type="search"
+                        onChange={this.textFilterChange}
+                        placeholder={placeholder}
+                        data-test="search"
+                        fullWidth
+                    />
+                )}
+
                 <GroupEditorComponent
                     itemStore={itemStore}
                     assignedItemStore={assignedItemStore}
                     onAssignItems={this.assignItems}
                     onRemoveItems={this.removeItems}
                     height={height}
+                    filterText={filterText}
                     {...extraProps}
                 />
             </div>
         );
     }
 }
-
-const d2UiTranslations = () => ({
-    assign_all: i18n.t("Assign all"),
-    remove_all: i18n.t("Remove all"),
-    hidden_by_filters: i18n.t("Hidden by filters"),
-    selected: i18n.t("selected"),
-});
 
 export default withStyles(styles)(MultiSelector);

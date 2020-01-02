@@ -2,19 +2,18 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { withRouter } from "react-router-dom";
 import { SearchBox, SimpleCheckBox } from "d2-ui-components";
 
-import Pagination from "../data-table/Pagination.component";
-import DataTable from "../data-table/DataTable";
+import Pagination from "../old-data-table/Pagination.component";
+import DataTable from "../old-data-table/DataTable";
 import { setupActions } from "./actions";
 import ListActionBar from "./ListActionBar.component";
 import WithScroll from "../details-box/WithScroll.component";
 import DetailsBox from "../details-box/DetailsBox.component";
 import i18n from "../utils/i18n";
 
-import "../data-table/Pagination.scss";
-import "../data-table/DataTable.scss";
+import "../old-data-table/Pagination.scss";
+import "../old-data-table/DataTable.scss";
 import { getFormatter } from "../helpers/d2";
 
 class ObjectsTable extends React.Component {
@@ -537,4 +536,4 @@ const styles = {
     },
 };
 
-export default withRouter(ObjectsTable);
+export default ObjectsTable;

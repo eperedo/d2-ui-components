@@ -2,14 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-import Card from "material-ui/Card/Card";
-import CardText from "material-ui/Card/CardText";
+import { Card, CardContent } from "@material-ui/core";
 
-import { OrgUnitTree } from "@dhis2/d2-ui-org-unit-tree";
-import { OrgUnitSelectByLevel } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectByGroup } from "@dhis2/d2-ui-org-unit-select";
-import { OrgUnitSelectAll } from "@dhis2/d2-ui-org-unit-select";
-import { incrementMemberCount, decrementMemberCount } from "@dhis2/d2-ui-org-unit-tree";
+import { OrgUnitTree } from "../org-unit-tree";
+import { OrgUnitSelectByLevel } from "../org-unit-select";
+import { OrgUnitSelectByGroup } from "../org-unit-select";
+import { OrgUnitSelectAll } from "../org-unit-select";
+import { incrementMemberCount, decrementMemberCount } from "../org-unit-tree";
 
 import i18n from "../utils/i18n";
 import SearchBox from "../search-box/SearchBox";
@@ -29,6 +28,8 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: PropTypes.bool,
             selectAll: PropTypes.bool,
         }),
+        withElevation: PropTypes.bool,
+        height: PropTypes.number,
     };
 
     static defaultProps = {
@@ -38,6 +39,8 @@ export default class OrgUnitsSelector extends React.Component {
             filterByGroup: true,
             selectAll: true,
         },
+        withElevation: true,
+        height: 350,
     };
 
     static childContextTypes = {
@@ -54,6 +57,7 @@ export default class OrgUnitsSelector extends React.Component {
             groups: null,
             currentRoot: null,
         };
+        this.contentsStyle = { ...styles.contents, height: props.height };
 
         const { filterByLevel, filterByGroup } = props.controls;
 
@@ -118,7 +122,7 @@ export default class OrgUnitsSelector extends React.Component {
 
         const listOptions = {
             paging: false,
-            fields: "id,displayName,path",
+            fields: "id,level, displayName,path",
             ...listParams,
             ..._.omit(options, ["postFilter"]),
         };
@@ -131,7 +135,7 @@ export default class OrgUnitsSelector extends React.Component {
 
     getChildContext() {
         return {
-            d2: i18n.getStubD2WithTranslations(this.props.d2, d2UiTranslations()),
+            d2: this.props.d2,
         };
     }
 
@@ -185,7 +189,7 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls } = this.props;
+        const { selected, controls, withElevation, selectableLevels, typeInput } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
@@ -193,14 +197,18 @@ export default class OrgUnitsSelector extends React.Component {
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
         const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
-        return (
-            <div>
-                <Card style={styles.cardWide}>
-                    <CardText style={styles.cardText}>
-                        <div style={styles.searchBox}>
-                            <SearchBox onChange={this.filterOrgUnits} />
-                        </div>
+        const cardWideStyle = withElevation
+            ? styles.cardWide
+            : { ...styles.cardWide, boxShadow: "none" };
 
+        return (
+            <Card style={cardWideStyle}>
+                <CardContent style={styles.cardText}>
+                    <div style={styles.searchBox}>
+                        <SearchBox onChange={this.filterOrgUnits} />
+                    </div>
+
+                    <div style={this.contentsStyle}>
                         <div style={leftStyles}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
@@ -210,6 +218,8 @@ export default class OrgUnitsSelector extends React.Component {
                                         currentRoot={currentRoot}
                                         initiallyExpanded={initiallyExpanded}
                                         onSelectClick={this.handleOrgUnitClick.bind(this, root)}
+                                        selectableLevels={selectableLevels}
+                                        typeInput={typeInput}
                                         onChangeCurrentRoot={this.changeRoot}
                                         onChildrenLoaded={this.handleChildrenLoaded.bind(
                                             this,
@@ -250,18 +260,20 @@ export default class OrgUnitsSelector extends React.Component {
                                     </div>
                                 )}
 
-                                <div style={styles.selectAll}>
-                                    <OrgUnitSelectAll
-                                        selected={selected}
-                                        currentRoot={currentRoot}
-                                        onUpdateSelection={this.handleSelectionUpdate}
-                                    />
-                                </div>
+                                {selectAll && (
+                                    <div style={styles.selectAll}>
+                                        <OrgUnitSelectAll
+                                            selected={selected}
+                                            currentRoot={currentRoot}
+                                            onUpdateSelection={this.handleSelectionUpdate}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         )}
-                    </CardText>
-                </Card>
-            </div>
+                    </div>
+                </CardContent>
+            </Card>
         );
     }
 }
@@ -305,7 +317,7 @@ const styles = {
     },
     cardText: {
         paddingTop: 10,
-        height: 420,
+        height: "auto",
         position: "relative",
     },
     cardHeader: {
@@ -315,28 +327,29 @@ const styles = {
     },
     searchBox: {
         width: 300,
+        marginBottom: 10,
+    },
+    contents: {
+        height: 350,
+        position: "relative",
+        overflowY: "auto",
     },
     left: {
         display: "inline-block",
         position: "absolute",
-        height: 350,
         width: 500,
-        overflowY: "scroll",
-        marginBottom: 16,
+        overflowY: "auto",
     },
     leftFullWidth: {
         display: "inline-block",
         position: "absolute",
-        height: 350,
         width: 1000,
-        overflowY: "scroll",
-        marginBottom: 16,
+        overflowY: "auto",
     },
     right: {
         display: "inline-block",
         position: "absolute",
         width: 500,
-        height: "100%",
         right: 16,
     },
     ouLabel: {
@@ -345,23 +358,13 @@ const styles = {
         border: "1px solid rgba(0,0,0,0.1)",
         padding: "1px 6px 1px 3px",
         fontStyle: "italic",
+        margin: 4,
     },
     selectByLevel: {
         marginBottom: -24,
-        marginTop: -16,
+        marginTop: 0,
     },
     selectAll: {
-        position: "absolute",
-        bottom: 80,
-        right: 0,
+        marginTop: 20,
     },
 };
-
-const d2UiTranslations = () => ({
-    select: i18n.t("Select"),
-    deselect: i18n.t("Unselect"),
-    select_all: i18n.t("Select all"),
-    deselect_all: i18n.t("Unselect all"),
-    organisation_unit_level: i18n.t("Organisation Unit Level"),
-    organisation_unit_group: i18n.t("Organisation Unit Group"),
-});
