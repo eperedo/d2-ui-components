@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { ReferenceObject, TableColumn, TablePagination, TableSorting } from "../types";
 import { formatRowValue } from "./formatting";
+import { ReactNode } from "react";
 
 export function sortObjects<T extends ReferenceObject>(
     rows: T[],
@@ -14,11 +15,24 @@ export function sortObjects<T extends ReferenceObject>(
     const realPage = page - 1;
 
     return _(rows)
-        .map(row => ({
-            ...row,
-            [field]: columns ? formatRowValue(column, row) : row[field as keyof T],
-        }))
-        .orderBy([field], [order])
+        .orderBy([row => getValue(row, column, field)], [order])
         .slice(realPage * pageSize, realPage * pageSize + pageSize)
         .value();
+}
+
+function getValue<T extends ReferenceObject>(
+    row: T,
+    column: TableColumn<T> | undefined,
+    field: string
+) {
+    if (column) {
+        const node = formatRowValue(column, row);
+        return hasKey(node) ? node.key : node;
+    } else {
+        row[field as keyof T];
+    }
+}
+
+function hasKey(node: ReactNode): node is { key: string } {
+    return typeof node === "object" && node.hasOwnProperty("key");
 }
