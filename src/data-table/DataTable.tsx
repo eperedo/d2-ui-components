@@ -114,16 +114,14 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
-    const pagination = _.merge(
-        {
-            pageSize: 25,
-            total: undefined,
-            page: 1,
-            pageSizeOptions: [10, 25, 50, 100],
-        },
-        statePagination,
-        controlledPagination
-    );
+    const pagination = {
+        pageSize: 25,
+        total: undefined,
+        page: 1,
+        pageSizeOptions: [10, 25, 50, 100],
+        ...statePagination,
+        ...controlledPagination,
+    };
 
     const rowObjects = controlledPagination
         ? rows
