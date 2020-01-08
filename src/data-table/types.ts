@@ -8,7 +8,7 @@ export interface TableObject extends ReferenceObject {
 }
 
 export interface TableColumn<T extends ReferenceObject> {
-    name: string;
+    name: keyof T;
     text: string;
     sortable?: boolean;
     hidden?: boolean;
@@ -26,7 +26,7 @@ export interface TableAction<T extends ReferenceObject> {
 }
 
 export interface TableSorting<T extends ReferenceObject> {
-    field: string;
+    field: keyof T;
     order: "asc" | "desc";
 }
 
@@ -56,4 +56,7 @@ export interface TableNotification {
     newSelection?: string[];
 }
 
-export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<TableColumn<T>, "name" | "text" | "getValue">;
+export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
+    TableColumn<T>,
+    "name" | "text" | "getValue"
+>;

@@ -40,7 +40,7 @@ const rotateIconStyle = (isOpen: boolean) => ({
 export interface DataTableBodyProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
-    visibleColumns: string[];
+    visibleColumns: (keyof T)[];
     sorting: TableSorting<T>;
     availableActions?: TableAction<T>[];
     selected: string[];

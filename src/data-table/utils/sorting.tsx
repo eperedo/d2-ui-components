@@ -23,13 +23,13 @@ export function sortObjects<T extends ReferenceObject>(
 function getValue<T extends ReferenceObject>(
     row: T,
     column: TableColumn<T> | undefined,
-    field: string
+    field: keyof T
 ) {
     if (column) {
         const node = formatRowValue(column, row);
         return hasKey(node) ? node.key : node;
     } else {
-        row[field as keyof T];
+        return row[field];
     }
 }
 
