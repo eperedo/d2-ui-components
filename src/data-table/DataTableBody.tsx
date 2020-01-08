@@ -82,12 +82,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         const handleClick = (event: MouseEvent<unknown>) => {
             const { tagName, type = null } = event.target as HTMLAnchorElement;
             const isCheckboxClick = tagName.localeCompare("input") && type === "checkbox";
+            const activeSelection = _.reject(selected, { indeterminate: true });
 
             if (event.type === "contextmenu") {
                 event.preventDefault();
                 contextualAction(event);
             } else if (enableMultipleAction && (isEventCtrlClick(event) || isCheckboxClick)) {
-                onChange(updateSelection(selected, row));
+                onChange(updateSelection(activeSelection, row));
             } else if (primaryAction && primaryAction.onClick) {
                 primaryAction.onClick([row]);
             }
