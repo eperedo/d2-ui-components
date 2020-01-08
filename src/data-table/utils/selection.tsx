@@ -1,39 +1,46 @@
-import { MouseEvent } from "react";
-import _ from "lodash";
 import i18n from "@dhis2/d2-i18n";
+import _ from "lodash";
+import { MouseEvent } from "react";
+import {
+    ReferenceObject,
+    TableAction,
+    TableNotification,
+    TablePagination,
+    TableSelection,
+} from "../types";
 
-import { ReferenceObject, TableAction, TablePagination, TableNotification } from "../types";
-
-export function updateSelection<T extends ReferenceObject>(selected: string[], row: T) {
-    let newSelected: string[] = [];
-    const selectedIndex = selected.indexOf(row.id);
+export function updateSelection<T extends ReferenceObject>(selected: TableSelection[], row: T) {
+    const selectedIndex = _.findIndex(selected, { id: row.id });
 
     if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, row.id);
+        return [...selected, { id: row.id }];
     } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
+        return selected.slice(1);
     } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
+        return selected.slice(0, -1);
     } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-            selected.slice(0, selectedIndex),
-            selected.slice(selectedIndex + 1)
-        );
+        return [...selected.slice(0, selectedIndex), ...selected.slice(selectedIndex + 1)];
+    } else {
+        return [];
     }
-
-    return newSelected;
 }
 
 export function isEventCtrlClick(event: MouseEvent<unknown>) {
     return event && event.ctrlKey;
 }
 
-export function getActionRows<T extends ReferenceObject>(row: T, rows: T[], selection: string[]) {
-    const rowInSelection = !!selection.find(id => row.id === id);
+export function getActionRows<T extends ReferenceObject>(
+    selectedRow: T,
+    allRows: T[],
+    selection: TableSelection[]
+) {
+    const isRowInSelection = !!_.find(selection, { id: selectedRow.id });
+    const selectedRows = _(selection)
+        .map(({ id }) => _.find(allRows, { id }))
+        .compact()
+        .value() as T[];
 
-    return rowInSelection
-        ? (_.compact(selection.map(id => _.find(rows, { id } as T))) as T[])
-        : [row];
+    return isRowInSelection ? selectedRows : [selectedRow];
 }
 
 export function parseActions<T extends ReferenceObject>(
@@ -48,7 +55,7 @@ export function parseActions<T extends ReferenceObject>(
 
 export function getSelectionMessages<T extends ReferenceObject>(
     rows: T[],
-    tableSelection: string[],
+    tableSelection: TableSelection[],
     pagination: TablePagination,
     ids: string[],
     childrenKeys: string[]
@@ -64,13 +71,12 @@ export function getSelectionMessages<T extends ReferenceObject>(
                 .value()
         )
         .flatten()
-        .map(({ id }) => id)
         .value();
-    const selection = _.difference(tableSelection, childrenIds);
+    const selection = _.differenceBy(tableSelection, childrenIds, "id");
 
     const allSelected = selection.length === pagination.total;
-    const selectionInOtherPages = _.difference(selection, rows.map(dr => dr.id));
-    const allSelectedInPage = rows.every(row => _.includes(selection, row.id));
+    const selectionInOtherPages = _.differenceBy(selection, rows, "id");
+    const allSelectedInPage = _.differenceBy(rows, selection, "id").length === 0;
     const multiplePagesAvailable = pagination.total > rows.length;
     const selectAllImplemented = ids.length === pagination.total;
 
@@ -102,7 +108,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
                   link: i18n.t("Select all {{total}} items in all pages", {
                       total: pagination.total,
                   }),
-                  newSelection: ids,
+                  newSelection: ids.map(id => ({ id })),
               }
             : null,
     ]);

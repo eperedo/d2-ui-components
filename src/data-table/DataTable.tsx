@@ -17,6 +17,7 @@ import {
     TableNotification,
     TableObject,
     TablePagination,
+    TableSelection,
     TableSorting,
     TableState,
 } from "./types";
@@ -72,7 +73,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     childrenKeys?: string[];
     // State controlled by parent
     sorting?: TableSorting<T>;
-    selection?: string[];
+    selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
     onChange?(state: TableState<T>): void;
 }
@@ -127,8 +128,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         ? rows
         : sortObjects(rows, columns, pagination, sorting);
     const allSelected =
-        rowObjects.length > 0 &&
-        _.difference(rowObjects.map(row => row.id), selection).length === 0;
+        rowObjects.length > 0 && _.differenceBy(rowObjects, selection, "id").length === 0;
     const enableMultipleAction = _.isUndefined(forceSelectionColumn)
         ? _.some(availableActions, "multiple")
         : forceSelectionColumn;
@@ -142,7 +142,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const [contextMenuActions, setContextMenuActions] = useState<TableAction<T>[]>([]);
     const [contextMenuRows, setContextMenuRows] = useState<T[]>([]);
 
-    const handleSelectionChange = (selection: string[]) => {
+    const handleSelectionChange = (selection: TableSelection[]) => {
         updateSelection(selection);
         onChange({ selection, pagination, sorting });
     };
@@ -160,10 +160,10 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ids = rowObjects.map(n => n.id);
+        const ids = rowObjects.map(({ id }) => ({ id }));
         const newSelection = event.target.checked
             ? _.uniq(selection.concat(ids))
-            : _.difference(selection, ids);
+            : _.differenceBy(selection, ids, "id");
         handleSelectionChange(newSelection);
     };
 
@@ -171,8 +171,12 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         setContextMenuTarget(null);
     };
 
-    const handleOpenContextualMenu = (row: T, positionLeft: number, positionTop: number) => {
-        const actionRows = getActionRows(row, rows, selection);
+    const handleOpenContextualMenu = (
+        selectedRow: T,
+        positionLeft: number,
+        positionTop: number
+    ) => {
+        const actionRows = getActionRows(selectedRow, rows, selection);
         const actions = parseActions(actionRows, availableActions);
         if (actions.length > 0) {
             setContextMenuTarget([positionTop, positionLeft]);

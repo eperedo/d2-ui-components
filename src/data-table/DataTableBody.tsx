@@ -11,7 +11,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
-import { ReferenceObject, TableAction, TableColumn, TableSorting } from "./types";
+import { ReferenceObject, TableAction, TableColumn, TableSelection, TableSorting } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
 
@@ -43,8 +43,8 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     visibleColumns: (keyof T)[];
     sorting: TableSorting<T>;
     availableActions?: TableAction<T>[];
-    selected: string[];
-    onChange?(newSelection: string[]): void;
+    selected: TableSelection[];
+    onChange?(newSelection: TableSelection[]): void;
     openContextualMenu?(row: T, positionLeft: number, positionTop: number): void;
     enableMultipleAction?: boolean;
     loading?: boolean;
@@ -68,9 +68,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const { field, order } = sorting;
     const classes = useStyles({});
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
-    const isSelected = (name: string) => _.includes(selected, name);
 
-    function createRow(row: T, index: number | string, level = 0, parentSelected = false) {
+    function createRow(row: T, index: number | string, level = 0) {
         const labelId = `data-table-row-${index}`;
         const defaultAction = parseActions([row], availableActions)[0];
         const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
@@ -101,14 +100,6 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             .orderBy([field], [order])
             .value();
 
-        const isItemSelected = isSelected(row.id);
-        const allChildrenSelected =
-            childrenRows.length > 0 && _.every(childrenRows, ({ id }) => isSelected(id));
-        const someChildrenSelected =
-            childrenRows.length > 0 && _.some(childrenRows, ({ id }) => isSelected(id));
-        const isCheckboxChecked = isItemSelected || parentSelected || allChildrenSelected;
-        const isCheckboxIndeterminate = !isItemSelected && (parentSelected || someChildrenSelected);
-
         const openChildrenRows = (event: MouseEvent<unknown>) => {
             event.stopPropagation();
             updateExpandedRows(expandedRows => {
@@ -120,6 +111,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             });
         };
 
+        const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
+        const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
+            selectedItem || {};
+
         return (
             <React.Fragment key={`data-table-row-${index}`}>
                 <TableRow
@@ -127,7 +122,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     onClick={event => handleClick(event)}
                     onContextMenu={event => handleClick(event)}
                     role="checkbox"
-                    selected={isItemSelected}
+                    selected={checked || indeterminate}
                     hover
                 >
                     {(enableMultipleAction || childrenRows.length > 0) && (
@@ -135,9 +130,9 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                             <div className={classes.flex}>
                                 {enableMultipleAction && (
                                     <Checkbox
-                                        checked={isCheckboxChecked}
-                                        indeterminate={isCheckboxIndeterminate}
-                                        indeterminateIcon={<CheckBoxTwoToneIcon />}
+                                        checked={checked}
+                                        indeterminate={indeterminate}
+                                        indeterminateIcon={icon}
                                     />
                                 )}
                                 {childrenRows.length > 0 && (
@@ -180,12 +175,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
                 {expandedRows.includes(row.id) &&
                     childrenRows.map((childrenRow: T, childrenIndex: number) =>
-                        createRow(
-                            childrenRow,
-                            `${index}-${childrenIndex}`,
-                            level + 1,
-                            isItemSelected
-                        )
+                        createRow(childrenRow, `${index}-${childrenIndex}`, level + 1)
                     )}
             </React.Fragment>
         );
