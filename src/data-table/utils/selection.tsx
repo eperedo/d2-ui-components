@@ -35,9 +35,7 @@ export function getActionRows<T extends ReferenceObject>(
     selection: TableSelection[]
 ) {
     const isRowInSelection = _.some(selection, { id: selectedRow.id });
-    const selectedRows = _(allRows)
-        .intersectionBy(selection, "id")
-        .value();
+    const selectedRows = _.intersectionBy(allRows, selection, "id");
 
     return isRowInSelection ? selectedRows : [selectedRow];
 }
