@@ -1,18 +1,17 @@
 import i18n from "@dhis2/d2-i18n";
+import { Checkbox, DialogContent } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import _ from "lodash";
 import { ConfirmationDialog, ReferenceObject, TableColumn } from "..";
-import { DialogContent, Checkbox } from "@material-ui/core";
 
 interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
-    visibleColumns: string[];
-    onChange: (visibleColumns: string[]) => void;
+    visibleColumns: (keyof T)[];
+    onChange: (visibleColumns: (keyof T)[]) => void;
     onCancel: () => void;
 }
 
@@ -21,7 +20,7 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
 ) {
     const { columns, visibleColumns, onChange, onCancel } = props;
 
-    const toggleElement = (name: string) => {
+    const toggleElement = (name: keyof T) => {
         const newSelection = !visibleColumns.includes(name)
             ? [...visibleColumns, name]
             : visibleColumns.filter(item => item !== name);
