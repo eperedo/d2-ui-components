@@ -34,10 +34,9 @@ export function getActionRows<T extends ReferenceObject>(
     allRows: T[],
     selection: TableSelection[]
 ) {
-    const isRowInSelection = !!_.find(selection, { id: selectedRow.id });
-    const selectedRows = _(selection)
-        .map(({ id }) => _.find(allRows, ["id", id]))
-        .compact()
+    const isRowInSelection = _.some(selection, { id: selectedRow.id });
+    const selectedRows = _(allRows)
+        .intersectionBy(selection, "id")
         .value();
 
     return isRowInSelection ? selectedRows : [selectedRow];
