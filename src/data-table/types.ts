@@ -8,7 +8,7 @@ export interface TableObject extends ReferenceObject {
 }
 
 export interface TableColumn<T extends ReferenceObject> {
-    name: string;
+    name: keyof T;
     text: string;
     sortable?: boolean;
     hidden?: boolean;
@@ -26,7 +26,7 @@ export interface TableAction<T extends ReferenceObject> {
 }
 
 export interface TableSorting<T extends ReferenceObject> {
-    field: string;
+    field: keyof T;
     order: "asc" | "desc";
 }
 
@@ -38,7 +38,7 @@ export interface TablePagination {
 }
 
 export interface TableState<T extends ReferenceObject> {
-    selection: string[];
+    selection: TableSelection[];
     sorting: TableSorting<T>;
     pagination: TablePagination;
 }
@@ -53,7 +53,17 @@ export interface TableNotification {
     // These props should be refactored and included everything into (...args) => ReactNode
     message: ReactNode;
     link?: string;
-    newSelection?: string[];
+    newSelection?: TableSelection[];
 }
 
-export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<TableColumn<T>, "name" | "text" | "getValue">;
+export interface TableSelection {
+    id: string;
+    checked?: boolean;
+    indeterminate?: boolean;
+    icon?: ReactNode;
+}
+
+export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
+    TableColumn<T>,
+    "name" | "text" | "getValue"
+>;

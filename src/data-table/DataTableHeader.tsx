@@ -1,18 +1,23 @@
-import React, { useState } from "react";
-import _ from "lodash";
+import Checkbox from "@material-ui/core/Checkbox";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
-
-import { TableSorting, TableColumn, TableNotification, ReferenceObject } from "./types";
-import IconButton from "@material-ui/core/IconButton";
-import { DataTableNotifications } from "./DataTableNotifications";
+import _ from "lodash";
+import React, { useState } from "react";
 import ColumnSelectorDialog from "./ColumnSelectorDialog";
+import { DataTableNotifications } from "./DataTableNotifications";
+import {
+    ReferenceObject,
+    TableColumn,
+    TableNotification,
+    TableSorting,
+    TableSelection,
+} from "./types";
 
 const useStyles = makeStyles({
     visuallyHidden: {
@@ -36,13 +41,13 @@ const useStyles = makeStyles({
 
 export interface DataTableHeaderProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
-    visibleColumns: string[];
-    onVisibleColumnsChange?(newVisibleColumns: string[]): void;
+    visibleColumns: (keyof T)[];
+    onVisibleColumnsChange?(newVisibleColumns: (keyof T)[]): void;
     sorting: TableSorting<T>;
     onSortingChange?(newSorting: TableSorting<T>): void;
     allSelected?: boolean;
     tableNotifications?: TableNotification[];
-    handleSelectionChange?(newSelection: string[]): void;
+    handleSelectionChange?(newSelection: TableSelection[]): void;
     onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
     enableMultipleAction: boolean;
     hideColumnVisibilityOptions?: boolean;
@@ -67,7 +72,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
     const { field, order } = sorting;
     const [openColumnReorder, setOpenColumnReorder] = useState<boolean>(false);
 
-    const createSortHandler = (property: string) => (_event: React.MouseEvent<unknown>) => {
+    const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
         const isDesc = field === property && order === "desc";
         onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
