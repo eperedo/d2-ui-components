@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
         paper: {
             flex: "1 1 0%",
             display: "inline-table",
-            margin: "5px",
+            marginLeft: "5px",
+            marginRight: "5px",
         },
         tableWrapper: {
             display: "flex",
