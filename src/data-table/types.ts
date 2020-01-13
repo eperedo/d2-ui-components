@@ -38,7 +38,7 @@ export interface TablePagination {
 }
 
 export interface TableState<T extends ReferenceObject> {
-    selection: string[];
+    selection: TableSelection[];
     sorting: TableSorting<T>;
     pagination: TablePagination;
 }
@@ -53,7 +53,14 @@ export interface TableNotification {
     // These props should be refactored and included everything into (...args) => ReactNode
     message: ReactNode;
     link?: string;
-    newSelection?: string[];
+    newSelection?: TableSelection[];
+}
+
+export interface TableSelection {
+    id: string;
+    checked?: boolean;
+    indeterminate?: boolean;
+    icon?: ReactNode;
 }
 
 export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<

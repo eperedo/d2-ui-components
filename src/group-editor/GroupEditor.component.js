@@ -115,8 +115,8 @@ export default class GroupEditor extends Component {
     getItemStoreIsCollection() {
         return (
             this.props.itemStore.state !== undefined &&
-            (typeof this.props.itemStore.state.values === "function" &&
-                typeof this.props.itemStore.state.has === "function")
+            typeof this.props.itemStore.state.values === "function" &&
+            typeof this.props.itemStore.state.has === "function"
         );
     }
     getItemStoreIsArray() {
@@ -128,8 +128,8 @@ export default class GroupEditor extends Component {
     getAssignedItemStoreIsCollection() {
         return (
             this.props.assignedItemStore.state !== undefined &&
-            (typeof this.props.assignedItemStore.state.values === "function" &&
-                typeof this.props.assignedItemStore.state.has === "function")
+            typeof this.props.assignedItemStore.state.values === "function" &&
+            typeof this.props.assignedItemStore.state.has === "function"
         );
     }
     getAssignedItemStoreIsArray() {

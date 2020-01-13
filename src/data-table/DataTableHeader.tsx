@@ -11,7 +11,13 @@ import _ from "lodash";
 import React, { useState } from "react";
 import ColumnSelectorDialog from "./ColumnSelectorDialog";
 import { DataTableNotifications } from "./DataTableNotifications";
-import { ReferenceObject, TableColumn, TableNotification, TableSorting } from "./types";
+import {
+    ReferenceObject,
+    TableColumn,
+    TableNotification,
+    TableSorting,
+    TableSelection,
+} from "./types";
 
 const useStyles = makeStyles({
     visuallyHidden: {
@@ -41,7 +47,7 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
     onSortingChange?(newSorting: TableSorting<T>): void;
     allSelected?: boolean;
     tableNotifications?: TableNotification[];
-    handleSelectionChange?(newSelection: string[]): void;
+    handleSelectionChange?(newSelection: TableSelection[]): void;
     onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
     enableMultipleAction: boolean;
     hideColumnVisibilityOptions?: boolean;
