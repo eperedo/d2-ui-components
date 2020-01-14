@@ -150,7 +150,9 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     handleOrgUnitClick = (root, event, orgUnit) => {
-        if (this.props.selected.includes(orgUnit.path)) {
+        if (this.props.singleSelect) {
+            this.props.onChange([orgUnit.path]);
+        } else if (this.props.selected.includes(orgUnit.path)) {
             const newSelected = [...this.props.selected];
             newSelected.splice(this.props.selected.indexOf(orgUnit.path), 1);
             decrementMemberCount(root, orgUnit);
@@ -202,8 +204,10 @@ export default class OrgUnitsSelector extends React.Component {
             selectableLevels,
             typeInput,
             hideCheckboxes,
+            hideMemberCount,
             fullWidth,
             square,
+            singleSelect,
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
@@ -247,6 +251,8 @@ export default class OrgUnitsSelector extends React.Component {
                                             root
                                         )}
                                         hideCheckboxes={hideCheckboxes}
+                                        hideMemberCount={hideMemberCount}
+                                        singleSelect={singleSelect}
                                     />
                                 </div>
                             ))}

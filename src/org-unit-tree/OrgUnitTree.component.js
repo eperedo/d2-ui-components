@@ -150,6 +150,7 @@ class OrgUnitTree extends React.Component {
                     onSelectClick={this.props.onSelectClick}
                     selectableLevels={this.props.selectableLevels}
                     typeInput={this.props.typeInput}
+                    singleSelect={this.props.singleSelect}
                     currentRoot={this.props.currentRoot}
                     onChangeCurrentRoot={this.props.onChangeCurrentRoot}
                     labelStyle={this.props.labelStyle}
@@ -254,8 +255,10 @@ class OrgUnitTree extends React.Component {
             <div
                 style={labelStyle}
                 onClick={
-                    (canBecomeCurrentRoot && setCurrentRoot) ||
-                    (isSelectable && this.handleSelectClick)
+                    this.props.singleSelect
+                        ? this.handleSelectClick
+                        : (canBecomeCurrentRoot && setCurrentRoot) ||
+                          (isSelectable && this.handleSelectClick)
                 }
                 role="button"
                 tabIndex={0}
@@ -348,6 +351,7 @@ OrgUnitTree.propTypes = {
     onSelectClick: PropTypes.func,
     typeInput: PropTypes.string,
     selectableLevels: PropTypes.arrayOf(PropTypes.number),
+    singleSelect: PropTypes.bool,
 
     /**
      * onChangeCurrentRoot callback, which is triggered when the change current root label is clicked. Setting this also
@@ -417,6 +421,7 @@ OrgUnitTree.defaultProps = {
     labelStyle: {},
     selectedLabelStyle: {},
     typeInput: undefined,
+    singleSelect: false,
     idsThatShouldBeReloaded: [],
     arrowSymbol: undefined,
     hideCheckboxes: false,
