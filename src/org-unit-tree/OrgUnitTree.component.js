@@ -251,18 +251,12 @@ class OrgUnitTree extends React.Component {
         };
         const handletypeInput = typeInput !== undefined ? typeInput : "checkbox";
 
+        const onClick = this.props.singleSelect
+            ? this.handleSelectClick
+            : (canBecomeCurrentRoot && setCurrentRoot) || (isSelectable && this.handleSelectClick);
+
         const label = (
-            <div
-                style={labelStyle}
-                onClick={
-                    this.props.singleSelect
-                        ? this.handleSelectClick
-                        : (canBecomeCurrentRoot && setCurrentRoot) ||
-                          (isSelectable && this.handleSelectClick)
-                }
-                role="button"
-                tabIndex={0}
-            >
+            <div style={labelStyle} onClick={onClick || undefined} role="button" tabIndex={0}>
                 {isSelectable && !this.props.hideCheckboxes && (
                     <input
                         type={handletypeInput}

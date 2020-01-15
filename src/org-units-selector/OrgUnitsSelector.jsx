@@ -33,6 +33,7 @@ export default class OrgUnitsSelector extends React.Component {
         hideCheckboxes: PropTypes.bool,
         fullWidth: PropTypes.bool,
         square: PropTypes.bool,
+        singleSelection: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -47,6 +48,7 @@ export default class OrgUnitsSelector extends React.Component {
         hideCheckboxes: false,
         fullWidth: true,
         square: false,
+        singleSelection: false,
     };
 
     static childContextTypes = {
@@ -150,7 +152,7 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     handleOrgUnitClick = (root, event, orgUnit) => {
-        if (this.props.singleSelect) {
+        if (this.props.singleSelection) {
             this.props.onChange([orgUnit.path]);
         } else if (this.props.selected.includes(orgUnit.path)) {
             const newSelected = [...this.props.selected];
@@ -207,7 +209,7 @@ export default class OrgUnitsSelector extends React.Component {
             hideMemberCount,
             fullWidth,
             square,
-            singleSelect,
+            selectOnClick,
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
@@ -252,7 +254,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         )}
                                         hideCheckboxes={hideCheckboxes}
                                         hideMemberCount={hideMemberCount}
-                                        singleSelect={singleSelect}
+                                        selectOnClick={selectOnClick}
                                     />
                                 </div>
                             ))}
