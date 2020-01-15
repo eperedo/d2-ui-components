@@ -50,6 +50,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         actions: parentActions = [],
         filterComponents: parentFilterComponents,
         sideComponents: parentSideComponents,
+        resetKey = "",
         ...rest
     } = props;
     const classes = useStyles({});
@@ -116,6 +117,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                 actions={actions}
                 filterComponents={filterComponents}
                 sideComponents={sideComponents}
+                resetKey={resetKey + "-" + searchValue}
                 {...rest}
             />
             {onActionButtonClick && (
