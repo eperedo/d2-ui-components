@@ -152,9 +152,7 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     handleOrgUnitClick = (root, event, orgUnit) => {
-        if (this.props.singleSelection) {
-            this.props.onChange([orgUnit.path]);
-        } else if (this.props.selected.includes(orgUnit.path)) {
+        if (this.props.selected.includes(orgUnit.path)) {
             const newSelected = [...this.props.selected];
             newSelected.splice(this.props.selected.indexOf(orgUnit.path), 1);
             decrementMemberCount(root, orgUnit);
@@ -162,7 +160,7 @@ export default class OrgUnitsSelector extends React.Component {
         } else {
             incrementMemberCount(root, orgUnit);
             const newSelected = this.props.selected.concat(orgUnit.path);
-            this.props.onChange(newSelected);
+            this.props.onChange(this.props.singleSelection ? [orgUnit.path] : newSelected);
         }
     };
 

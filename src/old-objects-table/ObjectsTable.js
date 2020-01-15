@@ -315,10 +315,7 @@ class ObjectsTable extends React.Component {
         if (_.isEmpty(dataRows) || disableMultiplePageSelection) return [];
 
         const allSelected = selection.size === pager.total;
-        const selectionInOtherPages = _.difference(
-            [...selection],
-            dataRows.map(dr => dr.id)
-        );
+        const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
         const allSelectedInPage = dataRows.every(row => selection.has(row.id));
         const multiplePagesAvailable = pager.total > dataRows.length;
         const selectAllImplemented = allObjects.size === pager.total;
