@@ -196,7 +196,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     <div className={classes.spacer}></div>
                     {loading && <CircularProgress size={30} />}
                     <DataTablePagination
-                        pagination={{ ...pagination, total: pagination.total || rows.length }}
+                        pagination={pagination}
+                        defaultTotal={rows.length}
                         onChange={handlePaginationChange}
                     />
                 </React.Fragment>
