@@ -205,7 +205,7 @@ export default class OrgUnitsSelector extends React.Component {
             typeInput,
             hideCheckboxes,
             hideMemberCount,
-            fullWidth,
+            // fullWidth,
             square,
             selectOnClick,
         } = this.props;
