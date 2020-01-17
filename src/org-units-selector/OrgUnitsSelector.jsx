@@ -217,13 +217,15 @@ export default class OrgUnitsSelector extends React.Component {
 
         const leftStyles = {
             ...styles.left,
-            width: someControlsVisible ? 500 : fullWidth ? 1000 : undefined,
+            //width: someControlsVisible ? 500 : fullWidth ? undefined : 1000,
+            width: someControlsVisible ? 500 : 1000,
         };
 
         const cardWideStyle = {
             ...styles.cardWide,
             boxShadow: !withElevation ? "none" : undefined,
-            width: someControlsVisible ? 1052 : undefined,
+            //width: someControlsVisible ? 1052 : undefined,
+            width: 1052,
         };
 
         return (
