@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import Toolbar from "@material-ui/core/Toolbar";
 import _ from "lodash";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import { ContextualMenu } from "./ContextualMenu";
 import { DataTableBody } from "./DataTableBody";
 import { DataTableHeader } from "./DataTableHeader";
@@ -86,6 +86,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
     onChange?(state: TableState<T>): void;
+    resetKey?: string;
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
@@ -109,6 +110,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         selection: controlledSelection,
         pagination: controlledPagination,
         onChange = _.noop,
+        resetKey,
     } = props;
 
     const initialSorting = initialState.sorting || {
@@ -123,6 +125,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const [stateSelection, updateSelection] = useState(initialSelection);
     const [statePagination, updatePagination] = useState(initialPagination);
     const [visibleColumns, updateVisibleColumns] = useState(initialVisibleColumns);
+    useEffect(() => updatePagination(pagination => ({ ...pagination, page: 1 })), [resetKey]);
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
@@ -205,10 +208,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     {loading && <CircularProgress size={30} className={classes.loading} />}
                     <div className={classes.paginator}>
                         <DataTablePagination
-                            pagination={{
-                                ...pagination,
-                                total: pagination.total || rows.length,
-                            }}
+                            pagination={pagination}
+                            defaultTotal={rows.length}
                             onChange={handlePaginationChange}
                         />
                     </div>
