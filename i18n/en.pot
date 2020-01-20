@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-01-20T10:00:02.254Z\n"
-"PO-Revision-Date: 2020-01-20T10:00:02.254Z\n"
+"POT-Creation-Date: 2020-01-20T11:53:02.941Z\n"
+"PO-Revision-Date: 2020-01-20T11:53:02.941Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -14,7 +14,39 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Columns to show in table"
+msgstr ""
+
 msgid "Close"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Loading details..."
+msgstr ""
+
+msgid "No detail fields provided"
+msgstr ""
+
+msgid "There are {{total}} items selected in all pages."
+msgstr ""
+
+msgid "Clear selection"
+msgstr ""
+
+msgid "There are {{count}} items selected ({{invisible}} on other pages)."
+msgid_plural "There are {{count}} items selected ({{invisible}} on other pages)."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "All {{total}} items on this page are selected."
+msgstr ""
+
+msgid "Select all {{total}} items in all pages"
 msgstr ""
 
 msgid "Hidden by filters"
@@ -53,27 +85,7 @@ msgstr ""
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "Actions"
-msgstr ""
-
 msgid "of"
-msgstr ""
-
-msgid "There are {{total}} items selected in all pages."
-msgstr ""
-
-msgid "Clear selection"
-msgstr ""
-
-msgid "There are {{count}} items selected ({{invisible}} on other pages)."
-msgid_plural "There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "All {{total}} items on this page are selected."
-msgstr ""
-
-msgid "Select all {{total}} items in all pages"
 msgstr ""
 
 msgid "No results found"
@@ -101,6 +113,9 @@ msgid "For organisation units within"
 msgstr ""
 
 msgid "For all organisation units"
+msgstr ""
+
+msgid "Search by name"
 msgstr ""
 
 msgid "Help"

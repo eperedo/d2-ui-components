@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2020-01-20T10:00:02.254Z\n"
+"POT-Creation-Date: 2020-01-20T11:53:02.941Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,8 +14,43 @@ msgstr "Annuler"
 msgid "Save"
 msgstr "Enregistrer"
 
+msgid "Columns to show in table"
+msgstr ""
+
 msgid "Close"
 msgstr "Fermer"
+
+msgid "Column"
+msgstr ""
+
+msgid "Actions"
+msgstr "Opérations"
+
+msgid "Loading details..."
+msgstr ""
+
+msgid "No detail fields provided"
+msgstr ""
+
+msgid "There are {{total}} items selected in all pages."
+msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
+
+msgid "Clear selection"
+msgstr "Effacer la sélection"
+
+msgid "There are {{count}} items selected ({{invisible}} on other pages)."
+msgid_plural ""
+"There are {{count}} items selected ({{invisible}} on other pages)."
+msgstr[0] ""
+"Il y a {{count}} élément sélectionné ({{invisible}} sur les autres pages)."
+msgstr[1] ""
+"Il y a {{count}} éléments sélectionnés ({{invisible}} sur les autres pages)."
+
+msgid "All {{total}} items on this page are selected."
+msgstr "Tous les {{total}} éléments de cette page sont sélectionnés"
+
+msgid "Select all {{total}} items in all pages"
+msgstr "Sélectionnez tous les {{{total}}} éléments dans toutes les pages"
 
 msgid "Hidden by filters"
 msgstr "Caché par des filtres"
@@ -53,31 +88,8 @@ msgstr "Données"
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "Actions"
-msgstr "Opérations"
-
 msgid "of"
 msgstr "de"
-
-msgid "There are {{total}} items selected in all pages."
-msgstr "Il y a {{total}} éléments sélectionnés dans toutes les pages"
-
-msgid "Clear selection"
-msgstr "Effacer la sélection"
-
-msgid "There are {{count}} items selected ({{invisible}} on other pages)."
-msgid_plural ""
-"There are {{count}} items selected ({{invisible}} on other pages)."
-msgstr[0] ""
-"Il y a {{count}} élément sélectionné ({{invisible}} sur les autres pages)."
-msgstr[1] ""
-"Il y a {{count}} éléments sélectionnés ({{invisible}} sur les autres pages)."
-
-msgid "All {{total}} items on this page are selected."
-msgstr "Tous les {{total}} éléments de cette page sont sélectionnés"
-
-msgid "Select all {{total}} items in all pages"
-msgstr "Sélectionnez tous les {{{total}}} éléments dans toutes les pages"
 
 msgid "No results found"
 msgstr "Aucun résultat trouvé"
@@ -106,6 +118,9 @@ msgstr "Pour les unités d'organisation au sein de"
 msgid "For all organisation units"
 msgstr "Pour toutes les unités d'organisation"
 
+msgid "Search by name"
+msgstr "Rechercher par nom"
+
 msgid "Help"
 msgstr "Aide"
 
@@ -114,6 +129,3 @@ msgstr "Précédent"
 
 msgid "Next"
 msgstr "Suivant"
-
-#~ msgid "Search by name"
-#~ msgstr "Rechercher par nom"
