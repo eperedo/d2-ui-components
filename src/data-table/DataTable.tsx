@@ -54,6 +54,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         spacer: {
             flex: "1 1 auto",
+            order: 10,
+        },
+        loading: {
+            order: 10,
+        },
+        paginator: {
+            order: 10,
+            marginLeft: "auto",
         },
     })
 );
@@ -66,6 +74,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     forceSelectionColumn?: boolean;
     hideSelectionMessages?: boolean;
     hideColumnVisibilityOptions?: boolean;
+    hideSelectAll?: boolean;
     tableNotifications?: TableNotification[];
     filterComponents?: ReactNode; // Portal to the navigation toolbar
     sideComponents?: ReactNode; // Portal to right-most of the Data Table
@@ -89,6 +98,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         forceSelectionColumn,
         hideSelectionMessages,
         hideColumnVisibilityOptions,
+        hideSelectAll,
         tableNotifications = [],
         filterComponents,
         sideComponents,
@@ -192,11 +202,16 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                 <React.Fragment>
                     {filterComponents}
                     <div className={classes.spacer}></div>
-                    {loading && <CircularProgress size={30} />}
-                    <DataTablePagination
-                        pagination={{ ...pagination, total: pagination.total || rows.length }}
-                        onChange={handlePaginationChange}
-                    />
+                    {loading && <CircularProgress size={30} className={classes.loading} />}
+                    <div className={classes.paginator}>
+                        <DataTablePagination
+                            pagination={{
+                                ...pagination,
+                                total: pagination.total || rows.length,
+                            }}
+                            onChange={handlePaginationChange}
+                        />
+                    </div>
                 </React.Fragment>
             </Toolbar>
             <div className={classes.tableWrapper}>
@@ -214,6 +229,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             handleSelectionChange={handleSelectionChange}
                             enableMultipleAction={enableMultipleAction}
                             hideColumnVisibilityOptions={hideColumnVisibilityOptions}
+                            hideSelectAll={hideSelectAll}
                         />
                         <DataTableBody
                             rows={rowObjects}
