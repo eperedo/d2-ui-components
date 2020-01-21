@@ -51,6 +51,7 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
     onSelectAllClick?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
     enableMultipleAction: boolean;
     hideColumnVisibilityOptions?: boolean;
+    hideSelectAll?: boolean;
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
@@ -67,6 +68,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         onSelectAllClick = _.noop,
         enableMultipleAction,
         hideColumnVisibilityOptions = false,
+        hideSelectAll = false,
     } = props;
 
     const { field, order } = sorting;
@@ -91,7 +93,9 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                 <TableRow className={classes.bottomBorder}>
                     {enableMultipleAction && (
                         <TableCell className={classes.checkboxCell} padding="checkbox">
-                            <Checkbox checked={allSelected} onChange={onSelectAllClick} />
+                            {!hideSelectAll && (
+                                <Checkbox checked={allSelected} onChange={onSelectAllClick} />
+                            )}
                         </TableCell>
                     )}
                     {columns

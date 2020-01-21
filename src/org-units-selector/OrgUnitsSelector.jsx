@@ -30,6 +30,10 @@ export default class OrgUnitsSelector extends React.Component {
         }),
         withElevation: PropTypes.bool,
         height: PropTypes.number,
+        hideCheckboxes: PropTypes.bool,
+        fullWidth: PropTypes.bool,
+        square: PropTypes.bool,
+        singleSelection: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -41,6 +45,10 @@ export default class OrgUnitsSelector extends React.Component {
         },
         withElevation: true,
         height: 350,
+        hideCheckboxes: false,
+        fullWidth: true,
+        square: false,
+        singleSelection: false,
     };
 
     static childContextTypes = {
@@ -152,7 +160,7 @@ export default class OrgUnitsSelector extends React.Component {
         } else {
             incrementMemberCount(root, orgUnit);
             const newSelected = this.props.selected.concat(orgUnit.path);
-            this.props.onChange(newSelected);
+            this.props.onChange(this.props.singleSelection ? [orgUnit.path] : newSelected);
         }
     };
 
@@ -189,20 +197,37 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation, selectableLevels, typeInput } = this.props;
+        const {
+            selected,
+            controls,
+            withElevation,
+            selectableLevels,
+            typeInput,
+            hideCheckboxes,
+            hideMemberCount,
+            fullWidth,
+            square,
+            selectOnClick,
+        } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
-        const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
-        const cardWideStyle = withElevation
-            ? styles.cardWide
-            : { ...styles.cardWide, boxShadow: "none" };
+        const leftStyles = {
+            ...styles.left,
+            width: someControlsVisible ? 500 : fullWidth ? 1000 : undefined,
+        };
+
+        const cardWideStyle = {
+            ...styles.cardWide,
+            boxShadow: !withElevation ? "none" : undefined,
+            width: fullWidth ? 1052 : undefined,
+        };
 
         return (
-            <Card style={cardWideStyle}>
+            <Card style={cardWideStyle} square={square}>
                 <CardContent style={styles.cardText}>
                     <div style={styles.searchBox}>
                         <SearchBox onChange={this.filterOrgUnits} />
@@ -225,6 +250,9 @@ export default class OrgUnitsSelector extends React.Component {
                                             this,
                                             root
                                         )}
+                                        hideCheckboxes={hideCheckboxes}
+                                        hideMemberCount={hideMemberCount}
+                                        selectOnClick={selectOnClick}
                                     />
                                 </div>
                             ))}
@@ -310,10 +338,8 @@ function mergeChildren(root, children) {
 
 const styles = {
     cardWide: {
-        display: "inline-block",
         margin: 0,
         transition: "all 175ms ease-out",
-        width: 1052,
     },
     cardText: {
         paddingTop: 10,
@@ -337,13 +363,6 @@ const styles = {
     left: {
         display: "inline-block",
         position: "absolute",
-        width: 500,
-        overflowY: "auto",
-    },
-    leftFullWidth: {
-        display: "inline-block",
-        position: "absolute",
-        width: 1000,
         overflowY: "auto",
     },
     right: {
