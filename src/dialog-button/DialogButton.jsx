@@ -6,8 +6,8 @@ import ConfirmationDialog from "../confirmation-dialog/ConfirmationDialog";
 class DialogButton extends React.Component {
     static propTypes = {
         buttonComponent: PropTypes.func.isRequired,
-        title: PropTypes.string.isRequired,
-        contents: PropTypes.string.isRequired,
+        title: PropTypes.node.isRequired,
+        contents: PropTypes.node.isRequired,
         initialIsOpen: PropTypes.bool,
         isVisible: PropTypes.bool,
     };
