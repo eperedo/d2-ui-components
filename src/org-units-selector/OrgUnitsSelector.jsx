@@ -53,6 +53,7 @@ export default class OrgUnitsSelector extends React.Component {
         super(props);
 
         this.state = {
+            cancel: null,
             levels: null,
             roots: null,
             groups: null,
@@ -138,8 +139,11 @@ export default class OrgUnitsSelector extends React.Component {
             ..._.omit(options, ["postFilter"]),
         };
 
-        return api.models.organisationUnits
-            .get(listOptions)
+        const response = api.models.organisationUnits.get(listOptions);
+        if (this.state.cancel) this.state.cancel();
+        this.setState({ cancel: response.cancel });
+
+        return response
             .getData()
             .then(({ objects }) => objects)
             .then(options.postFilter || _.identity);
