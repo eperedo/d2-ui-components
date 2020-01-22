@@ -75,8 +75,8 @@ class OrgUnitSelectByGroup extends React.Component {
                         filter: { id: { eq: groupId } },
                     })
                     .getData()
-                    .then(({ objects }) => objects[0])
-                    .then(({ organisationUnits }) => {
+                    .then(({ objects }) => _.first(objects) || {})
+                    .then(({ organisationUnits = [] }) => {
                         log.debug(
                             `Loaded ${organisationUnits.length} org units for group ${groupId}`
                         );
