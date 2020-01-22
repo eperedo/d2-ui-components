@@ -312,7 +312,7 @@ class ObjectsTable extends React.Component {
     getSelectionMessages = () => {
         const { allObjects, dataRows, selection, pager } = this.state;
         const { disableMultiplePageSelection } = this.props;
-        if (!selection || _.isEmpty(dataRows) || disableMultiplePageSelection) return [];
+        if (_.isEmpty(dataRows) || disableMultiplePageSelection) return [];
 
         const allSelected = selection.size === pager.total;
         const selectionInOtherPages = _.difference([...selection], dataRows.map(dr => dr.id));
