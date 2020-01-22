@@ -6,8 +6,8 @@ import i18n from "../utils/i18n";
 class ConfirmationDialog extends React.Component {
     static propTypes = {
         isOpen: PropTypes.bool.isRequired,
-        title: PropTypes.string.isRequired,
-        description: PropTypes.string,
+        title: PropTypes.node.isRequired,
+        description: PropTypes.node,
         onSave: PropTypes.func,
         onCancel: PropTypes.func,
         saveText: PropTypes.string,
@@ -34,13 +34,7 @@ class ConfirmationDialog extends React.Component {
                 <DialogTitle>{title}</DialogTitle>
 
                 <DialogContent>
-                    {description && (
-                        <React.Fragment>
-                            {description.split("\n").map((text, idx) => (
-                                <p key={idx}>{text}</p>
-                            ))}
-                        </React.Fragment>
-                    )}
+                    {description && renderNode(description)}
                     {children}
                 </DialogContent>
 
@@ -58,6 +52,14 @@ class ConfirmationDialog extends React.Component {
                 </DialogActions>
             </Dialog>
         );
+    }
+}
+
+function renderNode(node) {
+    if (typeof node === "string") {
+        return node.split("\n").map((text, idx) => <p key={idx}>{text}</p>);
+    } else {
+        return node;
     }
 }
 
