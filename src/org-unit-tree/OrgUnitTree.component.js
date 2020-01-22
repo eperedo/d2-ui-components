@@ -2,9 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { LinearProgress } from "@material-ui/core";
 
-import ModelBase from "d2/model/Model";
-import ModelCollection from "d2/model/ModelCollection";
-
 import { TreeView } from "@dhis2/d2-ui-core";
 
 const styles = {
@@ -60,15 +57,6 @@ class OrgUnitTree extends React.Component {
                     : undefined,
             loading: false,
         };
-        if (
-            props.root.children instanceof ModelCollection &&
-            !props.root.children.hasUnloadedData
-        ) {
-            this.state.children = props.root.children
-                .toArray()
-                // Sort here since the API returns nested children in random order
-                .sort((a, b) => a.displayName.localeCompare(b.displayName));
-        }
 
         this.loadChildren = this.loadChildren.bind(this);
         this.handleSelectClick = this.handleSelectClick.bind(this);
@@ -80,37 +68,45 @@ class OrgUnitTree extends React.Component {
         }
     }
 
-    UNSAFE_componentWillReceiveProps(newProps) {
-        if (
-            newProps.initiallyExpanded.some(ou => ou.includes(`/${newProps.root.id}`)) ||
-            newProps.idsThatShouldBeReloaded.includes(newProps.root.id)
-        ) {
-            this.loadChildren();
-        }
-    }
-
     setChildState(children) {
-        if (this.props.onChildrenLoaded) {
-            this.props.onChildrenLoaded(children);
-        }
+        if (this.props.onChildrenLoaded) this.props.onChildrenLoaded(children);
+
         this.setState({
-            children: children.toArray().sort((a, b) => a.displayName.localeCompare(b.displayName)),
+            children: children.sort((a, b) => a.displayName.localeCompare(b.displayName)),
             loading: false,
         });
     }
 
     loadChildren() {
+        const { root, api, idsThatShouldBeReloaded } = this.props;
+
         if (
             (this.state.children === undefined && !this.state.loading) ||
-            this.props.idsThatShouldBeReloaded.indexOf(this.props.root.id) >= 0
+            idsThatShouldBeReloaded.indexOf(root.id) >= 0
         ) {
             this.setState({ loading: true });
 
-            const root = this.props.root;
-            root.children
-                .load({ fields: "id,level,displayName,children::isNotEmpty,path,parent" })
-                .then(children => {
-                    this.setChildState(children);
+            const childrenIds = root.children.map(({ id }) => id);
+            api.models.organisationUnits
+                .get({
+                    paging: false,
+                    fields: {
+                        id: true,
+                        level: true,
+                        displayName: true,
+                        children: true,
+                        path: true,
+                        parent: true,
+                    },
+                    filter: {
+                        id: {
+                            in: childrenIds,
+                        },
+                    },
+                })
+                .getData()
+                .then(({ objects }) => {
+                    this.setChildState(objects);
                 });
         }
     }
@@ -143,6 +139,7 @@ class OrgUnitTree extends React.Component {
         if (this.shouldIncludeOrgUnit(orgUnit)) {
             return (
                 <OrgUnitTree
+                    api={this.props.api}
                     key={orgUnit.id}
                     root={orgUnit}
                     selected={this.props.selected}
@@ -192,11 +189,6 @@ class OrgUnitTree extends React.Component {
 
     render() {
         const currentOu = this.props.root;
-        // True if this OU has children = is not a leaf node
-        const hasChildren =
-            this.state.children === undefined ||
-            !selectableLevels ||
-            (Array.isArray(this.state.children) && this.state.children.length > 0);
         // True if a click handler exists
         const selectableLevels = this.props.selectableLevels;
         const maxSelectableLevel = Math.max(...selectableLevels);
@@ -206,6 +198,12 @@ class OrgUnitTree extends React.Component {
         const memberRegEx = new RegExp(`/${currentOu.id}`);
         const isSelected =
             this.props.selected && this.props.selected.some(ou => pathRegEx.test(ou));
+
+        // True if this OU has children = is not a leaf node
+        const hasChildren =
+            this.state.children === undefined ||
+            !selectableLevels ||
+            (Array.isArray(this.state.children) && this.state.children.length > 0);
 
         // True if this OU is the current root
         const isCurrentRoot = this.props.currentRoot && this.props.currentRoot.id === currentOu.id;
@@ -315,13 +313,18 @@ function orgUnitPathPropValidator(propValue, key, compName, location, propFullNa
 
 OrgUnitTree.propTypes = {
     /**
+     * The API connection (d2-api)
+     */
+    api: PropTypes.object.isRequired,
+
+    /**
      * The root OrganisationUnit of the tree
      *
      * If the root OU is known to have no children, the `children` property of the root OU should be either
      * `false` or an empty array. If the children property is undefined, the children will be fetched from
      * the server when the tree is expanded.
      */
-    root: PropTypes.instanceOf(ModelBase).isRequired,
+    root: PropTypes.object.isRequired,
 
     /**
      * An array of paths of selected OUs
@@ -364,7 +367,7 @@ OrgUnitTree.propTypes = {
     /**
      * onChildrenLoaded callback, which is triggered when the children of this root org unit have been loaded
      *
-     * The callback receives one argument: A D2 ModelCollection object that contains all the newly loaded org units
+     * The callback receives one argument: An array that contains all the newly loaded org units
      */
     onChildrenLoaded: PropTypes.func,
 

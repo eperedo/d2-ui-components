@@ -34,7 +34,7 @@ class OrgUnitSelectByGroup extends React.Component {
     }
 
     getOrgUnitsForGroup(groupId, ignoreCache = false) {
-        const d2 = this.context.d2;
+        const { api } = this.context;
         return new Promise(resolve => {
             if (this.props.currentRoot) {
                 log.debug(
@@ -42,15 +42,18 @@ class OrgUnitSelectByGroup extends React.Component {
                 );
                 this.setState({ loading: true });
 
-                d2.models.organisationUnits
-                    .list({
+                api.models.organisationUnits
+                    .get({
                         root: this.props.currentRoot.id,
                         paging: false,
                         includeDescendants: true,
-                        fields: "id,path",
-                        filter: `organisationUnitGroups.id:eq:${groupId}`,
+                        fields: { id: true, path: true },
+                        filter: {
+                            "organisationUnitGroups.id": { eq: groupId },
+                        },
                     })
-                    .then(orgUnits => orgUnits.toArray())
+                    .getData()
+                    .then(({ objects }) => objects)
                     .then(orgUnits => {
                         log.debug(
                             `Loaded ${orgUnits.length} org units for group ${groupId} within ${this.props.currentRoot.displayName}`
@@ -65,17 +68,23 @@ class OrgUnitSelectByGroup extends React.Component {
                 log.debug(`Loading org units for group ${groupId}`);
                 this.setState({ loading: true });
 
-                const d2 = this.context.d2;
-                d2.models.organisationUnitGroups
-                    .get(groupId, { fields: "organisationUnits[id,path]" })
-                    .then(orgUnitGroups => orgUnitGroups.organisationUnits.toArray())
-                    .then(orgUnits => {
-                        log.debug(`Loaded ${orgUnits.length} org units for group ${groupId}`);
+                const { api } = this.context;
+                api.models.organisationUnitGroups
+                    .get({
+                        fields: { organisationUnits: { id: true, path: true } },
+                        filter: { id: { eq: groupId } },
+                    })
+                    .getData()
+                    .then(({ objects }) => objects[0])
+                    .then(({ organisationUnits }) => {
+                        log.debug(
+                            `Loaded ${organisationUnits.length} org units for group ${groupId}`
+                        );
                         this.setState({ loading: false });
-                        this.groupCache[groupId] = orgUnits;
+                        this.groupCache[groupId] = organisationUnits;
 
                         // Make a copy of the returned array to ensure that the cache won't be modified from elsewhere
-                        resolve(orgUnits.slice());
+                        resolve(organisationUnits.slice());
                     })
                     .catch(err => {
                         this.setState({ loading: false });
@@ -124,6 +133,6 @@ OrgUnitSelectByGroup.propTypes = {
     // TODO: Add group cache prop?
 };
 
-OrgUnitSelectByGroup.contextTypes = { d2: PropTypes.any.isRequired };
+OrgUnitSelectByGroup.contextTypes = { api: PropTypes.any.isRequired };
 
 export default OrgUnitSelectByGroup;
