@@ -4,7 +4,7 @@ export interface SnackbarOptions {
     isOpen: boolean;
     message?: string;
     variant?: SnackbarLevel;
-    autoHideDuration?: number;
+    autoHideDuration?: number | null;
 }
 
 export interface SnackbarState {
