@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import SnackbarContext from "./context";
 import SnackbarConsumer from "./SnackbarConsumer";
-
-type SnackbarLevel = "success" | "info" | "warning" | "error";
-
-interface SnackbarOptions {
-    isOpen: boolean;
-    message?: string;
-    variant?: SnackbarLevel;
-    autoHideDuration?: number;
-}
+import { SnackbarOptions, SnackbarLevel } from ".";
 
 export const SnackbarProvider = ({ children }) => {
     const [state, setState] = useState<SnackbarOptions>({
