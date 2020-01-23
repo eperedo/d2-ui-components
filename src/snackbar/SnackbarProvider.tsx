@@ -24,9 +24,7 @@ export const SnackbarProvider = ({ children }) => {
         options: Partial<SnackbarOptions> = {}
     ) => {
         const defaultAutoHideDuration = variant === "success" ? 2000 : undefined;
-        const autoHideDuration = options.hasOwnProperty("autoHideDuration")
-            ? options.autoHideDuration
-            : defaultAutoHideDuration;
+        const { autoHideDuration = defaultAutoHideDuration } = options;
 
         setState({
             isOpen: true,
