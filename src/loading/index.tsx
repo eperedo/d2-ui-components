@@ -1,16 +1,6 @@
 import React, { useContext } from "react";
 import loadingContext from "./context";
-
-export interface LoadingState {
-    show: (isLoading?: boolean, message?: string, progress?: number) => void;
-    hide: () => void;
-    reset: () => void;
-    updateMessage: (message: string) => void;
-    updateProgress: (progress: number) => void;
-    isLoading: boolean;
-    message: string;
-    progress: number;
-}
+import { LoadingState } from "./types";
 
 export function withLoading(WrappedComponent: any) {
     return class extends React.Component {

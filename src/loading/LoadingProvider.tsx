@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import LoadingContext from "./context";
 import LoadingConsumer from "./LoadingConsumer";
-
-interface LoadingOptions {
-    isLoading: boolean;
-    message?: string;
-    progress?: number;
-}
+import { LoadingOptions } from "./types";
 
 export const LoadingProvider = ({ children }) => {
     const [state, setState] = useState<LoadingOptions>({

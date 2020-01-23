@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SnackbarContext from "./context";
 import SnackbarConsumer from "./SnackbarConsumer";
-import { SnackbarOptions, SnackbarLevel } from ".";
+import { SnackbarLevel, SnackbarOptions } from "./types";
 
 export const SnackbarProvider = ({ children }) => {
     const [state, setState] = useState<SnackbarOptions>({
