@@ -34,7 +34,7 @@ class OrgUnitSelectByLevel extends React.Component {
     }
 
     getOrgUnitsForLevel(level, ignoreCache = false) {
-        const d2 = this.context.d2;
+        const { api } = this.context;
         return new Promise(resolve => {
             if (this.props.currentRoot) {
                 const rootLevel =
@@ -49,14 +49,15 @@ class OrgUnitSelectByLevel extends React.Component {
                     return resolve([]);
                 }
 
-                d2.models.organisationUnits
-                    .list({
+                api.models.organisationUnits
+                    .get({
                         paging: false,
                         level: level - rootLevel,
-                        fields: "id,path",
+                        fields: { id: true, path: true },
                         root: this.props.currentRoot.id,
                     })
-                    .then(orgUnits => orgUnits.toArray())
+                    .getData()
+                    .then(({ objects }) => objects)
                     .then(orgUnitArray => {
                         log.debug(
                             `Loaded ${orgUnitArray.length} org units for level ` +
@@ -71,9 +72,10 @@ class OrgUnitSelectByLevel extends React.Component {
                 log.debug(`Loading org units for level ${level}`);
                 this.setState({ loading: true });
 
-                d2.models.organisationUnits
-                    .list({ paging: false, level, fields: "id,path" })
-                    .then(orgUnits => orgUnits.toArray())
+                api.models.organisationUnits
+                    .get({ paging: false, level, fields: { id: true, path: true } })
+                    .getData()
+                    .then(({ objects }) => objects)
                     .then(orgUnitArray => {
                         log.debug(`Loaded ${orgUnitArray.length} org units for level ${level}`);
                         this.setState({ loading: false });
@@ -154,6 +156,6 @@ OrgUnitSelectByLevel.propTypes = {
     // TODO: Add level cache prop?
 };
 
-OrgUnitSelectByLevel.contextTypes = { d2: PropTypes.any.isRequired };
+OrgUnitSelectByLevel.contextTypes = { api: PropTypes.any.isRequired };
 
 export default OrgUnitSelectByLevel;

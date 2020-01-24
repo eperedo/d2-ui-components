@@ -7,7 +7,7 @@
 export function forEachOnPath(root, path, op) {
     op(root);
     if (path.length > 0 && (Array.isArray(root.children) || root.children.size > 0)) {
-        if (root.children.has(path[0])) {
+        if (root.children.includes(path[0])) {
             forEachOnPath(root.children.get(path[0]), path.slice(1), op);
         } else {
             forEachOnPath(root, path.slice(1), op);
