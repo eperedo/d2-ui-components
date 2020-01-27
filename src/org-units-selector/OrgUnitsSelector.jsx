@@ -60,7 +60,10 @@ export default class OrgUnitsSelector extends React.Component {
             currentRoot: null,
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
+    }
 
+    componentDidMount() {
+        const { props } = this;
         const { filterByLevel, filterByGroup } = props.controls;
 
         Promise.all([
@@ -71,11 +74,7 @@ export default class OrgUnitsSelector extends React.Component {
                           paging: false,
                           fields: { id: true, level: true, displayName: true },
                           order: "level:asc",
-                          filter: {
-                              level: {
-                                  in: props.levels,
-                              },
-                          },
+                          filter: { level: { in: props.levels } },
                       })
                       .getData()
                       .then(({ objects }) => objects),
