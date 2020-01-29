@@ -113,8 +113,12 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         };
 
         const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
-        const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
-            selectedItem || {};
+        const {
+            checked = !!selectedItem,
+            indeterminate = false,
+            icon = <CheckBoxTwoToneIcon />,
+            disabled = false,
+        } = selectedItem || {};
 
         return (
             <React.Fragment key={`data-table-row-${index}`}>
@@ -134,6 +138,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                         checked={checked}
                                         indeterminate={indeterminate}
                                         indeterminateIcon={icon}
+                                        disabled={disabled}
                                     />
                                 )}
                                 {childrenRows.length > 0 && (

@@ -61,6 +61,7 @@ export interface TableSelection {
     checked?: boolean;
     indeterminate?: boolean;
     icon?: ReactNode;
+    disabled?: boolean;
 }
 
 export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
