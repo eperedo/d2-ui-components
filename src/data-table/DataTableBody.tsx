@@ -31,6 +31,9 @@ const useStyles = makeStyles({
     childrenRow: {
         background: "#E0E0E0",
     },
+    disabledRow: {
+        backgroundColor: "#F5DFDF !important",
+    },
 });
 
 const rotateIconStyle = (isOpen: boolean) => ({
@@ -113,17 +116,18 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         };
 
         const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
-        const {
-            checked = !!selectedItem,
-            indeterminate = false,
-            icon = <CheckBoxTwoToneIcon />,
-            disabled = false,
-        } = selectedItem || {};
+        const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
+            selectedItem || {};
+        const isRowDisabled = row.selectable === false;
+        const rowClassName = _.compact([
+            level === 0 ? classes.bottomBorder : classes.childrenRow,
+            isRowDisabled ? classes.disabledRow : null,
+        ]).join(" ");
 
         return (
             <React.Fragment key={`data-table-row-${index}`}>
                 <TableRow
-                    className={level === 0 ? classes.bottomBorder : classes.childrenRow}
+                    className={rowClassName}
                     onClick={event => handleClick(event)}
                     onContextMenu={event => handleClick(event)}
                     role="checkbox"
@@ -138,7 +142,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                         checked={checked}
                                         indeterminate={indeterminate}
                                         indeterminateIcon={icon}
-                                        disabled={disabled}
+                                        disabled={isRowDisabled}
                                     />
                                 )}
                                 {childrenRows.length > 0 && (

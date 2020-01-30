@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export type ReferenceObject = { id: string };
+export type ReferenceObject = { id: string; selectable?: boolean };
 
 export interface TableObject extends ReferenceObject {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -61,7 +61,6 @@ export interface TableSelection {
     checked?: boolean;
     indeterminate?: boolean;
     icon?: ReactNode;
-    disabled?: boolean;
 }
 
 export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
