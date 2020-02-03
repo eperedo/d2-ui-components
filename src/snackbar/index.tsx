@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import snackbarContext from "./context";
+import { SnackbarState } from "./types";
 
-export function withSnackbar(WrappedComponent) {
+export function withSnackbar(WrappedComponent: any) {
     return class extends React.Component {
         static displayName = `withSnackbar${WrappedComponent.displayName}`;
         static contextType = snackbarContext;
@@ -14,6 +15,6 @@ export function withSnackbar(WrappedComponent) {
 }
 
 export function useSnackbar() {
-    const contextValue = useContext(snackbarContext);
+    const contextValue = useContext<SnackbarState>(snackbarContext);
     return contextValue.byLevel;
 }

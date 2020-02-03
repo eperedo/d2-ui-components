@@ -7,7 +7,7 @@ import ConfirmationDialog from "./confirmation-dialog/ConfirmationDialog";
 import OrgUnitsSelector from "./org-units-selector/OrgUnitsSelector";
 import { withSnackbar, useSnackbar } from "./snackbar";
 import SnackbarProvider from "./snackbar/SnackbarProvider";
-import { withLoading } from "./loading";
+import { withLoading, useLoading } from "./loading";
 import LoadingProvider from "./loading/LoadingProvider";
 import OldObjectsTable from "./old-objects-table/ObjectsTable";
 import Wizard from "./wizard/Wizard";
@@ -27,6 +27,7 @@ export {
     useSnackbar,
     LoadingProvider,
     withLoading,
+    useLoading,
     OldObjectsTable,
     Wizard,
 };
