@@ -141,8 +141,11 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const rowObjects = controlledPagination
         ? rows
         : sortObjects(rows, columns, pagination, sorting);
+    const selectableRows = React.useMemo(() => {
+        return rowObjects.filter(row => row.selectable !== false);
+    }, [rowObjects]);
     const allSelected =
-        rowObjects.length > 0 && _.differenceBy(rowObjects, selection, "id").length === 0;
+        rowObjects.length > 0 && _.differenceBy(selectableRows, selection, "id").length === 0;
     const enableMultipleAction = _.isUndefined(forceSelectionColumn)
         ? _.some(availableActions, "multiple")
         : forceSelectionColumn;
