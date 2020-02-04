@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef } from "react";
 import loadingContext from "./context";
 import { LoadingState } from "./types";
 
@@ -15,6 +15,6 @@ export function withLoading(WrappedComponent: any) {
 
 export function useLoading() {
     const contextValue = useContext<LoadingState>(loadingContext);
-    const [state] = useState(contextValue);
-    return state;
+    const ref = useRef(contextValue);
+    return ref.current;
 }
