@@ -50,13 +50,10 @@ export const SnackbarProvider = ({ children }) => {
     };
 
     const value = {
+        ...byLevel,
+        ...state,
         openSnackbar: openSnackbar,
-        byLevel: byLevel,
         closeSnackbar: closeSnackbar,
-        snackbarIsOpen: state.isOpen,
-        message: state.message,
-        variant: state.variant,
-        autoHideDuration: state.autoHideDuration,
     };
 
     return (
