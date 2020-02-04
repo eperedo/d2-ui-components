@@ -32,14 +32,12 @@ export const LoadingProvider = ({ children }) => {
     };
 
     const value = {
+        ...state,
         show,
         hide,
         reset,
         updateMessage,
         updateProgress,
-        isLoading: state.isLoading,
-        message: state.message,
-        progress: state.progress,
     };
 
     return (

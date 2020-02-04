@@ -7,21 +7,15 @@ export interface SnackbarOptions {
     autoHideDuration?: number | null;
 }
 
-export interface SnackbarState {
+export interface SnackbarState extends SnackbarOptions {
+    success: (message: string, options?: Partial<SnackbarOptions>) => void;
+    info: (message: string, options?: Partial<SnackbarOptions>) => void;
+    warning: (message: string, options?: Partial<SnackbarOptions>) => void;
+    error: (message: string, options?: Partial<SnackbarOptions>) => void;
     openSnackbar: (
         variant: SnackbarLevel,
         message: string,
         options?: Partial<SnackbarOptions>
     ) => void;
     closeSnackbar: () => void;
-    snackbarIsOpen: boolean;
-    message: string;
-    variant: SnackbarLevel;
-    autoHideDuration: number;
-    byLevel: {
-        success: (message: string, options?: Partial<SnackbarOptions>) => void;
-        info: (message: string, options?: Partial<SnackbarOptions>) => void;
-        warning: (message: string, options?: Partial<SnackbarOptions>) => void;
-        error: (message: string, options?: Partial<SnackbarOptions>) => void;
-    };
 }

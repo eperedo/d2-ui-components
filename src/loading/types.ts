@@ -4,13 +4,10 @@ export interface LoadingOptions {
     progress?: number;
 }
 
-export interface LoadingState {
+export interface LoadingState extends LoadingOptions {
     show: (isLoading?: boolean, message?: string, progress?: number) => void;
     hide: () => void;
     reset: () => void;
     updateMessage: (message: string) => void;
     updateProgress: (progress: number) => void;
-    isLoading: boolean;
-    message: string;
-    progress: number;
 }

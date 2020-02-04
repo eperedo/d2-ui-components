@@ -73,7 +73,7 @@ const SnackbarConsumer = props => {
 
     return (
         <SnackbarContext.Consumer>
-            {({ snackbarIsOpen, message, variant, closeSnackbar, autoHideDuration }) => {
+            {({ isOpen, message, variant, closeSnackbar, autoHideDuration }) => {
                 const Icon = variantIcon[variant];
                 if (!Icon) {
                     throw new Error(`Unknown variant: ${variant}`);
@@ -84,7 +84,7 @@ const SnackbarConsumer = props => {
                         <Snackbar
                             className={classes.root}
                             anchorOrigin={anchorOrigin}
-                            open={snackbarIsOpen}
+                            open={isOpen}
                             autoHideDuration={autoHideDuration}
                             onClose={closeSnackbar}
                         >
