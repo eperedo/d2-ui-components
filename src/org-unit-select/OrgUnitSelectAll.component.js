@@ -48,10 +48,12 @@ class OrgUnitSelectAll extends React.Component {
         } else {
             this.setState({ loading: true });
 
-            this.context.d2.models.organisationUnits
-                .list({ fields: "id,path", paging: false })
+            this.context.api.models.organisationUnits
+                .get({ fields: { id: true, path: true }, paging: false })
+                .getData()
+                .then(({ objects }) => objects)
                 .then(orgUnits => {
-                    const ous = orgUnits.toArray().map(ou => ou.path);
+                    const ous = orgUnits.map(ou => ou.path);
                     this.setState({
                         cache: ous,
                         loading: false,
@@ -67,12 +69,15 @@ class OrgUnitSelectAll extends React.Component {
     }
 
     getDescendantOrgUnits() {
-        return this.context.d2.models.organisationUnits.list({
-            root: this.props.currentRoot.id,
-            paging: false,
-            includeDescendants: true,
-            fields: "id,path",
-        });
+        return this.context.api.models.organisationUnits
+            .get({
+                root: this.props.currentRoot.id,
+                paging: false,
+                includeDescendants: true,
+                fields: { id: true, path: true },
+            })
+            .getData()
+            .then(({ objects }) => objects);
     }
 
     handleDeselectAll() {
@@ -125,6 +130,6 @@ OrgUnitSelectAll.propTypes = {
     currentRoot: PropTypes.object,
 };
 
-OrgUnitSelectAll.contextTypes = { d2: PropTypes.object.isRequired };
+OrgUnitSelectAll.contextTypes = { api: PropTypes.object.isRequired };
 
 export default OrgUnitSelectAll;

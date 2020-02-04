@@ -12,13 +12,13 @@ import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import WarningIcon from "@material-ui/icons/Warning";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, Theme } from "@material-ui/core/styles";
 import SnackbarContext from "./context";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
 const anchorOrigin = {
-    vertical: "bottom",
-    horizontal: "center",
+    vertical: "bottom" as const,
+    horizontal: "center" as const,
 };
 
 const variantIcon = {
@@ -28,7 +28,7 @@ const variantIcon = {
     info: InfoIcon,
 };
 
-const styles = theme => ({
+const styles = (theme: Theme) => ({
     root: {
         bottom: 0,
     },
@@ -52,9 +52,9 @@ const styles = theme => ({
         marginRight: theme.spacing(4), // Or anything between 30px and 38px
     },
     message: {
-        display: "flex",
-        alignItems: "center",
-        whiteSpace: "pre-wrap",
+        display: "flex" as const,
+        alignItems: "center" as const,
+        whiteSpace: "pre-wrap" as const,
     },
 });
 
@@ -73,7 +73,7 @@ const SnackbarConsumer = props => {
 
     return (
         <SnackbarContext.Consumer>
-            {({ snackbarIsOpen, message, variant, closeSnackbar, autoHideDuration }) => {
+            {({ isOpen, message, variant, closeSnackbar, autoHideDuration }) => {
                 const Icon = variantIcon[variant];
                 if (!Icon) {
                     throw new Error(`Unknown variant: ${variant}`);
@@ -84,7 +84,7 @@ const SnackbarConsumer = props => {
                         <Snackbar
                             className={classes.root}
                             anchorOrigin={anchorOrigin}
-                            open={snackbarIsOpen}
+                            open={isOpen}
                             autoHideDuration={autoHideDuration}
                             onClose={closeSnackbar}
                         >

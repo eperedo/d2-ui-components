@@ -6,11 +6,13 @@ import { TablePagination } from "./types";
 
 export interface DataTablePaginationProps {
     pagination: TablePagination;
+    defaultTotal: number;
     onChange?(newPagination: TablePagination): void;
 }
 
 export function DataTablePagination(props: DataTablePaginationProps) {
-    const { pagination, onChange = _.noop } = props;
+    const { pagination, onChange = _.noop, defaultTotal } = props;
+    const { page, pageSize, pageSizeOptions, total = defaultTotal } = pagination;
 
     const handleChangePage = (_event: unknown, page: number) => {
         onChange({
@@ -28,14 +30,14 @@ export function DataTablePagination(props: DataTablePaginationProps) {
         });
     };
 
-    const currentPage = pagination.total > 0 ? pagination.page - 1 : 0;
+    const currentPage = total > 0 ? page - 1 : 0;
 
     return (
         <Pagination
-            rowsPerPageOptions={pagination.pageSizeOptions}
+            rowsPerPageOptions={pageSizeOptions}
             component="div"
-            count={pagination.total}
-            rowsPerPage={pagination.pageSize}
+            count={total}
+            rowsPerPage={pageSize}
             page={currentPage}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangePageSize}

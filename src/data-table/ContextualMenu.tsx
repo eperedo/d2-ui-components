@@ -50,6 +50,7 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
             className={classes.root}
             open={isOpen}
             anchorReference="anchorPosition"
+            disableScrollLock={true}
             anchorPosition={{
                 left: positionLeft,
                 top: positionTop,

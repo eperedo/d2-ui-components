@@ -1,23 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
-
 import { Card, CardContent } from "@material-ui/core";
-
-import { OrgUnitTree } from "../org-unit-tree";
-import { OrgUnitSelectByLevel } from "../org-unit-select";
-import { OrgUnitSelectByGroup } from "../org-unit-select";
-import { OrgUnitSelectAll } from "../org-unit-select";
-import { incrementMemberCount, decrementMemberCount } from "../org-unit-tree";
-
-import i18n from "../utils/i18n";
+import _ from "lodash";
+import PropTypes from "prop-types";
+import React from "react";
+import { OrgUnitSelectAll, OrgUnitSelectByGroup, OrgUnitSelectByLevel } from "../org-unit-select";
+import { decrementMemberCount, incrementMemberCount, OrgUnitTree } from "../org-unit-tree";
 import SearchBox from "../search-box/SearchBox";
+import i18n from "../utils/i18n";
 
 // Base code taken from d2-ui/examples/create-react-app/src/components/org-unit-selector.js
 
 export default class OrgUnitsSelector extends React.Component {
     static propTypes = {
-        d2: PropTypes.object.isRequired,
+        api: PropTypes.object.isRequired,
         onChange: PropTypes.func.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string).isRequired,
         levels: PropTypes.arrayOf(PropTypes.number),
@@ -30,6 +24,10 @@ export default class OrgUnitsSelector extends React.Component {
         }),
         withElevation: PropTypes.bool,
         height: PropTypes.number,
+        hideCheckboxes: PropTypes.bool,
+        fullWidth: PropTypes.bool,
+        square: PropTypes.bool,
+        singleSelection: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -41,48 +39,55 @@ export default class OrgUnitsSelector extends React.Component {
         },
         withElevation: true,
         height: 350,
+        hideCheckboxes: false,
+        fullWidth: true,
+        square: false,
+        singleSelection: false,
     };
 
     static childContextTypes = {
-        d2: PropTypes.object.isRequired,
+        api: PropTypes.object.isRequired,
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            d2: props.d2,
+            cancel: null,
             levels: null,
             roots: null,
             groups: null,
             currentRoot: null,
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
+    }
 
+    componentDidMount() {
+        const { props } = this;
         const { filterByLevel, filterByGroup } = props.controls;
 
         Promise.all([
             !filterByLevel
                 ? Promise.resolve([])
-                : props.d2.models.organisationUnitLevels.list({
-                      paging: false,
-                      fields: "id,level,displayName",
-                      order: "level:asc",
-                      // bug in old versions of dhis2, cannot use filter=level:in:[1,2] -> HTTP 500
-                      ...(props.levels
-                          ? {
-                                filter: props.levels.map(level => `level:eq:${level}`),
-                                rootJunction: "OR",
-                            }
-                          : {}),
-                  }),
+                : props.api.models.organisationUnitLevels
+                      .get({
+                          paging: false,
+                          fields: { id: true, level: true, displayName: true },
+                          order: "level:asc",
+                          filter: { level: { in: props.levels } },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             !filterByGroup
                 ? Promise.resolve([])
-                : props.d2.models.organisationUnitGroups.list({
-                      pageSize: 1,
-                      paging: false,
-                      fields: "id,displayName",
-                  }),
+                : props.api.models.organisationUnitGroups
+                      .get({
+                          pageSize: 1,
+                          paging: false,
+                          fields: { id: true, displayName: true },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             this.getRoots(),
         ]).then(([levels, groups, defaultRoots]) => {
             this.setState({
@@ -94,14 +99,14 @@ export default class OrgUnitsSelector extends React.Component {
     }
 
     getRoots({ filter } = {}) {
-        const { d2, listParams, rootIds } = this.props;
+        const { api, listParams, rootIds } = this.props;
         const pagingOptions = { paging: true, pageSize: 10 };
         let options;
 
         if (!filter && !rootIds) {
             options = { level: 1, paging: false };
         } else if (!filter && rootIds) {
-            options = { filter: `id:in:[${rootIds.join(",")}]`, paging: false };
+            options = { filter: { id: { in: rootIds } }, paging: false };
         } else if (filter && !rootIds) {
             options = { filter, ...pagingOptions };
         } else if (filter && rootIds) {
@@ -122,20 +127,30 @@ export default class OrgUnitsSelector extends React.Component {
 
         const listOptions = {
             paging: false,
-            fields: "id,level, displayName,path",
+            fields: {
+                id: true,
+                level: true,
+                displayName: true,
+                path: true,
+                children: true,
+            },
             ...listParams,
             ..._.omit(options, ["postFilter"]),
         };
 
-        return d2.models.organisationUnits
-            .list(listOptions)
-            .then(collection => collection.toArray())
+        const response = api.models.organisationUnits.get(listOptions);
+        if (this.state.cancel) this.state.cancel();
+        this.setState({ cancel: response.cancel });
+
+        return response
+            .getData()
+            .then(({ objects }) => objects)
             .then(options.postFilter || _.identity);
     }
 
     getChildContext() {
         return {
-            d2: this.props.d2,
+            api: this.props.api,
         };
     }
 
@@ -152,7 +167,7 @@ export default class OrgUnitsSelector extends React.Component {
         } else {
             incrementMemberCount(root, orgUnit);
             const newSelected = this.props.selected.concat(orgUnit.path);
-            this.props.onChange(newSelected);
+            this.props.onChange(this.props.singleSelection ? [orgUnit.path] : newSelected);
         }
     };
 
@@ -180,7 +195,7 @@ export default class OrgUnitsSelector extends React.Component {
     };
 
     filterOrgUnits = async value => {
-        const opts = value ? { filter: `displayName:ilike:${value}` } : undefined;
+        const opts = value ? { filter: { displayName: { ilike: value } } } : undefined;
         const roots = await this.getRoots(opts);
         this.setState({ roots });
     };
@@ -189,20 +204,38 @@ export default class OrgUnitsSelector extends React.Component {
         if (!this.state.levels) return null;
 
         const { levels, currentRoot, roots, groups } = this.state;
-        const { selected, controls, withElevation, selectableLevels, typeInput } = this.props;
+        const {
+            api,
+            selected,
+            controls,
+            withElevation,
+            selectableLevels,
+            typeInput,
+            hideCheckboxes,
+            hideMemberCount,
+            fullWidth,
+            square,
+            selectOnClick,
+        } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
-        const leftStyles = someControlsVisible ? styles.left : styles.leftFullWidth;
 
-        const cardWideStyle = withElevation
-            ? styles.cardWide
-            : { ...styles.cardWide, boxShadow: "none" };
+        const leftStyles = {
+            ...styles.left,
+            width: someControlsVisible ? 500 : fullWidth ? 1000 : undefined,
+        };
+
+        const cardWideStyle = {
+            ...styles.cardWide,
+            boxShadow: !withElevation ? "none" : undefined,
+            width: fullWidth ? 1052 : undefined,
+        };
 
         return (
-            <Card style={cardWideStyle}>
+            <Card style={cardWideStyle} square={square}>
                 <CardContent style={styles.cardText}>
                     <div style={styles.searchBox}>
                         <SearchBox onChange={this.filterOrgUnits} />
@@ -213,6 +246,7 @@ export default class OrgUnitsSelector extends React.Component {
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
+                                        api={api}
                                         root={root}
                                         selected={selected}
                                         currentRoot={currentRoot}
@@ -225,6 +259,9 @@ export default class OrgUnitsSelector extends React.Component {
                                             this,
                                             root
                                         )}
+                                        hideCheckboxes={hideCheckboxes}
+                                        hideMemberCount={hideMemberCount}
+                                        selectOnClick={selectOnClick}
                                     />
                                 </div>
                             ))}
@@ -287,7 +324,7 @@ function mergeChildren(root, children) {
             root.children = children;
         } else {
             const rootLevel = root.path.split("/").length - 1;
-            const nextRoot = root.children.get(targetPath.slice(rootLevel)[0]);
+            const nextRoot = _.find(root.children, { id: targetPath.slice(rootLevel)[0] });
             if (nextRoot) {
                 assignChildren(nextRoot, targetPath, children);
             } else {
@@ -298,11 +335,12 @@ function mergeChildren(root, children) {
         return root;
     }
 
-    const firstChild = children.toArray()[0];
-    if (!firstChild) {
+    if (children.length === 0) {
         return root;
     } else {
-        const childPath = firstChild.path.slice(1).split("/");
+        const childPath = _.first(children)
+            .path.slice(1)
+            .split("/");
         const parentPath = childPath.slice(0, childPath.length - 1);
         return assignChildren(root, parentPath, children);
     }
@@ -310,10 +348,8 @@ function mergeChildren(root, children) {
 
 const styles = {
     cardWide: {
-        display: "inline-block",
         margin: 0,
         transition: "all 175ms ease-out",
-        width: 1052,
     },
     cardText: {
         paddingTop: 10,
@@ -337,13 +373,6 @@ const styles = {
     left: {
         display: "inline-block",
         position: "absolute",
-        width: 500,
-        overflowY: "auto",
-    },
-    leftFullWidth: {
-        display: "inline-block",
-        position: "absolute",
-        width: 1000,
         overflowY: "auto",
     },
     right: {

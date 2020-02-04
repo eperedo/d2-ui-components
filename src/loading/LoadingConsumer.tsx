@@ -11,16 +11,16 @@ const styles = _theme => ({
     loadingMask: {
         height: "100%",
         width: "100%",
-        position: "fixed",
+        position: "fixed" as const,
         zIndex: 2000,
         background: "rgba(38, 50, 56, 0.9)",
     },
     contents: {
-        position: "absolute",
+        position: "absolute" as const,
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        textAlign: "center",
+        textAlign: "center" as const,
     },
     message: {
         color: "white",
