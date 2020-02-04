@@ -6,10 +6,9 @@ export function withSnackbar(WrappedComponent: any) {
     return class extends React.Component {
         static displayName = `withSnackbar${WrappedComponent.displayName}`;
         static contextType = snackbarContext;
-        openSnackbarByLevel = this.context.byLevel;
 
         render() {
-            return <WrappedComponent {...this.props} snackbar={this.openSnackbarByLevel} />;
+            return <WrappedComponent {...this.props} snackbar={this.context} />;
         }
     };
 }
