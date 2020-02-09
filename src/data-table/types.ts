@@ -21,7 +21,7 @@ export interface TableAction<T extends ReferenceObject> {
     icon?: ReactNode;
     multiple?: boolean;
     primary?: boolean;
-    onClick?(rows: T[]): void;
+    onClick?(rows: T[], selection: TableSelection[]): void;
     isActive?(rows: T[]): boolean;
 }
 
