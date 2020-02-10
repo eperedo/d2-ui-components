@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme: Theme) =>
         tableWrapper: {
             display: "flex",
             flex: "1 1 0%",
-            overflowX: "auto",
             paddingBottom: theme.spacing(2),
             marginTop: "5px",
         },
