@@ -44,11 +44,11 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
         return () => {
             if (rows.length > 0 && action.onClick) {
                 const areRowsInSelection = _.intersectionBy(selection, rows, "id").length > 0;
-                const rowSelection = areRowsInSelection
-                    ? selection
-                    : rows.map(({ id }) => ({ id, checked: false }));
+                const selectedIds = areRowsInSelection
+                    ? selection.map(({ id }) => id)
+                    : rows.map(({ id }) => id);
 
-                action.onClick(rows, rowSelection);
+                action.onClick(selectedIds);
             }
             onClose();
         };

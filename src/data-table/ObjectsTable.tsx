@@ -8,7 +8,7 @@ import { DataTable, DataTableProps } from "./DataTable";
 import { DetailsBox } from "./DetailsBox";
 import { ActionButton } from "./ActionButton";
 import { filterObjects } from "./utils/filtering";
-import { TableObject, ObjectsTableDetailField, ReferenceObject, TableSelection } from "./types";
+import { TableObject, ObjectsTableDetailField, ReferenceObject } from "./types";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,9 +68,12 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         icon: action.name === "details" && !action.icon ? <DetailsIcon /> : action.icon,
         onClick:
             action.name === "details"
-                ? (rows: T[], selection: TableSelection[]) => {
-                      setDetailsPaneObject(rows[0]);
-                      if (action.onClick) action.onClick(rows, selection);
+                ? (selectedIds: string[]) => {
+                      if (selectedIds.length === 1) {
+                          const row = _.find(parentRows, ["id", selectedIds[0]]);
+                          if (row) setDetailsPaneObject(row);
+                      }
+                      if (action.onClick) action.onClick(selectedIds);
                   }
                 : action.onClick,
     }));
