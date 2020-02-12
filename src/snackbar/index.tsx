@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import snackbarContext from "./context";
-import { SnackbarState } from "./types";
+import SnackbarProvider from "./SnackbarProvider";
+import { SnackbarLevel, SnackbarOptions, SnackbarState } from "./types";
 
 export function withSnackbar(WrappedComponent: any) {
     return class extends React.Component {
@@ -18,3 +19,5 @@ export function useSnackbar() {
     const ref = useRef(contextValue);
     return ref.current;
 }
+
+export { SnackbarProvider, SnackbarState, SnackbarOptions, SnackbarLevel };

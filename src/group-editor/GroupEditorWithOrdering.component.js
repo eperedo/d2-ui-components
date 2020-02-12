@@ -105,6 +105,7 @@ class GroupEditorWithOrdering extends Component {
                 <GroupEditor ref={this.setRef} {...other} />
                 <div style={styles.arrowsDiv}>
                     <IconButton
+                        data-test={"group-editor-move-up"}
                         style={styles.arrow}
                         tilte={i18n.t("Move up")}
                         onClick={this.moveUp}
@@ -113,6 +114,7 @@ class GroupEditorWithOrdering extends Component {
                     </IconButton>
 
                     <IconButton
+                        data-test={"group-editor-move-down"}
                         style={styles.arrow}
                         tilte={i18n.t("Move down")}
                         onClick={this.moveDown}
