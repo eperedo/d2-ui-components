@@ -259,6 +259,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     positionLeft={contextMenuTarget[0]}
                     positionTop={contextMenuTarget[1]}
                     onClose={handleCloseContextMenu}
+                    selection={selection}
                 />
             )}
         </div>
