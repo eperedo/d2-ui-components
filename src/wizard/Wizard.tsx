@@ -8,7 +8,7 @@ import Stepper from "@material-ui/core/Stepper";
 import _ from "lodash";
 import memoize from "nano-memoize";
 import { ReactComponentLike } from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DialogButton } from "../dialog-button/DialogButton";
 import { useSnackbar } from "../snackbar";
 import i18n from "../utils/i18n";
@@ -70,7 +70,7 @@ export interface WizardStep {
     warning?: string;
     description?: string;
     component: ReactComponentLike;
-    props?: any;
+    props?: object;
     help?: string;
     helpDialogIsInitialOpen?: boolean;
 }
@@ -103,10 +103,6 @@ export const Wizard: React.FC<WizardProps> = ({
         initialLastClickableStepIndex
     );
     const [messages, setMessages] = useState([]);
-
-    useEffect(() => {
-        notifyStepChange(currentStepKey);
-    }, [currentStepKey]);
 
     const getAdjacentSteps = () => {
         const index = _(steps).findIndex(step => step.key === currentStepKey);
@@ -167,9 +163,12 @@ export const Wizard: React.FC<WizardProps> = ({
         }
     };
 
-    const notifyStepChange = (skepKey: string) => {
-        onStepChange(skepKey);
-    };
+    const notifyStepChange = useCallback(
+        (skepKey: string) => {
+            onStepChange(skepKey);
+        },
+        [onStepChange]
+    );
 
     const setStep = async (newStepKey: string) => {
         const stepsByKey = _.keyBy(steps, "key");
@@ -209,6 +208,10 @@ export const Wizard: React.FC<WizardProps> = ({
     const Help = renderHelp;
     const FeedbackMessages = renderFeedbackMessages;
     const { component: StepComponent, props: stepProps = {}, warning, description } = currentStep;
+
+    useEffect(() => {
+        notifyStepChange(currentStepKey);
+    }, [notifyStepChange, currentStepKey]);
 
     return (
         <div className={classes.root}>
