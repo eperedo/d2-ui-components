@@ -83,7 +83,7 @@ class Wizard extends React.Component {
                 label: PropTypes.string.isRequired,
                 warning: PropTypes.string,
                 description: PropTypes.string,
-                component: PropTypes.func.isRequired,
+                component: PropTypes.elementType.isRequired,
                 helpDialogIsInitialOpen: PropTypes.bool,
             })
         ).isRequired,
