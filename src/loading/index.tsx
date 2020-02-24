@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import loadingContext from "./context";
-import { LoadingState } from "./types";
+import LoadingProvider from "./LoadingProvider";
+import { LoadingOptions, LoadingState } from "./types";
 
 export function withLoading(WrappedComponent: any) {
     return class extends React.Component {
@@ -18,3 +19,5 @@ export function useLoading() {
     const ref = useRef(contextValue);
     return ref.current;
 }
+
+export { LoadingProvider, LoadingState, LoadingOptions };
