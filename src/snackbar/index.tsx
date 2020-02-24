@@ -3,6 +3,7 @@ import snackbarContext from "./context";
 import SnackbarProvider from "./SnackbarProvider";
 import { SnackbarLevel, SnackbarOptions, SnackbarState } from "./types";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function withSnackbar(WrappedComponent: any) {
     return class extends React.Component {
         static displayName = `withSnackbar${WrappedComponent.displayName}`;
