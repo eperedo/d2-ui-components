@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import loadingContext from "./context";
-import { LoadingState } from "./types";
+import LoadingProvider from "./LoadingProvider";
+import { LoadingOptions, LoadingState } from "./types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function withLoading(WrappedComponent: any) {
@@ -19,3 +20,5 @@ export function useLoading() {
     const ref = useRef(contextValue);
     return ref.current;
 }
+
+export { LoadingProvider, LoadingState, LoadingOptions };
