@@ -93,7 +93,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             } else if (enableMultipleAction && (isEventCtrlClick(event) || isCheckboxClick)) {
                 onChange(updateSelection(activeSelection, row));
             } else if (primaryAction && primaryAction.onClick) {
-                primaryAction.onClick([row]);
+                primaryAction.onClick([row.id]);
             }
         };
 

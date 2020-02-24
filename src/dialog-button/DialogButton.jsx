@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import i18n from "../utils/i18n";
-import ConfirmationDialog from "../confirmation-dialog/ConfirmationDialog";
+import { ConfirmationDialog } from "../confirmation-dialog/ConfirmationDialog";
 
-class DialogButton extends React.Component {
+export class DialogButton extends React.Component {
     static propTypes = {
         buttonComponent: PropTypes.func.isRequired,
         title: PropTypes.node.isRequired,

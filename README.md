@@ -199,6 +199,8 @@ Display D2 objects in a table with:
 
 Whenever you want to update the objects table, pass a different `key` prop (i.e `new Date()`), as you would do with any other React component.
 
+The visibility of the float action button depends on the onButtonClick prop. If a function is defined it will be visible, otherwise, if the prop is undefined it will be hidden.
+
 ```
 const columns = [
     { name: "displayName", text: i18n.t("Name"), sortable: true },
@@ -321,15 +323,17 @@ $ yarn code-quality
 To publish a new package to npmjs:
 
 ```
-$ yarn build 
+$ yarn build
 ```
 
 Then run for alpha channel:
+
 ```
 $ yarn publish build/ --new-version VERSION
 ```
 
 or the following command for the beta channel:
+
 ```
 $ yarn publish build/ --tag beta --new-version VERSION
 ```
@@ -363,6 +367,7 @@ In d2-ui-components:
 ```
 yarn build-babel --watch
 ```
+
 ```
 node_modules/.bin/watch 'cp -av build/* ../path-to-application/node_modules/d2-ui-components/' build/
 ```
