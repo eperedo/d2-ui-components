@@ -25,6 +25,10 @@ export interface TableAction<T extends ReferenceObject> {
     isActive?(rows: T[]): boolean;
 }
 
+export interface TableGlobalAction extends Omit<TableAction<ReferenceObject>, "isActive"> {
+    visible: boolean;
+}
+
 export interface TableSorting<T extends ReferenceObject> {
     field: keyof T;
     order: "asc" | "desc";
