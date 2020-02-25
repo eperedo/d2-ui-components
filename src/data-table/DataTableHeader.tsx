@@ -61,7 +61,7 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const {
         columns,
         globalActions,

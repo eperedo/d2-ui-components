@@ -69,7 +69,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         childrenKeys,
     } = props;
     const { field, order } = sorting;
-    const classes = useStyles({});
+    const classes = useStyles();
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
 
     function createRow(row: T, index: number | string, level = 0) {

@@ -91,7 +91,7 @@ export interface DataTableProps<T extends ReferenceObject> {
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const {
         rows,
         columns,

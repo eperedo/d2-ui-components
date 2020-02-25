@@ -53,7 +53,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         resetKey = "",
         ...rest
     } = props;
-    const classes = useStyles({});
+    const classes = useStyles();
 
     const [detailsPaneObject, setDetailsPaneObject] = useState<T | null>(null);
     const [searchValue, setSearchValue] = useState(initialSearch);
