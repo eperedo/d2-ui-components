@@ -49,7 +49,7 @@ export interface DetailsBoxProps<T extends ReferenceObject> {
 }
 
 export function DetailsBox<T extends ReferenceObject>(props: DetailsBoxProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const { details, data, onClose } = props;
 
     const getDetailBoxContent = () => {

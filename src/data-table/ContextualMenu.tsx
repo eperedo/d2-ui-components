@@ -37,7 +37,7 @@ export interface ContextualMenuProps<T extends ReferenceObject> {
 }
 
 export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const { isOpen, rows, positionLeft, positionTop, onClose, actions, selection } = props;
 
     const handleActionClick = (action: TableAction<T>) => {

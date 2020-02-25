@@ -20,7 +20,7 @@ export interface ActionButtonProps {
 }
 
 export function ActionButton(props: ActionButtonProps) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const { onClick, label } = props;
     const variant = !label || React.isValidElement(label) ? "round" : "extended";
 
