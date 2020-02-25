@@ -89,16 +89,17 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
 
-    const tableActions = [
+    const tableActions = _.compact([
+        !hideColumnVisibilityOptions
+            ? {
+                  name: "reorder-columns",
+                  text: i18n.t("Reorder columns"),
+                  onClick: () => setOpenColumnReorder(true),
+                  icon: <ViewColumnIcon />,
+              }
+            : undefined,
         ...globalActions,
-        {
-            name: "reorder-columns",
-            text: i18n.t("Reorder columns"),
-            onClick: () => setOpenColumnReorder(true),
-            visible: !hideColumnVisibilityOptions,
-            icon: <ViewColumnIcon />,
-        },
-    ];
+    ]);
 
     const openTableActions = (event: MouseEvent<HTMLTableHeaderCellElement>) => {
         setContextMenuTarget([event.clientX, event.clientY + event.currentTarget.clientHeight / 2]);
