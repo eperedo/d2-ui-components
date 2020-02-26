@@ -78,6 +78,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
 
         const contextualAction = (event: MouseEvent<unknown>) => {
+            if (isEventCtrlClick(event)) return;
             event.stopPropagation();
             openContextualMenu(row, event.clientY, event.clientX);
         };

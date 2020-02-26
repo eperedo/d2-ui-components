@@ -64,10 +64,6 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
                 left: positionLeft,
                 top: positionTop,
             }}
-            anchorOrigin={{
-                vertical: "center",
-                horizontal: "center",
-            }}
             onClose={onClose}
         >
             {actions.map(action => (
