@@ -99,7 +99,7 @@ export default class OrgUnitsSelector extends React.Component {
     }
 
     getRoots({ filter } = {}) {
-        const { api, listParams, rootIds } = this.props;
+        const { api, listParams, rootIds, selectableLevels } = this.props;
         const pagingOptions = { paging: true, pageSize: 10 };
         let options;
 
@@ -119,7 +119,12 @@ export default class OrgUnitsSelector extends React.Component {
                 pageSize: 1000,
                 postFilter: orgUnits =>
                     _(orgUnits)
-                        .filter(orgUnit => rootIds.some(ouId => orgUnit.path.includes(ouId)))
+                        .filter(
+                            orgUnit =>
+                                (!selectableLevels &&
+                                    rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
+                                selectableLevels.includes(orgUnit.level)
+                        )
                         .take(pagingOptions.pageSize)
                         .value(),
             };
