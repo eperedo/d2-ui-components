@@ -20,6 +20,7 @@ import {
     TableSelection,
     TableSorting,
     TableState,
+    MouseActionsMapping,
 } from "./types";
 import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
@@ -69,6 +70,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
     actions?: TableAction<T>[];
+    mouseActionsMapping?: MouseActionsMapping;
     initialState?: TableInitialState<T>;
     forceSelectionColumn?: boolean;
     hideSelectionMessages?: boolean;
@@ -110,6 +112,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         pagination: controlledPagination,
         onChange = _.noop,
         resetKey,
+        mouseActionsMapping,
     } = props;
 
     const initialSorting = initialState.sorting || {
@@ -243,6 +246,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             onChange={handleSelectionChange}
                             openContextualMenu={handleOpenContextualMenu}
                             availableActions={availableActions}
+                            mouseActionsMapping={mouseActionsMapping}
                             enableMultipleAction={enableMultipleAction}
                             loading={loading}
                             childrenKeys={childrenKeys}

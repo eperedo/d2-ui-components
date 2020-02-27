@@ -67,3 +67,10 @@ export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
     TableColumn<T>,
     "name" | "text" | "getValue"
 >;
+
+export type MouseActionMapping =
+    | { type: "primary" }
+    | { type: "contextual" }
+    | { type: "action"; action: string };
+
+export type MouseActionsMapping = Record<"left" | "right", MouseActionMapping>;
