@@ -14,6 +14,7 @@ export default class OrgUnitsSelector extends React.Component {
         api: PropTypes.object.isRequired,
         onChange: PropTypes.func.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+        initiallyExpanded: PropTypes.arrayOf(PropTypes.string),
         levels: PropTypes.arrayOf(PropTypes.number),
         rootIds: PropTypes.arrayOf(PropTypes.string),
         listParams: PropTypes.object,
@@ -221,11 +222,11 @@ export default class OrgUnitsSelector extends React.Component {
             fullWidth,
             square,
             selectOnClick,
+            initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
-        const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
 
         const leftStyles = {
