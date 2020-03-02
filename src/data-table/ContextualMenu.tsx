@@ -43,9 +43,12 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
     const handleActionClick = (action: TableAction<T>) => {
         return () => {
             if (rows.length > 0 && action.onClick) {
-                const areRowsInSelection = _.intersectionBy(selection, rows, "id").length > 0;
+                const userSelection = selection.filter(
+                    ({ checked = true, indeterminate = false }) => checked && !indeterminate
+                );
+                const areRowsInSelection = _.intersectionBy(userSelection, rows, "id").length > 0;
                 const selectedIds = areRowsInSelection
-                    ? selection.map(({ id }) => id)
+                    ? userSelection.map(({ id }) => id)
                     : rows.map(({ id }) => id);
 
                 action.onClick(selectedIds);
