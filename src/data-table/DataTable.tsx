@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import Toolbar from "@material-ui/core/Toolbar";
 import _ from "lodash";
-import React, { ReactNode, useState, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ContextualMenu } from "./ContextualMenu";
 import { DataTableBody } from "./DataTableBody";
 import { DataTableHeader } from "./DataTableHeader";
@@ -13,6 +13,7 @@ import {
     ReferenceObject,
     TableAction,
     TableColumn,
+    TableGlobalAction,
     TableInitialState,
     TableNotification,
     TableObject,
@@ -71,6 +72,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
     actions?: TableAction<T>[];
     mouseActionsMapping?: MouseActionsMapping;
+    globalActions?: TableGlobalAction[];
     initialState?: TableInitialState<T>;
     forceSelectionColumn?: boolean;
     hideSelectionMessages?: boolean;
@@ -91,11 +93,12 @@ export interface DataTableProps<T extends ReferenceObject> {
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const {
         rows,
         columns,
         actions: availableActions = [],
+        globalActions = [],
         initialState = {},
         forceSelectionColumn,
         hideSelectionMessages,
@@ -225,6 +228,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     <Table className={classes.table} size={"medium"}>
                         <DataTableHeader
                             columns={columns}
+                            globalActions={globalActions}
+                            ids={ids}
                             visibleColumns={visibleColumns}
                             onVisibleColumnsChange={updateVisibleColumns}
                             sorting={sorting}
@@ -263,6 +268,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     positionLeft={contextMenuTarget[0]}
                     positionTop={contextMenuTarget[1]}
                     onClose={handleCloseContextMenu}
+                    selection={selection}
                 />
             )}
         </div>

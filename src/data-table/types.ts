@@ -21,9 +21,11 @@ export interface TableAction<T extends ReferenceObject> {
     icon?: ReactNode;
     multiple?: boolean;
     primary?: boolean;
-    onClick?(rows: T[]): void;
+    onClick?(selectedIds: string[]): void;
     isActive?(rows: T[]): boolean;
 }
+
+export type TableGlobalAction = Omit<TableAction<ReferenceObject>, "isActive">;
 
 export interface TableSorting<T extends ReferenceObject> {
     field: keyof T;

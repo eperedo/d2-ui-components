@@ -8,7 +8,7 @@ it("shows label", () => {
         <DatePicker value={new Date(2019, 1, 2)} label="My label" onChange={onChange} />
     );
 
-    expect(datePicker.text()).toContain("My label");
+    expect(datePicker.find("label").text()).toContain("My label");
 });
 
 export {};

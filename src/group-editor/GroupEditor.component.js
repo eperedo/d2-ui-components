@@ -375,6 +375,7 @@ export default class GroupEditor extends Component {
                         </select>
                     </Paper>
                     <Button
+                        data-test={"group-editor-assign-all"}
                         variant="contained"
                         disabled={
                             this.state.loading || this.getAvailableItemsUnfilteredCount() === 0
@@ -393,6 +394,7 @@ export default class GroupEditor extends Component {
                 <div style={styles.middle}>
                     <div style={styles.selected}>{selectedLabel()}</div>
                     <Button
+                        data-test={"group-editor-assign-item"}
                         variant="contained"
                         onClick={this.onAssignItems}
                         style={styles.buttons}
@@ -402,6 +404,7 @@ export default class GroupEditor extends Component {
                         →
                     </Button>
                     <Button
+                        data-test={"group-editor-remove-all"}
                         variant="contained"
                         onClick={this.onRemoveItems}
                         style={styles.buttons}
@@ -442,6 +445,7 @@ export default class GroupEditor extends Component {
                         </select>
                     </Paper>
                     <Button
+                        data-test={"group-editor-remove-all"}
                         variant="contained"
                         style={{ float: "right", marginTop: "1rem" }}
                         disabled={

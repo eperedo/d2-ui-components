@@ -1,10 +1,11 @@
 import React from "react";
+import _ from "lodash";
 import { makeStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-import { TableAction, ReferenceObject } from "./types";
+import { TableAction, ReferenceObject, TableSelection } from "./types";
 
 const useStyles = makeStyles({
     root: {
@@ -32,15 +33,23 @@ export interface ContextualMenuProps<T extends ReferenceObject> {
     positionTop: number;
     onClose(): void;
     actions: TableAction<T>[];
+    selection: TableSelection[];
 }
 
 export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuProps<T>) {
-    const classes = useStyles({});
-    const { isOpen, rows, positionLeft, positionTop, onClose, actions } = props;
+    const classes = useStyles();
+    const { isOpen, rows, positionLeft, positionTop, onClose, actions, selection } = props;
 
     const handleActionClick = (action: TableAction<T>) => {
         return () => {
-            if (rows.length > 0 && action.onClick) action.onClick(rows);
+            if (rows.length > 0 && action.onClick) {
+                const areRowsInSelection = _.intersectionBy(selection, rows, "id").length > 0;
+                const selectedIds = areRowsInSelection
+                    ? selection.map(({ id }) => id)
+                    : rows.map(({ id }) => id);
+
+                action.onClick(selectedIds);
+            }
             onClose();
         };
     };
@@ -54,10 +63,6 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
             anchorPosition={{
                 left: positionLeft,
                 top: positionTop,
-            }}
-            anchorOrigin={{
-                vertical: "center",
-                horizontal: "center",
             }}
             onClose={onClose}
         >

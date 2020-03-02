@@ -53,7 +53,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         resetKey = "",
         ...rest
     } = props;
-    const classes = useStyles({});
+    const classes = useStyles();
 
     const [detailsPaneObject, setDetailsPaneObject] = useState<T | null>(null);
     const [searchValue, setSearchValue] = useState(initialSearch);
@@ -68,9 +68,12 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         icon: action.name === "details" && !action.icon ? <DetailsIcon /> : action.icon,
         onClick:
             action.name === "details"
-                ? (rows: T[]) => {
-                      setDetailsPaneObject(rows[0]);
-                      if (action.onClick) action.onClick(rows);
+                ? (selectedIds: string[]) => {
+                      if (selectedIds.length === 1) {
+                          const row = _.find(parentRows, ["id", selectedIds[0]]);
+                          if (row) setDetailsPaneObject(row);
+                      }
+                      if (action.onClick) action.onClick(selectedIds);
                   }
                 : action.onClick,
     }));

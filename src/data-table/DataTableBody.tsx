@@ -77,7 +77,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         mouseActionsMapping = defaultMouseActionsMapping,
     } = props;
     const { field, order } = sorting;
-    const classes = useStyles({});
+    const classes = useStyles();
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
 
     function createRow(row: T, index: number | string, level = 0) {
@@ -86,6 +86,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
 
         const contextualAction = (event: MouseEvent<unknown>) => {
+            if (isEventCtrlClick(event)) return;
             event.stopPropagation();
             openContextualMenu(row, event.clientY, event.clientX);
         };
@@ -96,14 +97,14 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         ) => {
             switch (mouseActionMapping.type) {
                 case "primary":
-                    if (primaryAction && primaryAction.onClick) primaryAction.onClick([row]);
+                    if (primaryAction && primaryAction.onClick) primaryAction.onClick([row.id]);
                     break;
                 case "contextual":
                     contextualAction(event);
                     break;
                 case "action": {
                     const action = availableActions.find(a => a.name === mouseActionMapping.action);
-                    if (action && action.onClick) action.onClick([row]);
+                    if (action && action.onClick) action.onClick([row.id]);
                     break;
                 }
             }
