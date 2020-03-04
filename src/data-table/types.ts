@@ -21,9 +21,11 @@ export interface TableAction<T extends ReferenceObject> {
     icon?: ReactNode;
     multiple?: boolean;
     primary?: boolean;
-    onClick?(rows: T[]): void;
+    onClick?(selectedIds: string[]): void;
     isActive?(rows: T[]): boolean;
 }
+
+export type TableGlobalAction = Omit<TableAction<ReferenceObject>, "isActive">;
 
 export interface TableSorting<T extends ReferenceObject> {
     field: keyof T;
@@ -67,3 +69,10 @@ export type ObjectsTableDetailField<T extends ReferenceObject> = Pick<
     TableColumn<T>,
     "name" | "text" | "getValue"
 >;
+
+export type MouseActionMapping =
+    | { type: "primary" }
+    | { type: "contextual" }
+    | { type: "action"; action: string };
+
+export type MouseActionsMapping = Record<"left" | "right", MouseActionMapping>;

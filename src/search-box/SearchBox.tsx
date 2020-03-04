@@ -3,7 +3,7 @@ import { debounce } from "throttle-debounce";
 import TextField from "@material-ui/core/TextField";
 import i18n from "../utils/i18n";
 
-interface SearchBoxProps {
+export interface SearchBoxProps {
     value?: string;
     debounce?: number;
     onChange(value: string): void;
@@ -14,7 +14,7 @@ const styles = {
     textField: { paddingTop: 8 },
 };
 
-const SearchBox: React.FC<SearchBoxProps> = props => {
+export const SearchBox: React.FC<SearchBoxProps> = props => {
     const [value, setValue] = React.useState(props.value);
 
     const onChangeDebounced = React.useMemo(() => {

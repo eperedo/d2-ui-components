@@ -14,6 +14,7 @@ export default class OrgUnitsSelector extends React.Component {
         api: PropTypes.object.isRequired,
         onChange: PropTypes.func.isRequired,
         selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+        initiallyExpanded: PropTypes.arrayOf(PropTypes.string),
         levels: PropTypes.arrayOf(PropTypes.number),
         rootIds: PropTypes.arrayOf(PropTypes.string),
         listParams: PropTypes.object,
@@ -99,7 +100,7 @@ export default class OrgUnitsSelector extends React.Component {
     }
 
     getRoots({ filter } = {}) {
-        const { api, listParams, rootIds } = this.props;
+        const { api, listParams, rootIds, selectableLevels } = this.props;
         const pagingOptions = { paging: true, pageSize: 10 };
         let options;
 
@@ -119,7 +120,12 @@ export default class OrgUnitsSelector extends React.Component {
                 pageSize: 1000,
                 postFilter: orgUnits =>
                     _(orgUnits)
-                        .filter(orgUnit => rootIds.some(ouId => orgUnit.path.includes(ouId)))
+                        .filter(
+                            orgUnit =>
+                                (!selectableLevels &&
+                                    rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
+                                selectableLevels.includes(orgUnit.level)
+                        )
                         .take(pagingOptions.pageSize)
                         .value(),
             };
@@ -216,11 +222,11 @@ export default class OrgUnitsSelector extends React.Component {
             fullWidth,
             square,
             selectOnClick,
+            initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
         const someControlsVisible = filterByLevel || filterByGroup || selectAll;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
-        const initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path);
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
 
         const leftStyles = {

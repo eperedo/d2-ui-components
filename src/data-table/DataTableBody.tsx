@@ -12,8 +12,14 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
 import { ReferenceObject, TableAction, TableColumn, TableSelection, TableSorting } from "./types";
+import { MouseActionsMapping, MouseActionMapping } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
+
+const defaultMouseActionsMapping: MouseActionsMapping = {
+    left: { type: "primary" },
+    right: { type: "contextual" },
+};
 
 const useStyles = makeStyles({
     bottomBorder: {
@@ -52,6 +58,7 @@ export interface DataTableBodyProps<T extends ReferenceObject> {
     enableMultipleAction?: boolean;
     loading?: boolean;
     childrenKeys?: string[];
+    mouseActionsMapping?: MouseActionsMapping;
 }
 
 export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyProps<T>) {
@@ -67,9 +74,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         enableMultipleAction,
         loading,
         childrenKeys,
+        mouseActionsMapping = defaultMouseActionsMapping,
     } = props;
     const { field, order } = sorting;
-    const classes = useStyles({});
+    const classes = useStyles();
     const [expandedRows, updateExpandedRows] = useState<string[]>([]);
 
     function createRow(row: T, index: number | string, level = 0) {
@@ -78,8 +86,28 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
 
         const contextualAction = (event: MouseEvent<unknown>) => {
+            if (isEventCtrlClick(event)) return;
             event.stopPropagation();
             openContextualMenu(row, event.clientY, event.clientX);
+        };
+
+        const runMouseAction = (
+            event: MouseEvent<unknown>,
+            mouseActionMapping: MouseActionMapping
+        ) => {
+            switch (mouseActionMapping.type) {
+                case "primary":
+                    if (primaryAction && primaryAction.onClick) primaryAction.onClick([row.id]);
+                    break;
+                case "contextual":
+                    contextualAction(event);
+                    break;
+                case "action": {
+                    const action = availableActions.find(a => a.name === mouseActionMapping.action);
+                    if (action && action.onClick) action.onClick([row.id]);
+                    break;
+                }
+            }
         };
 
         const handleClick = (event: MouseEvent<unknown>) => {
@@ -89,11 +117,11 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
             if (event.type === "contextmenu") {
                 event.preventDefault();
-                contextualAction(event);
+                runMouseAction(event, mouseActionsMapping["right"]);
             } else if (enableMultipleAction && (isEventCtrlClick(event) || isCheckboxClick)) {
                 onChange(updateSelection(activeSelection, row));
-            } else if (primaryAction && primaryAction.onClick) {
-                primaryAction.onClick([row]);
+            } else {
+                runMouseAction(event, mouseActionsMapping["left"]);
             }
         };
 

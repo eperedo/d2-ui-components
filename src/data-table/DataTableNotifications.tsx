@@ -34,7 +34,7 @@ export interface DataTableNotificationsProps {
 
 export function DataTableNotifications(props: DataTableNotificationsProps) {
     const { messages, updateSelection = _.noop } = props;
-    const classes = useStyles({});
+    const classes = useStyles();
 
     return (
         <div className={classes.notificationPanel}>

@@ -1,3 +1,4 @@
+import i18n from "@dhis2/d2-i18n";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,16 +8,19 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ViewColumnIcon from "@material-ui/icons/ViewColumn";
+import SettingsIcon from "@material-ui/icons/Settings";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import ColumnSelectorDialog from "./ColumnSelectorDialog";
+import { ContextualMenu } from "./ContextualMenu";
 import { DataTableNotifications } from "./DataTableNotifications";
 import {
     ReferenceObject,
     TableColumn,
+    TableGlobalAction,
     TableNotification,
-    TableSorting,
     TableSelection,
+    TableSorting,
 } from "./types";
 
 const useStyles = makeStyles({
@@ -41,6 +45,8 @@ const useStyles = makeStyles({
 
 export interface DataTableHeaderProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
+    globalActions: TableGlobalAction[];
+    ids: string[];
     visibleColumns: (keyof T)[];
     onVisibleColumnsChange?(newVisibleColumns: (keyof T)[]): void;
     sorting: TableSorting<T>;
@@ -55,9 +61,11 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const {
         columns,
+        globalActions,
+        ids,
         visibleColumns,
         onVisibleColumnsChange = _.noop,
         sorting,
@@ -73,10 +81,32 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
 
     const { field, order } = sorting;
     const [openColumnReorder, setOpenColumnReorder] = useState<boolean>(false);
+    const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
+    const contextMenuRows = ids.map(id => ({ id }));
 
     const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
         const isDesc = field === property && order === "desc";
         onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
+    };
+
+    const tableActions = _.compact([
+        !hideColumnVisibilityOptions
+            ? {
+                  name: "reorder-columns",
+                  text: i18n.t("Reorder columns"),
+                  onClick: () => setOpenColumnReorder(true),
+                  icon: <ViewColumnIcon />,
+              }
+            : undefined,
+        ...globalActions,
+    ]);
+
+    const openTableActions = (event: MouseEvent<HTMLTableHeaderCellElement>) => {
+        setContextMenuTarget([event.clientX, event.clientY + event.currentTarget.clientHeight / 2]);
+    };
+
+    const closeTableActions = () => {
+        setContextMenuTarget(null);
     };
 
     return (
@@ -117,14 +147,10 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                                 </TableSortLabel>
                             </TableCell>
                         ))}
-                    <TableCell
-                        padding="none"
-                        align={"center"}
-                        onClick={() => !hideColumnVisibilityOptions && setOpenColumnReorder(true)}
-                    >
-                        {!hideColumnVisibilityOptions && (
+                    <TableCell padding="none" align={"center"} onClick={openTableActions}>
+                        {tableActions.length > 0 && (
                             <IconButton>
-                                <ViewColumnIcon />
+                                <SettingsIcon />
                             </IconButton>
                         )}
                     </TableCell>
@@ -140,6 +166,17 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                     </TableRow>
                 )}
             </TableHead>
+            {contextMenuTarget && (
+                <ContextualMenu
+                    isOpen={!!contextMenuTarget}
+                    positionLeft={contextMenuTarget[0]}
+                    positionTop={contextMenuTarget[1]}
+                    rows={contextMenuRows}
+                    selection={contextMenuRows}
+                    actions={tableActions}
+                    onClose={closeTableActions}
+                />
+            )}
         </React.Fragment>
     );
 }

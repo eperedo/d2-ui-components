@@ -18,9 +18,6 @@ const useStyles = makeStyles({
         minWidth: 300,
         height: "0%",
     },
-    content: {
-        display: "inline-block",
-    },
     label: {
         fontWeight: "bold",
     },
@@ -49,7 +46,7 @@ export interface DetailsBoxProps<T extends ReferenceObject> {
 }
 
 export function DetailsBox<T extends ReferenceObject>(props: DetailsBoxProps<T>) {
-    const classes = useStyles({});
+    const classes = useStyles();
     const { details, data, onClose } = props;
 
     const getDetailBoxContent = () => {
@@ -77,7 +74,7 @@ export function DetailsBox<T extends ReferenceObject>(props: DetailsBoxProps<T>)
     return (
         <Paper className={classes.root} square>
             <CloseIcon className={classes.closeButton} onClick={onClose} />
-            <div className={classes.content}>{getDetailBoxContent()}</div>
+            <div>{getDetailBoxContent()}</div>
         </Paper>
     );
 }
