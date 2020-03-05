@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, MouseEvent } from "react";
+import React, { useState, ReactNode, MouseEvent, useCallback, useMemo } from "react";
 import _ from "lodash";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import DetailsIcon from "@material-ui/icons/Details";
@@ -60,9 +60,9 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
     const [searchValue, setSearchValue] = useState(initialSearch);
     const showSearchBox = searchBoxColumns || onChangeSearch !== _.noop;
 
-    const handleDetailsBoxClose = () => {
+    const handleDetailsBoxClose = useCallback(() => {
         setDetailsPaneObject(null);
-    };
+    }, []);
 
     const childrenRows: T[] = _.flattenDeep(
         parentRows.map(row => Object.values(_.pick(row, childrenKeys)))
@@ -84,35 +84,55 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                 : action.onClick,
     }));
 
-    const handleSearchChange = (newSearch: string) => {
-        setSearchValue(newSearch);
-        onChangeSearch(newSearch);
-    };
+    const handleSearchChange = useCallback(
+        (newSearch: string) => {
+            setSearchValue(newSearch);
+            onChangeSearch(newSearch);
+        },
+        [onChangeSearch]
+    );
 
-    const filterComponents = showSearchBox
-        ? [
-              <div key={"objects-table-search-box"} className={classes.searchBox}>
-                  <SearchBox
-                      value={searchValue}
-                      hintText={searchBoxLabel || "Search items"}
-                      onChange={handleSearchChange}
-                  />
-              </div>,
-              parentFilterComponents,
-          ]
-        : parentFilterComponents;
+    const filterComponents = useMemo(
+        () => (
+            <React.Fragment>
+                {showSearchBox && (
+                    <div key={"objects-table-search-box"} className={classes.searchBox}>
+                        <SearchBox
+                            value={searchValue}
+                            hintText={searchBoxLabel || "Search items"}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+                )}
+                {parentFilterComponents}
+            </React.Fragment>
+        ),
+        [
+            classes.searchBox,
+            showSearchBox,
+            searchValue,
+            searchBoxLabel,
+            handleSearchChange,
+            parentFilterComponents,
+        ]
+    );
 
-    const sideComponents = detailsPaneObject
-        ? [
-              <DetailsBox
-                  key={"objects-table-details-box"}
-                  details={details}
-                  data={detailsPaneObject}
-                  onClose={handleDetailsBoxClose}
-              />,
-              parentSideComponents,
-          ]
-        : parentSideComponents;
+    const sideComponents = useMemo(
+        () => (
+            <React.Fragment>
+                {!!detailsPaneObject && (
+                    <DetailsBox
+                        key={"objects-table-details-box"}
+                        details={details}
+                        data={detailsPaneObject}
+                        onClose={handleDetailsBoxClose}
+                    />
+                )}
+                {parentSideComponents}
+            </React.Fragment>
+        ),
+        [detailsPaneObject, details, handleDetailsBoxClose, parentSideComponents]
+    );
 
     const rows =
         searchBoxColumns && searchValue
