@@ -198,7 +198,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         positionLeft: number,
         positionTop: number
     ) => {
-        const actionRows = getActionRows(selectedRow, rows, selection);
+        const actionRows = getActionRows(selectedRow, rows, selection, childrenKeys);
         const actions = parseActions(actionRows, availableActions);
         if (actions.length > 0) {
             setContextMenuTarget([positionTop, positionLeft]);
