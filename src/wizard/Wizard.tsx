@@ -71,7 +71,7 @@ export interface WizardStep {
     description?: string;
     component: ReactComponentLike;
     props?: object;
-    help?: string;
+    help?: React.ReactNode;
     helpDialogIsInitialOpen?: boolean;
 }
 
