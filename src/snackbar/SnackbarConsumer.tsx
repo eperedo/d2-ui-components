@@ -58,6 +58,7 @@ const styles = (theme: Theme) => ({
     message: {
         maxHeight: 500,
         overflow: "auto",
+        paddingRight: 10,
     },
 });
 
