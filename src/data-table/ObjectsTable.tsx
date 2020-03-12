@@ -51,6 +51,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         filterComponents: parentFilterComponents,
         sideComponents: parentSideComponents,
         resetKey = "",
+        childrenKeys,
         ...rest
     } = props;
     const classes = useStyles();
@@ -63,6 +64,10 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         setDetailsPaneObject(null);
     }, []);
 
+    const childrenRows: T[] = _.flattenDeep(
+        parentRows.map(row => Object.values(_.pick(row, childrenKeys)))
+    );
+
     const actions = parentActions.map(action => ({
         ...action,
         icon: action.name === "details" && !action.icon ? <DetailsIcon /> : action.icon,
@@ -70,7 +75,8 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
             action.name === "details"
                 ? (selectedIds: string[]) => {
                       if (selectedIds.length === 1) {
-                          const row = _.find(parentRows, ["id", selectedIds[0]]);
+                          const allRows = [...parentRows, ...childrenRows];
+                          const row = _.find(allRows, ["id", selectedIds[0]]);
                           if (row) setDetailsPaneObject(row);
                       }
                       if (action.onClick) action.onClick(selectedIds);
@@ -141,6 +147,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                 filterComponents={filterComponents}
                 sideComponents={sideComponents}
                 resetKey={resetKey + "-" + searchValue}
+                childrenKeys={childrenKeys}
                 {...rest}
             />
             {onActionButtonClick && (

@@ -42,10 +42,14 @@ export function ContextualMenu<T extends ReferenceObject>(props: ContextualMenuP
 
     const handleActionClick = (action: TableAction<T>) => {
         return () => {
-            const areRowsInSelection = _.intersectionBy(selection, rows, "id").length > 0;
+            const userSelection = selection.filter(
+                ({ checked = true, indeterminate = false }) => checked && !indeterminate
+            );
+            const areRowsInSelection = _.intersectionBy(userSelection, rows, "id").length > 0;
             const selectedIds = areRowsInSelection
-                ? selection.map(({ id }) => id)
+                ? userSelection.map(({ id }) => id)
                 : rows.map(({ id }) => id);
+
             if (action.onClick) action.onClick(selectedIds);
             onClose();
         };
