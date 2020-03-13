@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, MouseEvent } from "react";
+import React, { useState, ReactNode, MouseEvent, useCallback, useMemo } from "react";
 import _ from "lodash";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import DetailsIcon from "@material-ui/icons/Details";
@@ -51,6 +51,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         filterComponents: parentFilterComponents,
         sideComponents: parentSideComponents,
         resetKey = "",
+        childrenKeys,
         ...rest
     } = props;
     const classes = useStyles();
@@ -59,9 +60,13 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
     const [searchValue, setSearchValue] = useState(initialSearch);
     const showSearchBox = searchBoxColumns || onChangeSearch !== _.noop;
 
-    const handleDetailsBoxClose = () => {
+    const handleDetailsBoxClose = useCallback(() => {
         setDetailsPaneObject(null);
-    };
+    }, []);
+
+    const childrenRows: T[] = _.flattenDeep(
+        parentRows.map(row => Object.values(_.pick(row, childrenKeys)))
+    );
 
     const actions = parentActions.map(action => ({
         ...action,
@@ -70,7 +75,8 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
             action.name === "details"
                 ? (selectedIds: string[]) => {
                       if (selectedIds.length === 1) {
-                          const row = _.find(parentRows, ["id", selectedIds[0]]);
+                          const allRows = [...parentRows, ...childrenRows];
+                          const row = _.find(allRows, ["id", selectedIds[0]]);
                           if (row) setDetailsPaneObject(row);
                       }
                       if (action.onClick) action.onClick(selectedIds);
@@ -78,35 +84,55 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                 : action.onClick,
     }));
 
-    const handleSearchChange = (newSearch: string) => {
-        setSearchValue(newSearch);
-        onChangeSearch(newSearch);
-    };
+    const handleSearchChange = useCallback(
+        (newSearch: string) => {
+            setSearchValue(newSearch);
+            onChangeSearch(newSearch);
+        },
+        [onChangeSearch]
+    );
 
-    const filterComponents = showSearchBox
-        ? [
-              <div key={"objects-table-search-box"} className={classes.searchBox}>
-                  <SearchBox
-                      value={searchValue}
-                      hintText={searchBoxLabel || "Search items"}
-                      onChange={handleSearchChange}
-                  />
-              </div>,
-              parentFilterComponents,
-          ]
-        : parentFilterComponents;
+    const filterComponents = useMemo(
+        () => (
+            <React.Fragment>
+                {showSearchBox && (
+                    <div key={"objects-table-search-box"} className={classes.searchBox}>
+                        <SearchBox
+                            value={searchValue}
+                            hintText={searchBoxLabel || "Search items"}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+                )}
+                {parentFilterComponents}
+            </React.Fragment>
+        ),
+        [
+            classes.searchBox,
+            showSearchBox,
+            searchValue,
+            searchBoxLabel,
+            handleSearchChange,
+            parentFilterComponents,
+        ]
+    );
 
-    const sideComponents = detailsPaneObject
-        ? [
-              <DetailsBox
-                  key={"objects-table-details-box"}
-                  details={details}
-                  data={detailsPaneObject}
-                  onClose={handleDetailsBoxClose}
-              />,
-              parentSideComponents,
-          ]
-        : parentSideComponents;
+    const sideComponents = useMemo(
+        () => (
+            <React.Fragment>
+                {!!detailsPaneObject && (
+                    <DetailsBox
+                        key={"objects-table-details-box"}
+                        details={details}
+                        data={detailsPaneObject}
+                        onClose={handleDetailsBoxClose}
+                    />
+                )}
+                {parentSideComponents}
+            </React.Fragment>
+        ),
+        [detailsPaneObject, details, handleDetailsBoxClose, parentSideComponents]
+    );
 
     const rows =
         searchBoxColumns && searchValue
@@ -121,6 +147,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                 filterComponents={filterComponents}
                 sideComponents={sideComponents}
                 resetKey={resetKey + "-" + searchValue}
+                childrenKeys={childrenKeys}
                 {...rest}
             />
             {onActionButtonClick && (

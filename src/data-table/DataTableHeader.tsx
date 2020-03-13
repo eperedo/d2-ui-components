@@ -80,7 +80,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
     } = props;
 
     const { field, order } = sorting;
-    const [openColumnReorder, setOpenColumnReorder] = useState<boolean>(false);
+    const [openColumnSettings, setOpenColumnSettings] = useState<boolean>(false);
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
     const contextMenuRows = ids.map(id => ({ id }));
 
@@ -92,9 +92,9 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
     const tableActions = _.compact([
         !hideColumnVisibilityOptions
             ? {
-                  name: "reorder-columns",
-                  text: i18n.t("Reorder columns"),
-                  onClick: () => setOpenColumnReorder(true),
+                  name: "column-settings",
+                  text: i18n.t("Column settings"),
+                  onClick: () => setOpenColumnSettings(true),
                   icon: <ViewColumnIcon />,
               }
             : undefined,
@@ -111,12 +111,12 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
 
     return (
         <React.Fragment>
-            {openColumnReorder && (
+            {openColumnSettings && (
                 <ColumnSelectorDialog
                     columns={columns}
                     visibleColumns={visibleColumns}
                     onChange={onVisibleColumnsChange}
-                    onCancel={() => setOpenColumnReorder(false)}
+                    onCancel={() => setOpenColumnSettings(false)}
                 />
             )}
             <TableHead>

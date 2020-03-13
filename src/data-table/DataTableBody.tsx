@@ -125,10 +125,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             }
         };
 
-        const childrenRows = _(row)
-            .pick(childrenKeys)
-            .values()
-            .flatten()
+        const childrenRows: T[] = _(Object.values(_.pick(row, childrenKeys)))
+            .flattenDeep()
             .orderBy([field], [order])
             .value();
 

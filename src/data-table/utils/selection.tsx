@@ -31,11 +31,17 @@ export function isEventCtrlClick(event: MouseEvent<unknown>) {
 
 export function getActionRows<T extends ReferenceObject>(
     selectedRow: T,
-    allRows: T[],
-    selection: TableSelection[]
+    parentRows: T[],
+    selection: TableSelection[],
+    childrenKeys: string[]
 ) {
     const isRowInSelection = _.some(selection, { id: selectedRow.id });
-    const selectedRows = _.intersectionBy(allRows, selection, "id");
+    const childrenRows: T[] = _.flattenDeep(
+        parentRows.map(row => Object.values(_.pick(row, childrenKeys)))
+    );
+
+    const rows = [...parentRows, ...childrenRows];
+    const selectedRows = _.intersectionBy(rows, selection, "id");
 
     return isRowInSelection ? selectedRows : [selectedRow];
 }
