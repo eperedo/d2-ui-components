@@ -34,5 +34,5 @@ function getValue<T extends ReferenceObject>(
 }
 
 function hasKey(node: ReactNode): node is { key: string } {
-    return typeof node === "object" && node.hasOwnProperty("key");
+    return _.isObject(node) && node.hasOwnProperty("key");
 }
