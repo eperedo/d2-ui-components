@@ -10,19 +10,10 @@ import { DataTableBody } from "./DataTableBody";
 import { DataTableHeader } from "./DataTableHeader";
 import { DataTablePagination } from "./DataTablePagination";
 import {
-    MouseActionsMapping, ReferenceObject,
-
-
-
-
-
-
-
-
-
-
-
-    RowConfig, TableAction,
+    MouseActionsMapping,
+    ReferenceObject,
+    RowConfig,
+    TableAction,
     TableColumn,
     TableGlobalAction,
     TableInitialState,
@@ -31,7 +22,7 @@ import {
     TablePagination,
     TableSelection,
     TableSorting,
-    TableState
+    TableState,
 } from "./types";
 import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";

@@ -19,7 +19,7 @@ import {
     TableAction,
     TableColumn,
     TableSelection,
-    TableSorting
+    TableSorting,
 } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
