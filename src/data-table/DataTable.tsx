@@ -10,8 +10,19 @@ import { DataTableBody } from "./DataTableBody";
 import { DataTableHeader } from "./DataTableHeader";
 import { DataTablePagination } from "./DataTablePagination";
 import {
-    ReferenceObject,
-    TableAction,
+    MouseActionsMapping, ReferenceObject,
+
+
+
+
+
+
+
+
+
+
+
+    RowConfig, TableAction,
     TableColumn,
     TableGlobalAction,
     TableInitialState,
@@ -20,8 +31,7 @@ import {
     TablePagination,
     TableSelection,
     TableSorting,
-    TableState,
-    MouseActionsMapping,
+    TableState
 } from "./types";
 import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
@@ -71,6 +81,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
     actions?: TableAction<T>[];
+    rowConfig?(row: T): RowConfig;
     mouseActionsMapping?: MouseActionsMapping;
     globalActions?: TableGlobalAction[];
     initialState?: TableInitialState<T>;
@@ -97,6 +108,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const {
         rows,
         columns,
+        rowConfig,
         actions: availableActions = [],
         globalActions = [],
         initialState = {},
@@ -245,6 +257,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                         <DataTableBody
                             rows={rowObjects}
                             columns={columns}
+                            rowConfig={rowConfig}
                             visibleColumns={visibleColumns}
                             sorting={sorting}
                             selected={selection}
