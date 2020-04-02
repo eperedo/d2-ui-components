@@ -185,11 +185,18 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ids = rowObjects.map(({ id }) => ({ id }));
-        const newSelection = event.target.checked
-            ? _.uniq(selection.concat(ids))
-            : _.differenceBy(selection, ids, "id");
-        handleSelectionChange(newSelection);
+        const ids = rowObjects
+            .filter(row => {
+                const { selectable = true } = rowConfig(row);
+                return selectable;
+            })
+            .map(({ id }) => ({ id }));
+
+        handleSelectionChange(
+            event.target.checked
+                ? _.uniq(selection.concat(ids))
+                : _.differenceBy(selection, ids, "id")
+        );
     };
 
     const handleCloseContextMenu = () => {
