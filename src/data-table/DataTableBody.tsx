@@ -55,8 +55,6 @@ const rotateIconStyle = (isOpen: boolean) => ({
     transform: isOpen ? "rotate(90deg)" : "none",
 });
 
-const defaultRowConfig = () => ({} as RowConfig);
-
 export interface DataTableBodyProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
@@ -77,7 +75,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const {
         rows,
         columns,
-        rowConfig = defaultRowConfig,
+        rowConfig,
         visibleColumns,
         sorting,
         availableActions,

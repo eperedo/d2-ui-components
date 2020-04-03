@@ -24,6 +24,7 @@ import {
     TableSorting,
     TableState,
 } from "./types";
+import { defaultRowConfig } from "./utils/formatting";
 import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
 
@@ -99,7 +100,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const {
         rows,
         columns,
-        rowConfig,
+        rowConfig = defaultRowConfig,
         actions: availableActions = [],
         globalActions = [],
         initialState = {},
