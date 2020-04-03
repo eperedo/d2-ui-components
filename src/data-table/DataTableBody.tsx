@@ -11,8 +11,16 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
-import { ReferenceObject, TableAction, TableColumn, TableSelection, TableSorting } from "./types";
-import { MouseActionsMapping, MouseActionMapping } from "./types";
+import {
+    MouseActionMapping,
+    MouseActionsMapping,
+    ReferenceObject,
+    RowConfig,
+    TableAction,
+    TableColumn,
+    TableSelection,
+    TableSorting,
+} from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
 
@@ -38,7 +46,8 @@ const useStyles = makeStyles({
         background: "#E0E0E0",
     },
     disabledRow: {
-        backgroundColor: "#F5DFDF !important",
+        backgroundColor: "#EEEEEE",
+        pointerEvents: "none",
     },
 });
 
@@ -49,6 +58,7 @@ const rotateIconStyle = (isOpen: boolean) => ({
 export interface DataTableBodyProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
+    rowConfig?(row: T): RowConfig;
     visibleColumns: (keyof T)[];
     sorting: TableSorting<T>;
     availableActions?: TableAction<T>[];
@@ -65,6 +75,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
     const {
         rows,
         columns,
+        rowConfig,
         visibleColumns,
         sorting,
         availableActions,
@@ -141,13 +152,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             });
         };
 
+        const { style, disabled, selectable = !disabled } = rowConfig(row);
         const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
         const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
             selectedItem || {};
-        const isRowDisabled = row.selectable === false;
         const rowClassName = _.compact([
             level === 0 ? classes.bottomBorder : classes.childrenRow,
-            isRowDisabled ? classes.disabledRow : null,
+            disabled ? classes.disabledRow : null,
         ]).join(" ");
 
         return (
@@ -158,6 +169,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     onContextMenu={event => handleClick(event)}
                     role="checkbox"
                     selected={checked || indeterminate}
+                    style={style}
                     hover
                 >
                     {(enableMultipleAction || childrenRows.length > 0) && (
@@ -168,7 +180,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                         checked={checked}
                                         indeterminate={indeterminate}
                                         indeterminateIcon={icon}
-                                        disabled={isRowDisabled}
+                                        disabled={!selectable}
                                     />
                                 )}
                                 {childrenRows.length > 0 && (
