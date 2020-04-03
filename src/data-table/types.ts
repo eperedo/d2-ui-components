@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export type ReferenceObject = { id: string; selectable?: boolean };
 
@@ -23,6 +23,12 @@ export interface TableAction<T extends ReferenceObject> {
     primary?: boolean;
     onClick?(selectedIds: string[]): void;
     isActive?(rows: T[]): boolean;
+}
+
+export interface RowConfig {
+    style?: CSSProperties;
+    disabled?: boolean;
+    selectable?: boolean;
 }
 
 export type TableGlobalAction = Omit<TableAction<ReferenceObject>, "isActive">;

@@ -10,7 +10,9 @@ import { DataTableBody } from "./DataTableBody";
 import { DataTableHeader } from "./DataTableHeader";
 import { DataTablePagination } from "./DataTablePagination";
 import {
+    MouseActionsMapping,
     ReferenceObject,
+    RowConfig,
     TableAction,
     TableColumn,
     TableGlobalAction,
@@ -21,8 +23,8 @@ import {
     TableSelection,
     TableSorting,
     TableState,
-    MouseActionsMapping,
 } from "./types";
+import { defaultRowConfig } from "./utils/formatting";
 import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
 
@@ -71,6 +73,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     rows: T[];
     columns: TableColumn<T>[];
     actions?: TableAction<T>[];
+    rowConfig?(row: T): RowConfig;
     mouseActionsMapping?: MouseActionsMapping;
     globalActions?: TableGlobalAction[];
     initialState?: TableInitialState<T>;
@@ -97,6 +100,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const {
         rows,
         columns,
+        rowConfig = defaultRowConfig,
         actions: availableActions = [],
         globalActions = [],
         initialState = {},
@@ -182,11 +186,18 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ids = rowObjects.map(({ id }) => ({ id }));
-        const newSelection = event.target.checked
-            ? _.uniq(selection.concat(ids))
-            : _.differenceBy(selection, ids, "id");
-        handleSelectionChange(newSelection);
+        const ids = rowObjects
+            .filter(row => {
+                const { selectable = true } = rowConfig(row);
+                return selectable;
+            })
+            .map(({ id }) => ({ id }));
+
+        handleSelectionChange(
+            event.target.checked
+                ? _.uniq(selection.concat(ids))
+                : _.differenceBy(selection, ids, "id")
+        );
     };
 
     const handleCloseContextMenu = () => {
@@ -245,6 +256,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                         <DataTableBody
                             rows={rowObjects}
                             columns={columns}
+                            rowConfig={rowConfig}
                             visibleColumns={visibleColumns}
                             sorting={sorting}
                             selected={selection}

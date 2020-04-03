@@ -1,8 +1,7 @@
-import React, { ReactNode } from "react";
-import moment from "moment";
 import _ from "lodash";
-
-import { TableColumn, ReferenceObject } from "../types";
+import moment from "moment";
+import React, { ReactNode } from "react";
+import { ReferenceObject, RowConfig, TableColumn } from "../types";
 
 const urlRegex = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#()?&//=]*)/;
 
@@ -51,3 +50,5 @@ export function formatRowValue<T extends ReferenceObject>(
     const defaultValue = defaultFormatter(row[column.name]);
     return column.getValue ? column.getValue(row, defaultValue) : defaultValue;
 }
+
+export const defaultRowConfig = () => ({} as RowConfig);
