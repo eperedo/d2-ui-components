@@ -135,7 +135,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     useEffect(() => updatePagination(pagination => ({ ...pagination, page: 1 })), [resetKey]);
     useEffect(() => {
         const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
-        if (!_.isEqual(visibleColumns, newVisibleColumns)) updateVisibleColumns(newVisibleColumns);
+        updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
     }, [columns]);
 
     const sorting = controlledSorting || stateSorting;
