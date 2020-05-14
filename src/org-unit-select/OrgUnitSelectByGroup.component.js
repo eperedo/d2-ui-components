@@ -43,18 +43,14 @@ class OrgUnitSelectByGroup extends React.Component {
                 );
                 this.setState({ loading: true });
 
-                api.models.organisationUnits
-                    .get({
-                        root: this.props.currentRoot.id,
-                        paging: false,
-                        includeDescendants: true,
-                        fields: { id: true, path: true },
-                        filter: {
-                            "organisationUnitGroups.id": { eq: groupId },
-                        },
-                    })
+                api.get("/organisationUnits/" + this.props.currentRoot.id, {
+                    paging: false,
+                    includeDescendants: true,
+                    fields: "id,path",
+                    filter: `organisationUnitGroups.id:eq:${groupId}`,
+                })
                     .getData()
-                    .then(({ objects }) => objects)
+                    .then(({ organisationUnits }) => organisationUnits)
                     .then(orgUnits => {
                         log.debug(
                             `Loaded ${orgUnits.length} org units for group ${groupId} within ${this.props.currentRoot.displayName}`
