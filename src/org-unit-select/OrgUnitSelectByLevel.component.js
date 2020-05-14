@@ -49,15 +49,13 @@ class OrgUnitSelectByLevel extends React.Component {
                     return resolve([]);
                 }
 
-                api.models.organisationUnits
-                    .get({
-                        paging: false,
-                        level: level - rootLevel,
-                        fields: { id: true, path: true },
-                        root: this.props.currentRoot.id,
-                    })
+                api.get("/organisationUnits/" + this.props.currentRoot.id, {
+                    paging: false,
+                    level: level - rootLevel,
+                    fields: "id,path",
+                })
                     .getData()
-                    .then(({ objects }) => objects)
+                    .then(({ organisationUnits }) => organisationUnits)
                     .then(orgUnitArray => {
                         log.debug(
                             `Loaded ${orgUnitArray.length} org units for level ` +
