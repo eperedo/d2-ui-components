@@ -69,15 +69,14 @@ class OrgUnitSelectAll extends React.Component {
     }
 
     getDescendantOrgUnits() {
-        return this.context.api.models.organisationUnits
-            .get({
-                root: this.props.currentRoot.id,
+        return this.context.api
+            .get("/organisationUnits/" + this.props.currentRoot.id, {
                 paging: false,
                 includeDescendants: true,
-                fields: { id: true, path: true },
+                fields: "id,path",
             })
             .getData()
-            .then(({ objects }) => objects);
+            .then(({ organisationUnits }) => organisationUnits);
     }
 
     handleDeselectAll() {
