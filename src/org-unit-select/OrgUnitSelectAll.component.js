@@ -51,15 +51,12 @@ class OrgUnitSelectAll extends React.Component {
             this.context.api.models.organisationUnits
                 .get({ fields: { id: true, path: true }, paging: false })
                 .getData()
-                .then(({ objects }) => objects)
-                .then(orgUnits => {
-                    const ous = orgUnits.map(ou => ou.path);
+                .then(({ objects }) => {
+                    this.addToSelection(objects);
                     this.setState({
-                        cache: ous,
+                        cache: objects.map(ou => ou.path),
                         loading: false,
                     });
-
-                    this.props.onUpdateSelection(ous.slice());
                 })
                 .catch(err => {
                     this.setState({ loading: false });

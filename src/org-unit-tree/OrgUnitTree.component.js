@@ -201,7 +201,8 @@ class OrgUnitTree extends React.Component {
         } = this.props;
 
         const maxSelectableLevel = Math.max(...selectableLevels);
-        const isSelectable = this.handleSelectableLevel(selectableLevels, currentOu);
+        const isExcluded = filter && !filter.includes(currentOu.id);
+        const isSelectable = !isExcluded && this.handleSelectableLevel(selectableLevels, currentOu);
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
         const isSelected = selected.some(ou => pathRegEx.test(ou));
@@ -260,11 +261,9 @@ class OrgUnitTree extends React.Component {
             ? this.handleSelectClick
             : (canBecomeCurrentRoot && setCurrentRoot) || (isSelectable && this.handleSelectClick);
 
-        const isExcluded = filter && !filter.includes(currentOu.id);
-
         const label = (
             <div style={labelStyle} onClick={onClick || undefined} role="button" tabIndex={0}>
-                {isSelectable && !isExcluded && !hideCheckboxes && (
+                {isSelectable && !hideCheckboxes && (
                     <input
                         type={handletypeInput}
                         readOnly
