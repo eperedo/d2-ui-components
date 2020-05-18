@@ -29,6 +29,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: PropTypes.bool,
         square: PropTypes.bool,
         singleSelection: PropTypes.bool,
+        disableTree: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -44,6 +45,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: true,
         square: false,
         singleSelection: false,
+        disableTree: false,
     };
 
     static childContextTypes = {
@@ -222,6 +224,7 @@ export default class OrgUnitsSelector extends React.Component {
             fullWidth,
             square,
             selectOnClick,
+            disableTree,
             initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
@@ -268,6 +271,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         hideCheckboxes={hideCheckboxes}
                                         hideMemberCount={hideMemberCount}
                                         selectOnClick={selectOnClick}
+                                        disableTree={disableTree}
                                     />
                                 </div>
                             ))}
@@ -344,9 +348,7 @@ function mergeChildren(root, children) {
     if (children.length === 0) {
         return root;
     } else {
-        const childPath = _.first(children)
-            .path.slice(1)
-            .split("/");
+        const childPath = _.first(children).path.slice(1).split("/");
         const parentPath = childPath.slice(0, childPath.length - 1);
         return assignChildren(root, parentPath, children);
     }

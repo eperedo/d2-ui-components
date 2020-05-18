@@ -158,6 +158,7 @@ class OrgUnitTree extends React.Component {
                     onChildrenLoaded={this.props.onChildrenLoaded}
                     hideMemberCount={this.props.hideMemberCount}
                     orgUnitsPathsToInclude={this.props.orgUnitsPathsToInclude}
+                    disableTree={this.props.disableTree}
                 />
             );
         }
@@ -188,16 +189,19 @@ class OrgUnitTree extends React.Component {
     }
 
     render() {
-        const currentOu = this.props.root;
-        // True if a click handler exists
-        const selectableLevels = this.props.selectableLevels;
+        const {
+            root: currentOu,
+            selectableLevels,
+            typeInput,
+            disableTree,
+            selected = [],
+        } = this.props;
+
         const maxSelectableLevel = Math.max(...selectableLevels);
-        const typeInput = this.props.typeInput;
         const isSelectable = this.handleSelectableLevel(selectableLevels, currentOu);
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
-        const isSelected =
-            this.props.selected && this.props.selected.some(ou => pathRegEx.test(ou));
+        const isSelected = selected.some(ou => pathRegEx.test(ou));
 
         // True if this OU has children = is not a leaf node
         const hasChildren =
@@ -271,7 +275,7 @@ class OrgUnitTree extends React.Component {
             </div>
         );
 
-        if (hasChildren && currentOu.level !== maxSelectableLevel) {
+        if (!disableTree && hasChildren && currentOu.level !== maxSelectableLevel) {
             return (
                 <TreeView
                     label={label}
@@ -405,6 +409,11 @@ OrgUnitTree.propTypes = {
      * Array of paths of Organisation Units to include on tree. If not defined or empty, all children from root to leafs will be shown
      */
     orgUnitsPathsToInclude: PropTypes.array,
+
+    /**
+     * if true, disable tree view for current roots
+     */
+    disableTree: PropTypes.bool,
 };
 
 OrgUnitTree.defaultProps = {
