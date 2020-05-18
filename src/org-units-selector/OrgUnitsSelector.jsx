@@ -2,6 +2,7 @@ import { Card, CardContent } from "@material-ui/core";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
+import { promiseMap } from "../../../utils/common";
 import { OrgUnitSelectAll, OrgUnitSelectByGroup, OrgUnitSelectByLevel } from "../org-unit-select";
 import { decrementMemberCount, incrementMemberCount, OrgUnitTree } from "../org-unit-tree";
 import SearchBox from "../search-box/SearchBox";
@@ -101,40 +102,9 @@ export default class OrgUnitsSelector extends React.Component {
         });
     }
 
-    getRoots({ filter } = {}) {
-        const { api, listParams, rootIds, selectableLevels } = this.props;
-        const pagingOptions = { paging: true, pageSize: 10 };
-        let options;
-
-        if (!filter && !rootIds) {
-            options = { level: 1, paging: false };
-        } else if (!filter && rootIds) {
-            options = { filter: { id: { in: rootIds } }, paging: false };
-        } else if (filter && !rootIds) {
-            options = { filter, ...pagingOptions };
-        } else if (filter && rootIds) {
-            // We cannot both filter by name and check inclusion on rootIds on the same request, so
-            // let's make a request filtering only by name and later check the rootIds
-            // in the response. Also, limit pageSize to avoid an uncontrolled big request.
-            options = {
-                filter,
-                paging: true,
-                pageSize: 1000,
-                postFilter: orgUnits =>
-                    _(orgUnits)
-                        .filter(
-                            orgUnit =>
-                                (!selectableLevels &&
-                                    rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
-                                selectableLevels.includes(orgUnit.level)
-                        )
-                        .take(pagingOptions.pageSize)
-                        .value(),
-            };
-        }
-
-        const listOptions = {
-            paging: false,
+    queryRoots({ search }) {
+        const { api, rootIds } = this.props;
+        const baseOptions = {
             fields: {
                 id: true,
                 level: true,
@@ -142,18 +112,60 @@ export default class OrgUnitsSelector extends React.Component {
                 path: true,
                 children: true,
             },
-            ...listParams,
-            ..._.omit(options, ["postFilter"]),
         };
 
-        const response = api.models.organisationUnits.get(listOptions);
+        if (search) {
+            return api.models.organisationUnits.get({
+                ...baseOptions,
+                paging: true,
+                pageSize: 1000,
+                filter: { displayName: { ilike: search } },
+            });
+        } else if (rootIds) {
+            let cancel = false;
+            return {
+                getData: async () => {
+                    const responses = await promiseMap(_.chunk(rootIds, 400), ids => {
+                        if (cancel) return { objects: [] };
+                        return api.models.organisationUnits
+                            .get({ ...baseOptions, paging: false, filter: { id: { in: ids } } })
+                            .getData();
+                    });
+
+                    return { objects: _.flatMap(responses, ({ objects }) => objects) };
+                },
+                cancel: () => {
+                    cancel = true;
+                },
+            };
+        } else {
+            return api.models.organisationUnits.get({ ...baseOptions, level: 1, paging: false });
+        }
+    }
+
+    getRoots({ search } = {}) {
+        const { rootIds, selectableLevels } = this.props;
+        const postFilter = search
+            ? orgUnits =>
+                  _(orgUnits)
+                      .filter(
+                          orgUnit =>
+                              (!selectableLevels &&
+                                  rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
+                              selectableLevels.includes(orgUnit.level)
+                      )
+                      .take(10)
+                      .value()
+            : _.identity;
+
+        const response = this.queryRoots({ search });
         if (this.state.cancel) this.state.cancel();
         this.setState({ cancel: response.cancel });
 
         return response
             .getData()
             .then(({ objects }) => objects)
-            .then(options.postFilter || _.identity);
+            .then(postFilter);
     }
 
     getChildContext() {
@@ -202,9 +214,8 @@ export default class OrgUnitsSelector extends React.Component {
         this.setState({ currentRoot });
     };
 
-    filterOrgUnits = async value => {
-        const opts = value ? { filter: { displayName: { ilike: value } } } : undefined;
-        const roots = await this.getRoots(opts);
+    filterOrgUnits = async search => {
+        const roots = await this.getRoots({ search });
         this.setState({ roots });
     };
 
