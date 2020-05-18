@@ -159,6 +159,7 @@ class OrgUnitTree extends React.Component {
                     hideMemberCount={this.props.hideMemberCount}
                     orgUnitsPathsToInclude={this.props.orgUnitsPathsToInclude}
                     disableTree={this.props.disableTree}
+                    filter={this.props.filter}
                 />
             );
         }
@@ -194,7 +195,9 @@ class OrgUnitTree extends React.Component {
             selectableLevels,
             typeInput,
             disableTree,
+            filter,
             selected = [],
+            hideCheckboxes,
         } = this.props;
 
         const maxSelectableLevel = Math.max(...selectableLevels);
@@ -257,9 +260,11 @@ class OrgUnitTree extends React.Component {
             ? this.handleSelectClick
             : (canBecomeCurrentRoot && setCurrentRoot) || (isSelectable && this.handleSelectClick);
 
+        const isExcluded = filter && !filter.includes(currentOu.id);
+
         const label = (
             <div style={labelStyle} onClick={onClick || undefined} role="button" tabIndex={0}>
-                {isSelectable && !this.props.hideCheckboxes && (
+                {isSelectable && !isExcluded && !hideCheckboxes && (
                     <input
                         type={handletypeInput}
                         readOnly
@@ -414,6 +419,11 @@ OrgUnitTree.propTypes = {
      * if true, disable tree view for current roots
      */
     disableTree: PropTypes.bool,
+
+    /**
+     * Array of org unit ids to filter checkbox selection
+     */
+    filter: PropTypes.arrayOf(PropTypes.string),
 };
 
 OrgUnitTree.defaultProps = {

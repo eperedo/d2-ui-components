@@ -31,6 +31,7 @@ export default class OrgUnitsSelector extends React.Component {
         square: PropTypes.bool,
         singleSelection: PropTypes.bool,
         disableTree: PropTypes.bool,
+        filter: PropTypes.arrayOf(PropTypes.string),
     };
 
     static defaultProps = {
@@ -47,6 +48,7 @@ export default class OrgUnitsSelector extends React.Component {
         square: false,
         singleSelection: false,
         disableTree: false,
+        filter: undefined,
     };
 
     static childContextTypes = {
@@ -237,6 +239,7 @@ export default class OrgUnitsSelector extends React.Component {
             square,
             selectOnClick,
             disableTree,
+            filter,
             initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
@@ -284,6 +287,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         hideMemberCount={hideMemberCount}
                                         selectOnClick={selectOnClick}
                                         disableTree={disableTree}
+                                        filter={filter}
                                     />
                                 </div>
                             ))}
@@ -302,6 +306,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
+                                                    filter={filter}
                                                 />
                                             </div>
                                         )}
@@ -313,6 +318,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
+                                                    filter={filter}
                                                 />
                                             </div>
                                         )}
@@ -325,6 +331,7 @@ export default class OrgUnitsSelector extends React.Component {
                                             selected={selected}
                                             currentRoot={currentRoot}
                                             onUpdateSelection={this.handleSelectionUpdate}
+                                            filter={filter}
                                         />
                                     </div>
                                 )}
@@ -360,7 +367,9 @@ function mergeChildren(root, children) {
     if (children.length === 0) {
         return root;
     } else {
-        const childPath = _.first(children).path.slice(1).split("/");
+        const childPath = _.first(children)
+            .path.slice(1)
+            .split("/");
         const parentPath = childPath.slice(0, childPath.length - 1);
         return assignChildren(root, parentPath, children);
     }

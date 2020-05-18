@@ -20,8 +20,11 @@ style.button1 = Object.assign({}, style.button, { marginLeft: 0 });
 function addToSelection(orgUnits) {
     const orgUnitArray = Array.isArray(orgUnits) ? orgUnits : orgUnits.toArray();
     const addedOus = orgUnitArray.filter(ou => !this.props.selected.includes(ou.path));
+    const filteredOus = this.props.filter
+        ? addedOus.filter(({ id }) => this.props.filter.includes(id))
+        : addedOus;
 
-    this.props.onUpdateSelection(this.props.selected.concat(addedOus.map(ou => ou.path)));
+    this.props.onUpdateSelection(this.props.selected.concat(filteredOus.map(ou => ou.path)));
 }
 
 function removeFromSelection(orgUnits) {
