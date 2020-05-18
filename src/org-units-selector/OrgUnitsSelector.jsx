@@ -2,11 +2,11 @@ import { Card, CardContent } from "@material-ui/core";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
-import { promiseMap } from "../../../utils/common";
 import { OrgUnitSelectAll, OrgUnitSelectByGroup, OrgUnitSelectByLevel } from "../org-unit-select";
 import { decrementMemberCount, incrementMemberCount, OrgUnitTree } from "../org-unit-tree";
 import SearchBox from "../search-box/SearchBox";
 import i18n from "../utils/i18n";
+import { promiseMap } from "../utils/promiseMap";
 
 // Base code taken from d2-ui/examples/create-react-app/src/components/org-unit-selector.js
 
