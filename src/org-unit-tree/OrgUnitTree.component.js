@@ -158,8 +158,7 @@ class OrgUnitTree extends React.Component {
                     onChildrenLoaded={this.props.onChildrenLoaded}
                     hideMemberCount={this.props.hideMemberCount}
                     orgUnitsPathsToInclude={this.props.orgUnitsPathsToInclude}
-                    disableTree={this.props.disableTree}
-                    filter={this.props.filter}
+                    selectableIds={this.props.selectableIds}
                 />
             );
         }
@@ -194,14 +193,13 @@ class OrgUnitTree extends React.Component {
             root: currentOu,
             selectableLevels,
             typeInput,
-            disableTree,
-            filter,
+            selectableIds,
             selected = [],
             hideCheckboxes,
         } = this.props;
 
         const maxSelectableLevel = Math.max(...selectableLevels);
-        const isExcluded = filter && !filter.includes(currentOu.id);
+        const isExcluded = selectableIds && !selectableIds.includes(currentOu.id);
         const isSelectable = !isExcluded && this.handleSelectableLevel(selectableLevels, currentOu);
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
@@ -279,7 +277,7 @@ class OrgUnitTree extends React.Component {
             </div>
         );
 
-        if (!disableTree && hasChildren && currentOu.level !== maxSelectableLevel) {
+        if (hasChildren && currentOu.level !== maxSelectableLevel) {
             return (
                 <TreeView
                     label={label}
@@ -415,14 +413,9 @@ OrgUnitTree.propTypes = {
     orgUnitsPathsToInclude: PropTypes.array,
 
     /**
-     * if true, disable tree view for current roots
-     */
-    disableTree: PropTypes.bool,
-
-    /**
      * Array of org unit ids to filter checkbox selection
      */
-    filter: PropTypes.arrayOf(PropTypes.string),
+    selectableIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 OrgUnitTree.defaultProps = {

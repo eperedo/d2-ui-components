@@ -30,8 +30,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: PropTypes.bool,
         square: PropTypes.bool,
         singleSelection: PropTypes.bool,
-        disableTree: PropTypes.bool,
-        filter: PropTypes.arrayOf(PropTypes.string),
+        selectableIds: PropTypes.arrayOf(PropTypes.string),
     };
 
     static defaultProps = {
@@ -47,8 +46,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: true,
         square: false,
         singleSelection: false,
-        disableTree: false,
-        filter: undefined,
+        selectableIds: undefined,
     };
 
     static childContextTypes = {
@@ -238,8 +236,7 @@ export default class OrgUnitsSelector extends React.Component {
             fullWidth,
             square,
             selectOnClick,
-            disableTree,
-            filter,
+            selectableIds,
             initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
@@ -286,8 +283,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         hideCheckboxes={hideCheckboxes}
                                         hideMemberCount={hideMemberCount}
                                         selectOnClick={selectOnClick}
-                                        disableTree={disableTree}
-                                        filter={filter}
+                                        selectableIds={selectableIds}
                                     />
                                 </div>
                             ))}
@@ -306,7 +302,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
-                                                    filter={filter}
+                                                    selectableIds={selectableIds}
                                                 />
                                             </div>
                                         )}
@@ -318,7 +314,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
-                                                    filter={filter}
+                                                    selectableIds={selectableIds}
                                                 />
                                             </div>
                                         )}
@@ -331,7 +327,7 @@ export default class OrgUnitsSelector extends React.Component {
                                             selected={selected}
                                             currentRoot={currentRoot}
                                             onUpdateSelection={this.handleSelectionUpdate}
-                                            filter={filter}
+                                            selectableIds={selectableIds}
                                         />
                                     </div>
                                 )}
