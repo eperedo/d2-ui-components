@@ -91,5 +91,10 @@ function renderControls() {
     );
 }
 
-export { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown, renderControls, };
-
+export {
+    addToSelection,
+    removeFromSelection,
+    handleChangeSelection,
+    renderDropdown,
+    renderControls,
+};
