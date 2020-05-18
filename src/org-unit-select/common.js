@@ -1,6 +1,7 @@
-import React from "react";
+import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { LinearProgress, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import _ from "lodash";
+import React from "react";
 import i18n from "../utils/i18n";
 
 const style = {
@@ -22,8 +23,9 @@ function addToSelection(orgUnits) {
     const additions = orgUnits.filter(({ id }) =>
         selectableIds ? selectableIds.includes(id) : true
     );
+    const newSelection = _.uniq([...selected, ...additions.map(ou => ou.path)]);
 
-    this.props.onUpdateSelection(_.uniq([...selected, ...additions.map(ou => ou.path)]));
+    this.props.onUpdateSelection(newSelection);
 }
 
 function removeFromSelection(orgUnits) {
@@ -89,10 +91,5 @@ function renderControls() {
     );
 }
 
-export {
-    addToSelection,
-    removeFromSelection,
-    handleChangeSelection,
-    renderDropdown,
-    renderControls,
-};
+export { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown, renderControls, };
+
