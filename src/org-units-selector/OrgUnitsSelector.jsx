@@ -103,7 +103,7 @@ export default class OrgUnitsSelector extends React.Component {
     }
 
     queryRoots({ search }) {
-        const { api, rootIds } = this.props;
+        const { api, rootIds, listParams } = this.props;
         const baseOptions = {
             fields: {
                 id: true,
@@ -112,6 +112,7 @@ export default class OrgUnitsSelector extends React.Component {
                 path: true,
                 children: true,
             },
+            ...listParams,
         };
 
         if (search) {
