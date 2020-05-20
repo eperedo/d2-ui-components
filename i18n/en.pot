@@ -5,13 +5,16 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-03-04T21:03:33.295Z\n"
-"PO-Revision-Date: 2020-03-04T21:03:33.295Z\n"
+"POT-Creation-Date: 2020-05-20T17:17:06.740Z\n"
+"PO-Revision-Date: 2020-05-20T17:17:06.740Z\n"
 
 msgid "Cancel"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Info"
 msgstr ""
 
 msgid "Columns to show in table"
