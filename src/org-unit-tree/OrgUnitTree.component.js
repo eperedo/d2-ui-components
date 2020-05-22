@@ -295,7 +295,7 @@ class OrgUnitTree extends React.Component {
 
         return (
             <div
-                onClick={isSelectable && this.handleSelectClick}
+                onClick={(isSelectable && this.handleSelectClick) || undefined}
                 className="orgunit without-children"
                 style={ouContainerStyle}
                 role="button"
