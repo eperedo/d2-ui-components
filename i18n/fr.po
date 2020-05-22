@@ -15,7 +15,7 @@ msgid "Save"
 msgstr "Enregistrer"
 
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgid "Columns to show in table"
 msgstr ""
