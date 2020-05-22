@@ -20,9 +20,7 @@ style.button1 = Object.assign({}, style.button, { marginLeft: 0 });
 
 function addToSelection(orgUnits) {
     const { selectableIds, selected } = this.props;
-    const additions = orgUnits.filter(({ id }) =>
-        selectableIds ? selectableIds.includes(id) : true
-    );
+    const additions = orgUnits.filter(({ id }) => !selectableIds || selectableIds.includes(id));
     const newSelection = _.uniq([...selected, ...additions.map(ou => ou.path)]);
 
     this.props.onUpdateSelection(newSelection);
