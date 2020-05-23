@@ -70,11 +70,11 @@ export function getSelectionMessages<T extends ReferenceObject>(
             _(row)
                 .pick(childrenKeys)
                 .values()
-                .flatten()
                 .value()
         )
-        .flatten()
+        .flattenDeep()
         .value();
+
     const selection = _.differenceBy(tableSelection, childrenIds, "id");
 
     const allSelected = selection.length === pagination.total;

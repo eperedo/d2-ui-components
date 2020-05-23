@@ -51,15 +51,12 @@ class OrgUnitSelectAll extends React.Component {
             this.context.api.models.organisationUnits
                 .get({ fields: { id: true, path: true }, paging: false })
                 .getData()
-                .then(({ objects }) => objects)
-                .then(orgUnits => {
-                    const ous = orgUnits.map(ou => ou.path);
+                .then(({ objects }) => {
+                    this.addToSelection(objects);
                     this.setState({
-                        cache: ous,
+                        cache: objects.map(ou => ou.path),
                         loading: false,
                     });
-
-                    this.props.onUpdateSelection(ous.slice());
                 })
                 .catch(err => {
                     this.setState({ loading: false });
@@ -69,15 +66,14 @@ class OrgUnitSelectAll extends React.Component {
     }
 
     getDescendantOrgUnits() {
-        return this.context.api.models.organisationUnits
-            .get({
-                root: this.props.currentRoot.id,
+        return this.context.api
+            .get("/organisationUnits/" + this.props.currentRoot.id, {
                 paging: false,
                 includeDescendants: true,
-                fields: { id: true, path: true },
+                fields: "id,path",
             })
             .getData()
-            .then(({ objects }) => objects);
+            .then(({ organisationUnits }) => organisationUnits);
     }
 
     handleDeselectAll() {

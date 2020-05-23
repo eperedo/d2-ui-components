@@ -1,6 +1,7 @@
-import React from "react";
+import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { LinearProgress, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import _ from "lodash";
+import React from "react";
 import i18n from "../utils/i18n";
 
 const style = {
@@ -18,15 +19,15 @@ const style = {
 style.button1 = Object.assign({}, style.button, { marginLeft: 0 });
 
 function addToSelection(orgUnits) {
-    const orgUnitArray = Array.isArray(orgUnits) ? orgUnits : orgUnits.toArray();
-    const addedOus = orgUnitArray.filter(ou => !this.props.selected.includes(ou.path));
+    const { selectableIds, selected } = this.props;
+    const additions = orgUnits.filter(({ id }) => !selectableIds || selectableIds.includes(id));
+    const newSelection = _.uniq([...selected, ...additions.map(ou => ou.path)]);
 
-    this.props.onUpdateSelection(this.props.selected.concat(addedOus.map(ou => ou.path)));
+    this.props.onUpdateSelection(newSelection);
 }
 
 function removeFromSelection(orgUnits) {
-    const orgUnitArray = Array.isArray(orgUnits) ? orgUnits : orgUnits.toArray();
-    const removedOus = orgUnitArray.filter(ou => this.props.selected.includes(ou.path));
+    const removedOus = orgUnits.filter(ou => this.props.selected.includes(ou.path));
     const removed = removedOus.map(ou => ou.path);
     const selectedOus = this.props.selected.filter(ou => !removed.includes(ou));
 
