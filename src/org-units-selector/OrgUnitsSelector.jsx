@@ -6,6 +6,7 @@ import { OrgUnitSelectAll, OrgUnitSelectByGroup, OrgUnitSelectByLevel } from "..
 import { decrementMemberCount, incrementMemberCount, OrgUnitTree } from "../org-unit-tree";
 import SearchBox from "../search-box/SearchBox";
 import i18n from "../utils/i18n";
+import { promiseMap } from "../utils/promiseMap";
 
 // Base code taken from d2-ui/examples/create-react-app/src/components/org-unit-selector.js
 
@@ -29,6 +30,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: PropTypes.bool,
         square: PropTypes.bool,
         singleSelection: PropTypes.bool,
+        selectableIds: PropTypes.arrayOf(PropTypes.string),
     };
 
     static defaultProps = {
@@ -44,6 +46,7 @@ export default class OrgUnitsSelector extends React.Component {
         fullWidth: true,
         square: false,
         singleSelection: false,
+        selectableIds: undefined,
     };
 
     static childContextTypes = {
@@ -99,40 +102,9 @@ export default class OrgUnitsSelector extends React.Component {
         });
     }
 
-    getRoots({ filter } = {}) {
-        const { api, listParams, rootIds, selectableLevels } = this.props;
-        const pagingOptions = { paging: true, pageSize: 10 };
-        let options;
-
-        if (!filter && !rootIds) {
-            options = { level: 1, paging: false };
-        } else if (!filter && rootIds) {
-            options = { filter: { id: { in: rootIds } }, paging: false };
-        } else if (filter && !rootIds) {
-            options = { filter, ...pagingOptions };
-        } else if (filter && rootIds) {
-            // We cannot both filter by name and check inclusion on rootIds on the same request, so
-            // let's make a request filtering only by name and later check the rootIds
-            // in the response. Also, limit pageSize to avoid an uncontrolled big request.
-            options = {
-                filter,
-                paging: true,
-                pageSize: 1000,
-                postFilter: orgUnits =>
-                    _(orgUnits)
-                        .filter(
-                            orgUnit =>
-                                (!selectableLevels &&
-                                    rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
-                                selectableLevels.includes(orgUnit.level)
-                        )
-                        .take(pagingOptions.pageSize)
-                        .value(),
-            };
-        }
-
-        const listOptions = {
-            paging: false,
+    queryRoots({ search }) {
+        const { api, rootIds, listParams } = this.props;
+        const baseOptions = {
             fields: {
                 id: true,
                 level: true,
@@ -141,17 +113,60 @@ export default class OrgUnitsSelector extends React.Component {
                 children: true,
             },
             ...listParams,
-            ..._.omit(options, ["postFilter"]),
         };
 
-        const response = api.models.organisationUnits.get(listOptions);
+        if (search) {
+            return api.models.organisationUnits.get({
+                ...baseOptions,
+                paging: true,
+                pageSize: 1000,
+                filter: { displayName: { ilike: search } },
+            });
+        } else if (rootIds) {
+            let cancel = false;
+            return {
+                getData: async () => {
+                    const responses = await promiseMap(_.chunk(rootIds, 400), ids => {
+                        if (cancel) return { objects: [] };
+                        return api.models.organisationUnits
+                            .get({ ...baseOptions, paging: false, filter: { id: { in: ids } } })
+                            .getData();
+                    });
+
+                    return { objects: _.flatMap(responses, ({ objects }) => objects) };
+                },
+                cancel: () => {
+                    cancel = true;
+                },
+            };
+        } else {
+            return api.models.organisationUnits.get({ ...baseOptions, level: 1, paging: false });
+        }
+    }
+
+    getRoots({ search } = {}) {
+        const { rootIds, selectableLevels } = this.props;
+        const postFilter = search
+            ? orgUnits =>
+                  _(orgUnits)
+                      .filter(
+                          orgUnit =>
+                              (!selectableLevels &&
+                                  rootIds.some(ouId => orgUnit.path.includes(ouId))) ||
+                              selectableLevels.includes(orgUnit.level)
+                      )
+                      .take(10)
+                      .value()
+            : _.identity;
+
+        const response = this.queryRoots({ search });
         if (this.state.cancel) this.state.cancel();
         this.setState({ cancel: response.cancel });
 
         return response
             .getData()
             .then(({ objects }) => objects)
-            .then(options.postFilter || _.identity);
+            .then(postFilter);
     }
 
     getChildContext() {
@@ -200,9 +215,8 @@ export default class OrgUnitsSelector extends React.Component {
         this.setState({ currentRoot });
     };
 
-    filterOrgUnits = async value => {
-        const opts = value ? { filter: { displayName: { ilike: value } } } : undefined;
-        const roots = await this.getRoots(opts);
+    filterOrgUnits = async search => {
+        const roots = await this.getRoots({ search });
         this.setState({ roots });
     };
 
@@ -222,6 +236,7 @@ export default class OrgUnitsSelector extends React.Component {
             fullWidth,
             square,
             selectOnClick,
+            selectableIds,
             initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
         const { filterByLevel, filterByGroup, selectAll } = controls;
@@ -268,6 +283,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         hideCheckboxes={hideCheckboxes}
                                         hideMemberCount={hideMemberCount}
                                         selectOnClick={selectOnClick}
+                                        selectableIds={selectableIds}
                                     />
                                 </div>
                             ))}
@@ -286,6 +302,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
+                                                    selectableIds={selectableIds}
                                                 />
                                             </div>
                                         )}
@@ -297,6 +314,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                     selected={selected}
                                                     currentRoot={currentRoot}
                                                     onUpdateSelection={this.handleSelectionUpdate}
+                                                    selectableIds={selectableIds}
                                                 />
                                             </div>
                                         )}
@@ -309,6 +327,7 @@ export default class OrgUnitsSelector extends React.Component {
                                             selected={selected}
                                             currentRoot={currentRoot}
                                             onUpdateSelection={this.handleSelectionUpdate}
+                                            selectableIds={selectableIds}
                                         />
                                     </div>
                                 )}
