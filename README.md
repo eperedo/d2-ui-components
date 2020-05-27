@@ -308,7 +308,7 @@ const MyWizard = props => {
 };
 ```
 
-# Sharings
+# Sharing
 
 ```
 import React from "react";
@@ -322,7 +322,7 @@ const initialSharedObject: MetaObject = {
     },
     object: {
         id: "uKLXQPfYBQB",
-        displayName: "My Project (DN)",
+        displayName: "My data set",
         user: { id: "M5zQapPyTZI", name: "Tom Waikiki" },
         publicAccess: "rwrw----",
         externalAccess: false,
@@ -334,6 +334,7 @@ const showOptions = {
     dataSharing: true,
     publicSharing: true,
     externalSharing: true,
+    permissionPicker: true,
 };
 
 function searchUsers(api: D2Api, query: string) {
