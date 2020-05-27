@@ -20,7 +20,8 @@ export interface TableProps {
         externalSharing: boolean;
         permissionPicker: boolean;
     }>;
-    onChange: (sharedUpdate: ShareUpdate, callbackAfterSuccessfulPost?: () => void) => void;
+    // Return a fulfilled promise to signal that the update was successful
+    onChange: (sharedUpdate: ShareUpdate) => Promise<void>;
     onSearch: (s: string) => Promise<SearchResult>;
 }
 
@@ -78,22 +79,20 @@ class Table extends React.Component<TablePropsWithStyles> {
 
     addUserAccess = (userAccess: SharingRule) => {
         const currentAccesses = this.props.meta.object.userAccesses || [];
-        this.props.onChange(
-            {
+        this.props
+            .onChange({
                 userAccesses: [...currentAccesses, userAccess],
-            },
-            this.scrollAccessListToBottom.bind(this)
-        );
+            })
+            .then(this.scrollAccessListToBottom);
     };
 
     addUserGroupAccess = (userGroupAccess: SharingRule) => {
         const currentAccesses = this.props.meta.object.userGroupAccesses || [];
-        this.props.onChange(
-            {
+        this.props
+            .onChange({
                 userGroupAccesses: [...currentAccesses, userGroupAccess],
-            },
-            this.scrollAccessListToBottom.bind(this)
-        );
+            })
+            .then(this.scrollAccessListToBottom);
     };
 
     scrollAccessListToBottom = () => {
