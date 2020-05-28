@@ -244,11 +244,6 @@ export default class OrgUnitsSelector extends React.Component {
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
 
-        const leftStyles = {
-            ...styles.left,
-            width: someControlsVisible ? 500 : fullWidth ? 1000 : undefined,
-        };
-
         const cardWideStyle = {
             ...styles.cardWide,
             boxShadow: !withElevation ? "none" : undefined,
@@ -263,7 +258,7 @@ export default class OrgUnitsSelector extends React.Component {
                     </div>
 
                     <div style={this.contentsStyle}>
-                        <div style={leftStyles}>
+                        <div style={styles.contentItem}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
@@ -290,7 +285,7 @@ export default class OrgUnitsSelector extends React.Component {
                         </div>
 
                         {someControlsVisible && (
-                            <div style={styles.right}>
+                            <div style={styles.contentItem}>
                                 {(filterByLevel || filterByGroup) && (
                                     <div>
                                         <OrgUnitSelectTitle />
@@ -392,19 +387,11 @@ const styles = {
     },
     contents: {
         height: 350,
-        position: "relative",
+        display: "flex",
         overflowY: "auto",
     },
-    left: {
-        display: "inline-block",
-        position: "absolute",
-        overflowY: "auto",
-    },
-    right: {
-        display: "inline-block",
-        position: "absolute",
-        width: 500,
-        right: 16,
+    contentItem: {
+        flexBasis: "100%",
     },
     ouLabel: {
         background: "rgba(0,0,0,0.05)",
@@ -419,6 +406,6 @@ const styles = {
         marginTop: 0,
     },
     selectAll: {
-        marginTop: 20,
+        marginTop: 10,
     },
 };

@@ -1,17 +1,14 @@
-import React from "react";
 import _ from "lodash";
-import PropTypes from "prop-types";
 import log from "loglevel";
-
+import PropTypes from "prop-types";
+import React from "react";
+import i18n from "../utils/i18n";
 import {
     addToSelection,
-    removeFromSelection,
     handleChangeSelection,
+    removeFromSelection,
     renderDropdown,
-    renderControls,
 } from "./common";
-
-import i18n from "../utils/i18n";
 import "./common.css";
 
 class OrgUnitSelectByGroup extends React.Component {
@@ -27,7 +24,6 @@ class OrgUnitSelectByGroup extends React.Component {
         this.addToSelection = addToSelection.bind(this);
         this.removeFromSelection = removeFromSelection.bind(this);
         this.handleChangeSelection = handleChangeSelection.bind(this);
-        this.renderControls = renderControls.bind(this);
 
         this.getOrgUnitsForGroup = this.getOrgUnitsForGroup.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
