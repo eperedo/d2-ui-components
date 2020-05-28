@@ -9,7 +9,6 @@ import {
     removeFromSelection,
     renderDropdown,
 } from "./common";
-import "./common.css";
 
 class OrgUnitSelectByGroup extends React.Component {
     constructor(props, context) {
