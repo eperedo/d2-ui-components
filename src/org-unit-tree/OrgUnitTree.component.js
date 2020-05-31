@@ -158,6 +158,7 @@ class OrgUnitTree extends React.Component {
                     onChildrenLoaded={this.props.onChildrenLoaded}
                     hideMemberCount={this.props.hideMemberCount}
                     orgUnitsPathsToInclude={this.props.orgUnitsPathsToInclude}
+                    selectableIds={this.props.selectableIds}
                 />
             );
         }
@@ -188,16 +189,21 @@ class OrgUnitTree extends React.Component {
     }
 
     render() {
-        const currentOu = this.props.root;
-        // True if a click handler exists
-        const selectableLevels = this.props.selectableLevels;
+        const {
+            root: currentOu,
+            selectableLevels,
+            typeInput,
+            selectableIds,
+            selected = [],
+            hideCheckboxes,
+        } = this.props;
+
         const maxSelectableLevel = Math.max(...selectableLevels);
-        const typeInput = this.props.typeInput;
-        const isSelectable = this.handleSelectableLevel(selectableLevels, currentOu);
+        const isExcluded = selectableIds && !selectableIds.includes(currentOu.id);
+        const isSelectable = !isExcluded && this.handleSelectableLevel(selectableLevels, currentOu);
         const pathRegEx = new RegExp(`/${currentOu.id}$`);
         const memberRegEx = new RegExp(`/${currentOu.id}`);
-        const isSelected =
-            this.props.selected && this.props.selected.some(ou => pathRegEx.test(ou));
+        const isSelected = selected.some(ou => pathRegEx.test(ou));
 
         // True if this OU has children = is not a leaf node
         const hasChildren =
@@ -255,7 +261,7 @@ class OrgUnitTree extends React.Component {
 
         const label = (
             <div style={labelStyle} onClick={onClick || undefined} role="button" tabIndex={0}>
-                {isSelectable && !this.props.hideCheckboxes && (
+                {isSelectable && !hideCheckboxes && (
                     <input
                         type={handletypeInput}
                         readOnly
@@ -289,7 +295,7 @@ class OrgUnitTree extends React.Component {
 
         return (
             <div
-                onClick={isSelectable && this.handleSelectClick}
+                onClick={(isSelectable && this.handleSelectClick) || undefined}
                 className="orgunit without-children"
                 style={ouContainerStyle}
                 role="button"
@@ -405,6 +411,11 @@ OrgUnitTree.propTypes = {
      * Array of paths of Organisation Units to include on tree. If not defined or empty, all children from root to leafs will be shown
      */
     orgUnitsPathsToInclude: PropTypes.array,
+
+    /**
+     * Array of org unit ids to filter checkbox selection
+     */
+    selectableIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 OrgUnitTree.defaultProps = {

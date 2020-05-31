@@ -5,6 +5,7 @@ import {
     DialogContent,
     DialogProps,
     DialogTitle,
+    makeStyles,
 } from "@material-ui/core";
 import _ from "lodash";
 import React, { ReactNode } from "react";
@@ -16,8 +17,10 @@ export interface ConfirmationDialogProps extends Partial<DialogProps> {
     description?: string | ReactNode;
     onSave?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onInfoAction?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     saveText?: string;
     cancelText?: string;
+    infoActionText?: string;
     disableSave?: boolean;
 }
 
@@ -26,13 +29,17 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     description,
     onSave,
     onCancel,
+    onInfoAction,
     isOpen = false,
     children,
     cancelText = i18n.t("Cancel"),
     saveText = i18n.t("Save"),
+    infoActionText = i18n.t("Info"),
     disableSave = false,
     ...other
 }) => {
+    const classes = useStyles();
+
     return (
         <Dialog open={isOpen} onClose={onCancel || _.noop} {...other}>
             <DialogTitle>{title}</DialogTitle>
@@ -43,6 +50,16 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             </DialogContent>
 
             <DialogActions>
+                {onInfoAction && (
+                    <Button
+                        key={"info"}
+                        className={classes.infoButton}
+                        onClick={onInfoAction}
+                        autoFocus
+                    >
+                        {infoActionText}
+                    </Button>
+                )}
                 {onCancel && (
                     <Button key={"cancel"} onClick={onCancel} autoFocus>
                         {cancelText}
@@ -65,5 +82,9 @@ function renderNode(node: ReactNode) {
         return node;
     }
 }
+
+const useStyles = makeStyles({
+    infoButton: { marginRight: "auto" },
+});
 
 export default ConfirmationDialog;

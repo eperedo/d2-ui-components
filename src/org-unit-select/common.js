@@ -1,32 +1,34 @@
-import React from "react";
+import { FormControl, InputLabel, LinearProgress, MenuItem, Select } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { LinearProgress, Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
+import _ from "lodash";
+import React from "react";
 import i18n from "../utils/i18n";
 
 const style = {
     button: {
-        position: "relative",
-        top: 3,
-        marginLeft: 16,
+        margin: 5,
     },
     progress: {
         height: 2,
         backgroundColor: "rgba(0,0,0,0)",
         top: 46,
     },
+    selector: {
+        width: "33%",
+        marginTop: 18,
+    },
 };
-style.button1 = Object.assign({}, style.button, { marginLeft: 0 });
 
 function addToSelection(orgUnits) {
-    const orgUnitArray = Array.isArray(orgUnits) ? orgUnits : orgUnits.toArray();
-    const addedOus = orgUnitArray.filter(ou => !this.props.selected.includes(ou.path));
+    const { selectableIds, selected } = this.props;
+    const additions = orgUnits.filter(({ id }) => !selectableIds || selectableIds.includes(id));
+    const newSelection = _.uniq([...selected, ...additions.map(ou => ou.path)]);
 
-    this.props.onUpdateSelection(this.props.selected.concat(addedOus.map(ou => ou.path)));
+    this.props.onUpdateSelection(newSelection);
 }
 
 function removeFromSelection(orgUnits) {
-    const orgUnitArray = Array.isArray(orgUnits) ? orgUnits : orgUnits.toArray();
-    const removedOus = orgUnitArray.filter(ou => this.props.selected.includes(ou.path));
+    const removedOus = orgUnits.filter(ou => this.props.selected.includes(ou.path));
     const removed = removedOus.map(ou => ou.path);
     const selectedOus = this.props.selected.filter(ou => !removed.includes(ou));
 
@@ -38,9 +40,11 @@ function handleChangeSelection(event) {
 }
 
 function renderDropdown(menuItems, label) {
+    const disabled = this.state.loading || !this.state.selection;
+
     return (
         <div style={{ position: "relative", minHeight: 89 }}>
-            <FormControl classes={{ root: "org-unit-select-dropdown" }}>
+            <FormControl style={style.selector}>
                 <InputLabel>{label}</InputLabel>
 
                 <Select
@@ -56,42 +60,28 @@ function renderDropdown(menuItems, label) {
                 </Select>
             </FormControl>
 
-            {this.renderControls()}
+            <div style={{ marginLeft: 10, marginTop: 24, display: "inline-block" }}>
+                {this.state.loading && <LinearProgress size={0.5} style={style.progress} />}
+                <Button
+                    variant="contained"
+                    style={style.button}
+                    onClick={this.handleSelect}
+                    disabled={disabled}
+                >
+                    {i18n.t("Select")}
+                </Button>
+
+                <Button
+                    variant="contained"
+                    style={style.button}
+                    onClick={this.handleDeselect}
+                    disabled={disabled}
+                >
+                    {i18n.t("Deselect")}
+                </Button>
+            </div>
         </div>
     );
 }
 
-function renderControls() {
-    const disabled = this.state.loading || !this.state.selection;
-
-    return (
-        <div style={{ position: "absolute", display: "inline-block", top: 24, marginLeft: 16 }}>
-            {this.state.loading && <LinearProgress size={0.5} style={style.progress} />}
-            <Button
-                variant="contained"
-                style={style.button1}
-                onClick={this.handleSelect}
-                disabled={disabled}
-            >
-                {i18n.t("Select")}
-            </Button>
-
-            <Button
-                variant="contained"
-                style={style.button}
-                onClick={this.handleDeselect}
-                disabled={disabled}
-            >
-                {i18n.t("Deselect")}
-            </Button>
-        </div>
-    );
-}
-
-export {
-    addToSelection,
-    removeFromSelection,
-    handleChangeSelection,
-    renderDropdown,
-    renderControls,
-};
+export { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown };

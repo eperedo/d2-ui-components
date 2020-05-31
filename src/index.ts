@@ -14,4 +14,6 @@ export * from "./loading";
 export * from "./search-box/SearchBox";
 export * from "./snackbar";
 export * from "./wizard/Wizard";
+export * from "./sharing/Sharing";
+
 export { MultiSelector, SimpleCheckBox, DialogButton, OrgUnitsSelector, OldObjectsTable };
