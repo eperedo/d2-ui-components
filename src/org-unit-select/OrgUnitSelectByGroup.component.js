@@ -95,9 +95,7 @@ class OrgUnitSelectByGroup extends React.Component {
     }
 
     render() {
-        const menuItems =
-            (Array.isArray(this.props.groups) && this.props.groups) || this.props.groups.toArray();
-
+        const menuItems = this.props.groups;
         const label = i18n.t("Organisation unit group");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
