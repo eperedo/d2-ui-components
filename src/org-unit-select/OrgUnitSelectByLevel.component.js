@@ -103,10 +103,7 @@ class OrgUnitSelectByLevel extends React.Component {
             ? currentRoot.level || currentRoot.path.match(/\//g).length
             : 1;
 
-        const menuItems = (
-            (Array.isArray(this.props.levels) && this.props.levels) ||
-            this.props.levels.toArray()
-        )
+        const menuItems = this.props.levels
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
         const label = i18n.t("Organisation Unit Level");
