@@ -52,7 +52,7 @@ function renderDropdown(menuItems, label) {
                     onChange={this.handleChangeSelection}
                     disabled={this.state.loading}
                 >
-                    <MenuItem value={""}>{label}</MenuItem>
+                    <MenuItem value={""}>{i18n.t("<No value>")}</MenuItem>
                     {menuItems.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                             {item.displayName}
