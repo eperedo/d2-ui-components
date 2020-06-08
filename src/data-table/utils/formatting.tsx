@@ -27,7 +27,7 @@ function defaultFormatter(value: any): ReactNode {
     ) {
         return moment(value).format("YYYY-MM-DD HH:mm:ss");
     } else {
-        return <Linkify>{value}</Linkify>;
+        return <Linkify key={value}>{value}</Linkify>;
     }
 }
 
