@@ -286,46 +286,52 @@ export default class OrgUnitsSelector extends React.Component {
 
                         {someControlsVisible && (
                             <div style={styles.contentItem}>
-                                {(filterByLevel || filterByGroup) && (
-                                    <div>
-                                        <OrgUnitSelectTitle />
+                                <div style={styles.rightPanel}>
+                                    {(filterByLevel || filterByGroup) && (
+                                        <React.Fragment>
+                                            <OrgUnitSelectTitle />
 
-                                        {filterByLevel && (
-                                            <div style={styles.selectByLevel}>
-                                                <OrgUnitSelectByLevel
-                                                    levels={levels}
-                                                    selected={selected}
-                                                    currentRoot={currentRoot}
-                                                    onUpdateSelection={this.handleSelectionUpdate}
-                                                    selectableIds={selectableIds}
-                                                />
-                                            </div>
-                                        )}
+                                            {filterByLevel && (
+                                                <div style={styles.selectByLevel}>
+                                                    <OrgUnitSelectByLevel
+                                                        levels={levels}
+                                                        selected={selected}
+                                                        currentRoot={currentRoot}
+                                                        onUpdateSelection={
+                                                            this.handleSelectionUpdate
+                                                        }
+                                                        selectableIds={selectableIds}
+                                                    />
+                                                </div>
+                                            )}
 
-                                        {filterByGroup && (
-                                            <div>
-                                                <OrgUnitSelectByGroup
-                                                    groups={groups}
-                                                    selected={selected}
-                                                    currentRoot={currentRoot}
-                                                    onUpdateSelection={this.handleSelectionUpdate}
-                                                    selectableIds={selectableIds}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                            {filterByGroup && (
+                                                <div>
+                                                    <OrgUnitSelectByGroup
+                                                        groups={groups}
+                                                        selected={selected}
+                                                        currentRoot={currentRoot}
+                                                        onUpdateSelection={
+                                                            this.handleSelectionUpdate
+                                                        }
+                                                        selectableIds={selectableIds}
+                                                    />
+                                                </div>
+                                            )}
+                                        </React.Fragment>
+                                    )}
 
-                                {selectAll && (
-                                    <div style={styles.selectAll}>
-                                        <OrgUnitSelectAll
-                                            selected={selected}
-                                            currentRoot={currentRoot}
-                                            onUpdateSelection={this.handleSelectionUpdate}
-                                            selectableIds={selectableIds}
-                                        />
-                                    </div>
-                                )}
+                                    {selectAll && (
+                                        <div style={styles.selectAll}>
+                                            <OrgUnitSelectAll
+                                                selected={selected}
+                                                currentRoot={currentRoot}
+                                                onUpdateSelection={this.handleSelectionUpdate}
+                                                selectableIds={selectableIds}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -392,6 +398,10 @@ const styles = {
     },
     contentItem: {
         flexBasis: "100%",
+    },
+    rightPanel: {
+        position: "absolute",
+        width: "65%",
     },
     ouLabel: {
         background: "rgba(0,0,0,0.05)",
