@@ -1,17 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
 import log from "loglevel";
-
+import PropTypes from "prop-types";
+import React from "react";
+import i18n from "../utils/i18n";
 import {
     addToSelection,
-    removeFromSelection,
     handleChangeSelection,
+    removeFromSelection,
     renderDropdown,
-    renderControls,
 } from "./common";
-
-import i18n from "../utils/i18n";
-import "./common.css";
 
 class OrgUnitSelectByLevel extends React.Component {
     constructor(props, context) {
@@ -26,7 +22,6 @@ class OrgUnitSelectByLevel extends React.Component {
         this.addToSelection = addToSelection.bind(this);
         this.removeFromSelection = removeFromSelection.bind(this);
         this.handleChangeSelection = handleChangeSelection.bind(this);
-        this.renderControls = renderControls.bind(this);
 
         this.getOrgUnitsForLevel = this.getOrgUnitsForLevel.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -108,10 +103,7 @@ class OrgUnitSelectByLevel extends React.Component {
             ? currentRoot.level || currentRoot.path.match(/\//g).length
             : 1;
 
-        const menuItems = (
-            (Array.isArray(this.props.levels) && this.props.levels) ||
-            this.props.levels.toArray()
-        )
+        const menuItems = this.props.levels
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
         const label = i18n.t("Organisation Unit Level");

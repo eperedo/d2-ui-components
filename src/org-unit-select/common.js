@@ -6,17 +6,18 @@ import i18n from "../utils/i18n";
 
 const style = {
     button: {
-        position: "relative",
-        top: 3,
-        marginLeft: 16,
+        margin: 5,
     },
     progress: {
         height: 2,
         backgroundColor: "rgba(0,0,0,0)",
         top: 46,
     },
+    selector: {
+        width: "33%",
+        marginTop: 18,
+    },
 };
-style.button1 = Object.assign({}, style.button, { marginLeft: 0 });
 
 function addToSelection(orgUnits) {
     const { selectableIds, selected } = this.props;
@@ -39,9 +40,11 @@ function handleChangeSelection(event) {
 }
 
 function renderDropdown(menuItems, label) {
+    const disabled = this.state.loading || !this.state.selection;
+
     return (
         <div style={{ position: "relative", minHeight: 89 }}>
-            <FormControl classes={{ root: "org-unit-select-dropdown" }}>
+            <FormControl style={style.selector}>
                 <InputLabel>{label}</InputLabel>
 
                 <Select
@@ -49,6 +52,7 @@ function renderDropdown(menuItems, label) {
                     onChange={this.handleChangeSelection}
                     disabled={this.state.loading}
                 >
+                    <MenuItem value={""}>{i18n.t("<No value>")}</MenuItem>
                     {menuItems.map(item => (
                         <MenuItem key={item.id} value={item.id}>
                             {item.displayName}
@@ -57,42 +61,28 @@ function renderDropdown(menuItems, label) {
                 </Select>
             </FormControl>
 
-            {this.renderControls()}
+            <div style={{ marginLeft: 10, marginTop: 24, display: "inline-block" }}>
+                {this.state.loading && <LinearProgress size={0.5} style={style.progress} />}
+                <Button
+                    variant="contained"
+                    style={style.button}
+                    onClick={this.handleSelect}
+                    disabled={disabled}
+                >
+                    {i18n.t("Select")}
+                </Button>
+
+                <Button
+                    variant="contained"
+                    style={style.button}
+                    onClick={this.handleDeselect}
+                    disabled={disabled}
+                >
+                    {i18n.t("Deselect")}
+                </Button>
+            </div>
         </div>
     );
 }
 
-function renderControls() {
-    const disabled = this.state.loading || !this.state.selection;
-
-    return (
-        <div style={{ position: "absolute", display: "inline-block", top: 24, marginLeft: 16 }}>
-            {this.state.loading && <LinearProgress size={0.5} style={style.progress} />}
-            <Button
-                variant="contained"
-                style={style.button1}
-                onClick={this.handleSelect}
-                disabled={disabled}
-            >
-                {i18n.t("Select")}
-            </Button>
-
-            <Button
-                variant="contained"
-                style={style.button}
-                onClick={this.handleDeselect}
-                disabled={disabled}
-            >
-                {i18n.t("Deselect")}
-            </Button>
-        </div>
-    );
-}
-
-export {
-    addToSelection,
-    removeFromSelection,
-    handleChangeSelection,
-    renderDropdown,
-    renderControls,
-};
+export { addToSelection, removeFromSelection, handleChangeSelection, renderDropdown };

@@ -244,11 +244,6 @@ export default class OrgUnitsSelector extends React.Component {
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
 
-        const leftStyles = {
-            ...styles.left,
-            width: someControlsVisible ? 500 : fullWidth ? 1000 : undefined,
-        };
-
         const cardWideStyle = {
             ...styles.cardWide,
             boxShadow: !withElevation ? "none" : undefined,
@@ -263,7 +258,7 @@ export default class OrgUnitsSelector extends React.Component {
                     </div>
 
                     <div style={this.contentsStyle}>
-                        <div style={leftStyles}>
+                        <div style={styles.contentItem}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
                                     <OrgUnitTree
@@ -290,47 +285,53 @@ export default class OrgUnitsSelector extends React.Component {
                         </div>
 
                         {someControlsVisible && (
-                            <div style={styles.right}>
-                                {(filterByLevel || filterByGroup) && (
-                                    <div>
-                                        <OrgUnitSelectTitle />
+                            <div style={styles.contentItem}>
+                                <div style={styles.rightPanel}>
+                                    {(filterByLevel || filterByGroup) && (
+                                        <React.Fragment>
+                                            <OrgUnitSelectTitle />
 
-                                        {filterByLevel && (
-                                            <div style={styles.selectByLevel}>
-                                                <OrgUnitSelectByLevel
-                                                    levels={levels}
-                                                    selected={selected}
-                                                    currentRoot={currentRoot}
-                                                    onUpdateSelection={this.handleSelectionUpdate}
-                                                    selectableIds={selectableIds}
-                                                />
-                                            </div>
-                                        )}
+                                            {filterByLevel && (
+                                                <div style={styles.selectByLevel}>
+                                                    <OrgUnitSelectByLevel
+                                                        levels={levels}
+                                                        selected={selected}
+                                                        currentRoot={currentRoot}
+                                                        onUpdateSelection={
+                                                            this.handleSelectionUpdate
+                                                        }
+                                                        selectableIds={selectableIds}
+                                                    />
+                                                </div>
+                                            )}
 
-                                        {filterByGroup && (
-                                            <div>
-                                                <OrgUnitSelectByGroup
-                                                    groups={groups}
-                                                    selected={selected}
-                                                    currentRoot={currentRoot}
-                                                    onUpdateSelection={this.handleSelectionUpdate}
-                                                    selectableIds={selectableIds}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                            {filterByGroup && (
+                                                <div>
+                                                    <OrgUnitSelectByGroup
+                                                        groups={groups}
+                                                        selected={selected}
+                                                        currentRoot={currentRoot}
+                                                        onUpdateSelection={
+                                                            this.handleSelectionUpdate
+                                                        }
+                                                        selectableIds={selectableIds}
+                                                    />
+                                                </div>
+                                            )}
+                                        </React.Fragment>
+                                    )}
 
-                                {selectAll && (
-                                    <div style={styles.selectAll}>
-                                        <OrgUnitSelectAll
-                                            selected={selected}
-                                            currentRoot={currentRoot}
-                                            onUpdateSelection={this.handleSelectionUpdate}
-                                            selectableIds={selectableIds}
-                                        />
-                                    </div>
-                                )}
+                                    {selectAll && (
+                                        <div style={styles.selectAll}>
+                                            <OrgUnitSelectAll
+                                                selected={selected}
+                                                currentRoot={currentRoot}
+                                                onUpdateSelection={this.handleSelectionUpdate}
+                                                selectableIds={selectableIds}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -392,19 +393,15 @@ const styles = {
     },
     contents: {
         height: 350,
-        position: "relative",
+        display: "flex",
         overflowY: "auto",
     },
-    left: {
-        display: "inline-block",
-        position: "absolute",
-        overflowY: "auto",
+    contentItem: {
+        flexBasis: "100%",
     },
-    right: {
-        display: "inline-block",
+    rightPanel: {
         position: "absolute",
-        width: 500,
-        right: 16,
+        width: "65%",
     },
     ouLabel: {
         background: "rgba(0,0,0,0.05)",
@@ -419,6 +416,6 @@ const styles = {
         marginTop: 0,
     },
     selectAll: {
-        marginTop: 20,
+        marginTop: 10,
     },
 };
