@@ -91,6 +91,8 @@ export interface DataTableProps<T extends ReferenceObject> {
     sorting?: TableSorting<T>;
     selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
+    pageSize?: number;
+    pageSizeOptions?: number[];
     onChange?(state: TableState<T>): void;
     resetKey?: string;
 }
@@ -117,6 +119,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
+        pageSize = 25,
+        pageSizeOptions = [10, 25, 50, 100],
         onChange = _.noop,
         resetKey,
         mouseActionsMapping,
@@ -141,10 +145,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
     const pagination = {
-        pageSize: 25,
         total: undefined,
         page: 1,
-        pageSizeOptions: [10, 25, 50, 100],
         ...statePagination,
         ...controlledPagination,
     };
@@ -229,6 +231,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     {loading && <CircularProgress size={30} className={classes.loading} />}
                     <div className={classes.paginator}>
                         <DataTablePagination
+                            pageSize={pageSize}
+                            pageSizeOptions={pageSizeOptions}
                             pagination={pagination}
                             defaultTotal={rows.length}
                             onChange={handlePaginationChange}
