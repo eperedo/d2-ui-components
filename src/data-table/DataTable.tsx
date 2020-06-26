@@ -153,7 +153,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const rowObjects = controlledPagination
         ? rows
-        : sortObjects(rows, columns, pagination, sorting);
+        : sortObjects(rows, columns, pageSize, pagination, sorting);
     const selectableRows = React.useMemo(() => {
         return rowObjects.filter(row => row.selectable !== false);
     }, [rowObjects]);

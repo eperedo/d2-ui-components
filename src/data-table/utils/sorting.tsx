@@ -6,11 +6,12 @@ import { ReactNode } from "react";
 export function sortObjects<T extends ReferenceObject>(
     rows: T[],
     columns: TableColumn<T>[],
+    pageSize: number,
     tablePagination: TablePagination,
     tableSorting: TableSorting<T>
 ) {
     const { field, order } = tableSorting;
-    const { page, pageSize } = tablePagination;
+    const { page } = tablePagination;
     const column = columns.find(({ name }) => name === field);
     const realPage = page - 1;
 
