@@ -39,6 +39,7 @@ export interface TableSorting<T extends ReferenceObject> {
 }
 
 export interface TablePagination {
+    pageSize: number;
     total: number;
     page: number;
 }

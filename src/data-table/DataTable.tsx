@@ -91,7 +91,6 @@ export interface DataTableProps<T extends ReferenceObject> {
     sorting?: TableSorting<T>;
     selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
-    pageSize?: number;
     pageSizeOptions?: number[];
     onChange?(state: TableState<T>): void;
     resetKey?: string;
@@ -119,7 +118,6 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
-        pageSize = 25,
         pageSizeOptions = [10, 25, 50, 100],
         onChange = _.noop,
         resetKey,
@@ -153,7 +151,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const rowObjects = controlledPagination
         ? rows
-        : sortObjects(rows, columns, pageSize, pagination, sorting);
+        : sortObjects(rows, columns, pagination, sorting);
     const selectableRows = React.useMemo(() => {
         return rowObjects.filter(row => row.selectable !== false);
     }, [rowObjects]);
@@ -231,7 +229,6 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     {loading && <CircularProgress size={30} className={classes.loading} />}
                     <div className={classes.paginator}>
                         <DataTablePagination
-                            pageSize={pageSize}
                             pageSizeOptions={pageSizeOptions}
                             pagination={pagination}
                             defaultTotal={rows.length}

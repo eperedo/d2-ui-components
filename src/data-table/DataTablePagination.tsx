@@ -6,15 +6,14 @@ import { TablePagination } from "./types";
 
 export interface DataTablePaginationProps {
     pagination: TablePagination;
-    pageSize: number;
     pageSizeOptions: number[];
     defaultTotal: number;
     onChange?(newPagination: TablePagination): void;
 }
 
 export function DataTablePagination(props: DataTablePaginationProps) {
-    const { pagination, pageSizeOptions, pageSize, onChange = _.noop, defaultTotal } = props;
-    const { page, total = defaultTotal } = pagination;
+    const { pagination, pageSizeOptions, onChange = _.noop, defaultTotal } = props;
+    const { page, pageSize, total = defaultTotal } = pagination;
 
     const handleChangePage = (_event: unknown, page: number) => {
         onChange({
