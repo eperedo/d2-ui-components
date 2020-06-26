@@ -143,6 +143,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
     const pagination = {
+        pageSize: 25,
         total: undefined,
         page: 1,
         ...statePagination,
