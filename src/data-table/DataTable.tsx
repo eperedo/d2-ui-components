@@ -140,10 +140,13 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
     }, [columns]);
 
+    const pageSize = pageSizeOptions.includes(25) ? 25 : pageSizeOptions[0];
+    if (!pageSize) throw new Error("Invalid page size options");
+
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
     const pagination = {
-        pageSize: 25,
+        pageSize,
         total: undefined,
         page: 1,
         ...statePagination,
