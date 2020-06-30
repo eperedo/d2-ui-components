@@ -15,6 +15,7 @@ type Id = string;
 export interface TableProps {
     meta: MetaObject;
     showOptions: Partial<{
+        title: boolean;
         dataSharing: boolean;
         publicSharing: boolean;
         externalSharing: boolean;
@@ -118,6 +119,7 @@ class Table extends React.Component<TablePropsWithStyles> {
             .concat((userGroupAccesses || []).map(access => access.id));
 
         const {
+            title: showTitle = true,
             dataSharing: dataShareable = false,
             publicSharing: showPublicSharing = true,
             externalSharing: showExternalSharing = true,
@@ -126,7 +128,7 @@ class Table extends React.Component<TablePropsWithStyles> {
 
         return (
             <div>
-                <h2 className={classes.title}>{displayName}</h2>
+                {showTitle && <h2 className={classes.title}>{displayName}</h2>}
                 {user && (
                     <div className={classes.createdBy}>
                         {`${i18n.t("Created by")}: ${user.name}`}
