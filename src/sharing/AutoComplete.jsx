@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Popper from "@material-ui/core/Popper";
+import PersonIcon from "@material-ui/icons/Person";
+import GroupIcon from "@material-ui/icons/Group";
 
 const Input = ({ InputProps }) => {
     return <TextField id="user-search-input" fullWidth InputProps={{ ...InputProps }} />;
@@ -28,6 +30,9 @@ const Suggestion = ({ suggestion, itemProps, isHighlighted, selectedItem }) => {
                 fontWeight: isSelected ? 500 : 400,
             }}
         >
+            <span style={{ marginRight: 10 }}>
+                {suggestion.type === "userGroupAccess" ? <GroupIcon /> : <PersonIcon />}
+            </span>
             {suggestion.displayName}
         </MenuItem>
     );
