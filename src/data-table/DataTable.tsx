@@ -122,19 +122,21 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         mouseActionsMapping,
     } = props;
 
-    const initialSorting = initialState.sorting || {
-        field: columns[0].name,
-        order: "asc" as const,
-    };
-    const initialSelection = initialState.selection || [];
-    const initialPagination = initialState.pagination;
-    const initialVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
+    const [stateSelection, updateSelection] = useState(initialState.selection || []);
+    const [statePagination, updatePagination] = useState(initialState.pagination);
+    const [visibleColumns, updateVisibleColumns] = useState([]);
+    const [stateSorting, updateSorting] = useState(
+        initialState.sorting || {
+            field: columns[0].name,
+            order: "asc" as const,
+        }
+    );
 
-    const [stateSorting, updateSorting] = useState(initialSorting);
-    const [stateSelection, updateSelection] = useState(initialSelection);
-    const [statePagination, updatePagination] = useState(initialPagination);
-    const [visibleColumns, updateVisibleColumns] = useState(initialVisibleColumns);
     useEffect(() => updatePagination(pagination => ({ ...pagination, page: 1 })), [resetKey]);
+    useEffect(() => {
+        const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
+        updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
+    }, [columns]);
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
