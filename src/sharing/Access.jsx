@@ -79,9 +79,11 @@ export const Access = withStyles(styles)(
                     disabled={disabled}
                 />
             )}
-            <IconButton disabled={!onRemove} onClick={onRemove}>
-                <ClearIcon color={!onRemove ? "disabled" : "action"} />
-            </IconButton>
+            <span title={onRemove ? i18n.t("Remove") : i18n.t("This access cannot be removed")}>
+                <IconButton disabled={!onRemove} onClick={onRemove}>
+                    <ClearIcon color={!onRemove ? "disabled" : "action"} />
+                </IconButton>
+            </span>
         </div>
     )
 );

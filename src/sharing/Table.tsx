@@ -21,6 +21,7 @@ export interface TableProps {
         externalSharing: boolean;
         permissionPicker: boolean;
     }>;
+    unremovebleIds?: Set<Id>;
     // Return a fulfilled promise to signal that the update was successful
     onChange: (sharedUpdate: ShareUpdate) => Promise<void>;
     onSearch: (s: string) => Promise<SearchResult>;
@@ -47,17 +48,22 @@ class Table extends React.Component<TablePropsWithStyles> {
         });
     };
 
-    onAccessRemove = (accessOwnerId: Id) => () => {
-        const withoutId = (accessOwner: SharingRule) => accessOwner.id !== accessOwnerId;
-        const userAccesses = (this.props.meta.object.userAccesses || []).filter(withoutId);
-        const userGroupAccesses = (this.props.meta.object.userGroupAccesses || []).filter(
-            withoutId
-        );
+    onAccessRemove = (accessOwnerId: Id) => {
+        const { unremovebleIds } = this.props;
+        if (unremovebleIds && unremovebleIds.has(accessOwnerId)) return undefined;
 
-        this.props.onChange({
-            userAccesses,
-            userGroupAccesses,
-        });
+        return () => {
+            const withoutId = (accessOwner: SharingRule) => accessOwner.id !== accessOwnerId;
+            const userAccesses = (this.props.meta.object.userAccesses || []).filter(withoutId);
+            const userGroupAccesses = (this.props.meta.object.userGroupAccesses || []).filter(
+                withoutId
+            );
+
+            this.props.onChange({
+                userAccesses,
+                userGroupAccesses,
+            });
+        };
     };
 
     onPublicAccessChange = (publicAccess: AccessRule) => {
