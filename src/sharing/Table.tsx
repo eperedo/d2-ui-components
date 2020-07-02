@@ -15,11 +15,13 @@ type Id = string;
 export interface TableProps {
     meta: MetaObject;
     showOptions: Partial<{
+        title: boolean;
         dataSharing: boolean;
         publicSharing: boolean;
         externalSharing: boolean;
         permissionPicker: boolean;
     }>;
+    unremovebleIds?: Set<Id>;
     // Return a fulfilled promise to signal that the update was successful
     onChange: (sharedUpdate: ShareUpdate) => Promise<void>;
     onSearch: (s: string) => Promise<SearchResult>;
@@ -46,17 +48,22 @@ class Table extends React.Component<TablePropsWithStyles> {
         });
     };
 
-    onAccessRemove = (accessOwnerId: Id) => () => {
-        const withoutId = (accessOwner: SharingRule) => accessOwner.id !== accessOwnerId;
-        const userAccesses = (this.props.meta.object.userAccesses || []).filter(withoutId);
-        const userGroupAccesses = (this.props.meta.object.userGroupAccesses || []).filter(
-            withoutId
-        );
+    onAccessRemove = (accessOwnerId: Id) => {
+        const { unremovebleIds } = this.props;
+        if (unremovebleIds && unremovebleIds.has(accessOwnerId)) return undefined;
 
-        this.props.onChange({
-            userAccesses,
-            userGroupAccesses,
-        });
+        return () => {
+            const withoutId = (accessOwner: SharingRule) => accessOwner.id !== accessOwnerId;
+            const userAccesses = (this.props.meta.object.userAccesses || []).filter(withoutId);
+            const userGroupAccesses = (this.props.meta.object.userGroupAccesses || []).filter(
+                withoutId
+            );
+
+            this.props.onChange({
+                userAccesses,
+                userGroupAccesses,
+            });
+        };
     };
 
     onPublicAccessChange = (publicAccess: AccessRule) => {
@@ -118,6 +125,7 @@ class Table extends React.Component<TablePropsWithStyles> {
             .concat((userGroupAccesses || []).map(access => access.id));
 
         const {
+            title: showTitle = true,
             dataSharing: dataShareable = false,
             publicSharing: showPublicSharing = true,
             externalSharing: showExternalSharing = true,
@@ -126,7 +134,7 @@ class Table extends React.Component<TablePropsWithStyles> {
 
         return (
             <div>
-                <h2 className={classes.title}>{displayName}</h2>
+                {showTitle && <h2 className={classes.title}>{displayName}</h2>}
                 {user && (
                     <div className={classes.createdBy}>
                         {`${i18n.t("Created by")}: ${user.name}`}
