@@ -11,6 +11,7 @@ import { DataTableHeader } from "./DataTableHeader";
 import { DataTablePagination } from "./DataTablePagination";
 import {
     MouseActionsMapping,
+    PaginationOptions,
     ReferenceObject,
     RowConfig,
     TableAction,
@@ -91,7 +92,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     sorting?: TableSorting<T>;
     selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
-    pageSizeOptions?: number[];
+    paginationOptions?: PaginationOptions;
     onChange?(state: TableState<T>): void;
     resetKey?: string;
 }
@@ -118,7 +119,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
-        pageSizeOptions = [10, 25, 50, 100],
+        paginationOptions = {} as PaginationOptions,
         onChange = _.noop,
         resetKey,
         mouseActionsMapping,
@@ -140,8 +141,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
     }, [columns]);
 
-    const pageSize = pageSizeOptions.includes(25) ? 25 : pageSizeOptions[0];
-    if (!pageSize) throw new Error("Invalid page size options");
+    const { pageSizeInitialValue: pageSize = 25 } = paginationOptions;
 
     const sorting = controlledSorting || stateSorting;
     const selection = controlledSelection || stateSelection;
@@ -233,7 +233,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                     {loading && <CircularProgress size={30} className={classes.loading} />}
                     <div className={classes.paginator}>
                         <DataTablePagination
-                            pageSizeOptions={pageSizeOptions}
+                            paginationOptions={paginationOptions}
                             pagination={pagination}
                             defaultTotal={rows.length}
                             onChange={handlePaginationChange}
