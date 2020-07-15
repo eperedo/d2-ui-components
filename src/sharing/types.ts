@@ -11,13 +11,13 @@ export interface SharingRule {
 
 export interface SharedObject {
     id: Id;
-    user?: { id: Id; name: string };
-    displayName?: string;
     name: string;
+    displayName?: string;
+    user?: { id: Id; name: string };
     userAccesses?: SharingRule[];
     userGroupAccesses?: SharingRule[];
-    externalAccess: boolean;
-    publicAccess: AccessRule;
+    externalAccess?: boolean;
+    publicAccess?: AccessRule;
 }
 
 export type ShareUpdate = Partial<
