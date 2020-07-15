@@ -26,8 +26,8 @@ export type ShareUpdate = Partial<
 
 export interface MetaObject {
     meta: {
-        allowPublicAccess: boolean;
-        allowExternalAccess: boolean;
+        allowPublicAccess?: boolean;
+        allowExternalAccess?: boolean;
     };
     object: SharedObject;
 }
