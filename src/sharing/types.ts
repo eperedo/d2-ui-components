@@ -12,7 +12,8 @@ export interface SharingRule {
 export interface SharedObject {
     id: Id;
     user?: { id: Id; name: string };
-    displayName: string;
+    displayName?: string;
+    name: string;
     userAccesses?: SharingRule[];
     userGroupAccesses?: SharingRule[];
     externalAccess: boolean;

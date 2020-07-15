@@ -114,6 +114,7 @@ class Table extends React.Component<TablePropsWithStyles> {
         const {
             user,
             displayName,
+            name,
             userAccesses,
             userGroupAccesses,
             publicAccess,
@@ -134,7 +135,7 @@ class Table extends React.Component<TablePropsWithStyles> {
 
         return (
             <div>
-                {showTitle && <h2 className={classes.title}>{displayName}</h2>}
+                {showTitle && <h2 className={classes.title}>{displayName || name}</h2>}
                 {user && (
                     <div className={classes.createdBy}>
                         {`${i18n.t("Created by")}: ${user.name}`}
