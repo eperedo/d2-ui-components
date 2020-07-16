@@ -1,18 +1,19 @@
-import React from "react";
-import _ from "lodash";
 import Pagination from "@material-ui/core/TablePagination";
-
-import { TablePagination } from "./types";
+import _ from "lodash";
+import React from "react";
+import { PaginationOptions, TablePagination } from "./types";
 
 export interface DataTablePaginationProps {
     pagination: TablePagination;
+    paginationOptions: Partial<PaginationOptions>;
     defaultTotal: number;
     onChange?(newPagination: TablePagination): void;
 }
 
 export function DataTablePagination(props: DataTablePaginationProps) {
-    const { pagination, onChange = _.noop, defaultTotal } = props;
-    const { page, pageSize, pageSizeOptions, total = defaultTotal } = pagination;
+    const { pagination, paginationOptions, onChange = _.noop, defaultTotal } = props;
+    const { pageSizeOptions = [10, 25, 50, 100] } = paginationOptions;
+    const { page, pageSize, total = defaultTotal } = pagination;
 
     const handleChangePage = (_event: unknown, page: number) => {
         onChange({
