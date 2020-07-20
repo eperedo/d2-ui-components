@@ -93,7 +93,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
     function createRow(row: T, index: number | string, level = 0) {
         const labelId = `data-table-row-${index}`;
-        const defaultAction = parseActions([row], availableActions)[0];
+        const showRowActions = parseActions([row], availableActions).length > 0;
         const primaryAction = _(availableActions).find({ primary: true });
 
         const contextualAction = (event: MouseEvent<unknown>) => {
