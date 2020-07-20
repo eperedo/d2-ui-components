@@ -212,7 +212,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         ))}
 
                     <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
-                        {!!defaultAction && (
+                        {!!showRowActions && (
                             <Tooltip title={i18n.t("Actions")}>
                                 <IconButton onClick={event => contextualAction(event)}>
                                     <MoreVertIcon />
