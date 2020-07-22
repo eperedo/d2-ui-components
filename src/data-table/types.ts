@@ -40,7 +40,6 @@ export interface TableSorting<T extends ReferenceObject> {
 
 export interface TablePagination {
     pageSize: number;
-    pageSizeOptions: number[];
     total: number;
     page: number;
 }
@@ -82,3 +81,8 @@ export type MouseActionMapping =
     | { type: "action"; action: string };
 
 export type MouseActionsMapping = Record<"left" | "right", MouseActionMapping>;
+
+export interface PaginationOptions {
+    pageSizeOptions: number[];
+    pageSizeInitialValue: number;
+}
