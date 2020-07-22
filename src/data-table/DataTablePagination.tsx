@@ -5,7 +5,7 @@ import { PaginationOptions, TablePagination } from "./types";
 
 export interface DataTablePaginationProps {
     pagination: TablePagination;
-    paginationOptions: PaginationOptions;
+    paginationOptions: Partial<PaginationOptions>;
     defaultTotal: number;
     onChange?(newPagination: TablePagination): void;
 }

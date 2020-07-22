@@ -92,7 +92,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     sorting?: TableSorting<T>;
     selection?: TableSelection[];
     pagination?: Partial<TablePagination>;
-    paginationOptions?: PaginationOptions;
+    paginationOptions?: Partial<PaginationOptions>;
     onChange?(state: TableState<T>): void;
     resetKey?: string;
 }
@@ -119,7 +119,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         sorting: controlledSorting,
         selection: controlledSelection,
         pagination: controlledPagination,
-        paginationOptions = {} as PaginationOptions,
+        paginationOptions = {},
         onChange = _.noop,
         resetKey,
         mouseActionsMapping,
