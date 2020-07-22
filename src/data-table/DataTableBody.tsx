@@ -93,8 +93,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
     function createRow(row: T, index: number | string, level = 0) {
         const labelId = `data-table-row-${index}`;
-        const defaultAction = parseActions([row], availableActions)[0];
-        const primaryAction = _(availableActions).find({ primary: true }) || defaultAction;
+        const showRowActions = parseActions([row], availableActions).length > 0;
+        const primaryAction = _(availableActions).find({ primary: true });
 
         const contextualAction = (event: MouseEvent<unknown>) => {
             if (isEventCtrlClick(event)) return;
@@ -123,6 +123,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
 
         const handleClick = (event: MouseEvent<unknown>) => {
             const { tagName, type = null } = event.target as HTMLAnchorElement;
+            if (!tagName) return;
             const isCheckboxClick = tagName.localeCompare("input") && type === "checkbox";
             const activeSelection = _.reject(selected, { indeterminate: true });
 
@@ -211,7 +212,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         ))}
 
                     <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
-                        {!!defaultAction && (
+                        {!!showRowActions && (
                             <Tooltip title={i18n.t("Actions")}>
                                 <IconButton onClick={event => contextualAction(event)}>
                                     <MoreVertIcon />
