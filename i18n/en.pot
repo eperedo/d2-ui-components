@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-07-01T08:06:53.907Z\n"
-"PO-Revision-Date: 2020-07-01T08:06:53.907Z\n"
+"POT-Creation-Date: 2020-07-30T10:20:16.077Z\n"
+"PO-Revision-Date: 2020-07-30T10:20:16.077Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -89,12 +89,6 @@ msgid "Data"
 msgstr ""
 
 msgid "Search available/selected items"
-msgstr ""
-
-msgid "of"
-msgstr ""
-
-msgid "No results found"
 msgstr ""
 
 msgid "Select all"

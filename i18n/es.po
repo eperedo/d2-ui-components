@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2020-07-01T08:06:53.907Z\n"
+"POT-Creation-Date: 2020-07-30T10:20:16.077Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -94,12 +94,6 @@ msgstr "Datos"
 msgid "Search available/selected items"
 msgstr "Buscar elementos disponibles/seleccionados"
 
-msgid "of"
-msgstr "de"
-
-msgid "No results found"
-msgstr "No hay resultados"
-
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -183,3 +177,9 @@ msgstr "Anterior"
 
 msgid "Next"
 msgstr "Siguiente"
+
+#~ msgid "of"
+#~ msgstr "de"
+
+#~ msgid "No results found"
+#~ msgstr "No hay resultados"
