@@ -110,7 +110,9 @@ class Table extends React.Component<TablePropsWithStyles> {
     };
 
     render() {
-        const { allowPublicAccess, allowExternalAccess } = this.props.meta.meta;
+        const { allowPublicAccess = true, allowExternalAccess = false } =
+            this.props.meta.meta || {};
+
         const { classes, subtitle = i18n.t("Who has access") } = this.props;
         const {
             id,
