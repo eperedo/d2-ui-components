@@ -134,46 +134,46 @@ msgid "Remove"
 msgstr "Quitar"
 
 msgid "This access cannot be removed"
-msgstr ""
+msgstr "No se puede eleminar este acceso"
 
 msgid "External access"
-msgstr ""
+msgstr "Acceso externo"
 
 msgid "Anyone can view without login"
-msgstr ""
+msgstr "Cualquiera puede ver sin login"
 
 msgid "No access"
-msgstr ""
+msgstr "Sin acceso"
 
 msgid "Public access"
-msgstr ""
+msgstr "Acceso público"
 
 msgid "METADATA"
-msgstr ""
+msgstr "METADATOS"
 
 msgid "Can edit and view"
-msgstr ""
+msgstr "Puede editar y ver"
 
 msgid "Can view only"
-msgstr ""
+msgstr "Puede ver"
 
 msgid "DATA"
-msgstr ""
+msgstr "DATOS"
 
 msgid "Can capture and view"
-msgstr ""
+msgstr "Puede capturar y ver"
 
 msgid "Who has access"
-msgstr ""
+msgstr "¿Quién tiene acceso?"
 
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 msgid "Add users and user groups"
-msgstr ""
+msgstr "Añadir usuarios y grupos de usuario"
 
 msgid "Enter names"
-msgstr ""
+msgstr "Introduzca nombres"
 
 msgid "Help"
 msgstr "Ayuda"
