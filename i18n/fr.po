@@ -177,12 +177,3 @@ msgstr "Précédent"
 
 msgid "Next"
 msgstr "Suivant"
-
-#~ msgid "of"
-#~ msgstr "de"
-
-#~ msgid "No results found"
-#~ msgstr "Aucun résultat trouvé"
-
-#~ msgid "Reorder columns"
-#~ msgstr "Réorganiser les colonnes"

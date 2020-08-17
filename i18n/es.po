@@ -177,9 +177,3 @@ msgstr "Anterior"
 
 msgid "Next"
 msgstr "Siguiente"
-
-#~ msgid "of"
-#~ msgstr "de"
-
-#~ msgid "No results found"
-#~ msgstr "No hay resultados"
