@@ -113,6 +113,7 @@ class Table extends React.Component<TablePropsWithStyles> {
         const { allowPublicAccess, allowExternalAccess } = this.props.meta.meta;
         const { classes, subtitle = i18n.t("Who has access") } = this.props;
         const {
+            id,
             user,
             displayName,
             name,
@@ -136,7 +137,7 @@ class Table extends React.Component<TablePropsWithStyles> {
 
         return (
             <div>
-                {showTitle && <h2 className={classes.title}>{displayName || name}</h2>}
+                {showTitle && <h2 className={classes.title}>{displayName || name || id}</h2>}
                 {user && (
                     <div className={classes.createdBy}>
                         {`${i18n.t("Created by")}: ${user.name}`}
