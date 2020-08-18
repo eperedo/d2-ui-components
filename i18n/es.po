@@ -94,12 +94,6 @@ msgstr "Datos"
 msgid "Search available/selected items"
 msgstr "Buscar elementos disponibles/seleccionados"
 
-msgid "of"
-msgstr "de"
-
-msgid "No results found"
-msgstr "No hay resultados"
-
 msgid "Select all"
 msgstr "Seleccionar todo"
 

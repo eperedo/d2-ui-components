@@ -1,6 +1,5 @@
 import DialogButton from "./dialog-button/DialogButton";
 import MultiSelector from "./multi-selector/MultiSelector";
-import OldObjectsTable from "./old-objects-table/ObjectsTable";
 import OrgUnitsSelector from "./org-units-selector/OrgUnitsSelector";
 import SimpleCheckBox from "./simple-check-box/SimpleCheckBox";
 import "./locales";
@@ -16,4 +15,4 @@ export * from "./snackbar";
 export * from "./wizard/Wizard";
 export * from "./sharing/Sharing";
 
-export { MultiSelector, SimpleCheckBox, DialogButton, OrgUnitsSelector, OldObjectsTable };
+export { MultiSelector, SimpleCheckBox, DialogButton, OrgUnitsSelector };

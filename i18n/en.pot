@@ -91,12 +91,6 @@ msgstr ""
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "of"
-msgstr ""
-
-msgid "No results found"
-msgstr ""
-
 msgid "Select all"
 msgstr ""
 

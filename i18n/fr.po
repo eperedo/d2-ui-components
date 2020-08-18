@@ -94,12 +94,6 @@ msgstr "Données"
 msgid "Search available/selected items"
 msgstr ""
 
-msgid "of"
-msgstr "de"
-
-msgid "No results found"
-msgstr "Aucun résultat trouvé"
-
 msgid "Select all"
 msgstr "Sélectionner tout"
 
@@ -183,6 +177,3 @@ msgstr "Précédent"
 
 msgid "Next"
 msgstr "Suivant"
-
-#~ msgid "Reorder columns"
-#~ msgstr "Réorganiser les colonnes"
