@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2020-07-01T08:06:53.907Z\n"
+"POT-Creation-Date: 2020-07-29T07:27:35.411Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -163,10 +163,10 @@ msgstr ""
 msgid "Can capture and view"
 msgstr ""
 
-msgid "Created by"
+msgid "Who has access"
 msgstr ""
 
-msgid "Who has access"
+msgid "Created by"
 msgstr ""
 
 msgid "Add users and user groups"
