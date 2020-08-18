@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-07-30T10:20:16.077Z\n"
-"PO-Revision-Date: 2020-07-30T10:20:16.077Z\n"
+"POT-Creation-Date: 2020-07-29T07:27:35.411Z\n"
+"PO-Revision-Date: 2020-07-29T07:27:35.411Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -154,10 +154,10 @@ msgstr ""
 msgid "Can capture and view"
 msgstr ""
 
-msgid "Created by"
+msgid "Who has access"
 msgstr ""
 
-msgid "Who has access"
+msgid "Created by"
 msgstr ""
 
 msgid "Add users and user groups"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: i18next-conv\n"
-"POT-Creation-Date: 2020-07-30T10:20:16.077Z\n"
+"POT-Creation-Date: 2020-07-29T07:27:35.411Z\n"
 "PO-Revision-Date: 2019-02-14T11:21:26.165Z\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -128,46 +128,46 @@ msgid "Remove"
 msgstr "Quitar"
 
 msgid "This access cannot be removed"
-msgstr ""
+msgstr "No se puede eleminar este acceso"
 
 msgid "External access"
-msgstr ""
+msgstr "Acceso externo"
 
 msgid "Anyone can view without login"
-msgstr ""
+msgstr "Cualquiera puede ver sin login"
 
 msgid "No access"
-msgstr ""
+msgstr "Sin acceso"
 
 msgid "Public access"
-msgstr ""
+msgstr "Acceso público"
 
 msgid "METADATA"
-msgstr ""
+msgstr "METADATOS"
 
 msgid "Can edit and view"
-msgstr ""
+msgstr "Puede editar y ver"
 
 msgid "Can view only"
-msgstr ""
+msgstr "Puede ver"
 
 msgid "DATA"
-msgstr ""
+msgstr "DATOS"
 
 msgid "Can capture and view"
-msgstr ""
-
-msgid "Created by"
-msgstr ""
+msgstr "Puede capturar y ver"
 
 msgid "Who has access"
-msgstr ""
+msgstr "¿Quién tiene acceso?"
+
+msgid "Created by"
+msgstr "Creado por"
 
 msgid "Add users and user groups"
-msgstr ""
+msgstr "Añadir usuarios y grupos de usuario"
 
 msgid "Enter names"
-msgstr ""
+msgstr "Introduzca nombres"
 
 msgid "Help"
 msgstr "Ayuda"
