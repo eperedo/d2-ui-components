@@ -21,6 +21,7 @@ export interface TableProps {
         externalSharing: boolean;
         permissionPicker: boolean;
     }>;
+    subtitle?: string;
     unremovebleIds?: Set<Id>;
     // Return a fulfilled promise to signal that the update was successful
     onChange: (sharedUpdate: ShareUpdate) => Promise<void>;
@@ -109,11 +110,15 @@ class Table extends React.Component<TablePropsWithStyles> {
     };
 
     render() {
-        const { allowPublicAccess, allowExternalAccess } = this.props.meta.meta;
-        const { classes } = this.props;
+        const { allowPublicAccess = true, allowExternalAccess = false } =
+            this.props.meta.meta || {};
+
+        const { classes, subtitle = i18n.t("Who has access") } = this.props;
         const {
+            id,
             user,
             displayName,
+            name,
             userAccesses,
             userGroupAccesses,
             publicAccess,
@@ -134,19 +139,18 @@ class Table extends React.Component<TablePropsWithStyles> {
 
         return (
             <div>
-                {showTitle && <h2 className={classes.title}>{displayName}</h2>}
+                {showTitle && <h2 className={classes.title}>{displayName || name || id}</h2>}
                 {user && (
                     <div className={classes.createdBy}>
                         {`${i18n.t("Created by")}: ${user.name}`}
                     </div>
                 )}
                 <div className={classes.titleBodySpace} />
-                <Typography variant="subtitle1">{i18n.t("Who has access")}</Typography>
+                <Typography variant="subtitle1">{subtitle}</Typography>
                 <Divider />
                 <div className={classes.rules} ref={this.setAccessListRef}>
                     {showPublicSharing && (
                         <React.Fragment>
-                            {" "}
                             <PublicAccess
                                 access={publicAccess}
                                 disabled={!allowPublicAccess}

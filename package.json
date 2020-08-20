@@ -7,7 +7,7 @@
         "type": "git",
         "url": "git+https://github.com/eyeseetea/d2-ui-components.git"
     },
-    "version": "1.6.0",
+    "version": "2.0.0",
     "main": "index.js",
     "types": "index.d.ts",
     "peerDependencies": {
@@ -71,7 +71,6 @@
         "lodash": "4.17.19",
         "moment": "^2.22.2",
         "nano-memoize": "1.1.10",
-        "node-sass": "^4.12.0",
         "react-linkify": "^1.0.0-alpha",
         "rxjs-compat": "6.5.4",
         "throttle-debounce": "^2.1.0"
@@ -82,7 +81,7 @@
         "build-tsc": "tsc --outDir build",
         "build-babel": "babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
         "build-locales": "mkdir -p build/locales && cp -a src/locales/* build/locales",
-        "build-css": "cd src && cp -a --parents **/*.css **/*.scss ../build",
+        "build-css": "cd src && cp -a --parents **/*.css ../build",
         "build": "yarn code-quality && rm -rf build/* && yarn build-only",
         "build-dev": "yarn build-only --watch --verbose",
         "code-quality": "yarn lint && yarn prettify && yarn test",
