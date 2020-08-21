@@ -20,11 +20,7 @@ function defaultFormatter(value: any): ReactNode {
         );
     } else if (value.displayName || value.name || value.id) {
         return value.displayName || value.name || value.id;
-    } else if (
-        moment.isDate(value) ||
-        moment.isMoment(value) ||
-        moment(value, moment.ISO_8601, true).isValid()
-    ) {
+    } else if (moment.isDate(value) || moment.isMoment(value) || isStringDate(value)) {
         return moment(value).format("YYYY-MM-DD HH:mm:ss");
     } else {
         return <Linkify key={value}>{value}</Linkify>;
@@ -40,3 +36,12 @@ export function formatRowValue<T extends ReferenceObject>(
 }
 
 export const defaultRowConfig = () => ({} as RowConfig);
+
+function isStringDate(value: any): boolean {
+    // Avoid dubious positives by skipping strings that do not contain at least year, month and day.
+    if (typeof value === "string" && value.length >= "YYYY-MM-DD".length) {
+        return moment(value, moment.ISO_8601, true).isValid();
+    } else {
+        return false;
+    }
+}
