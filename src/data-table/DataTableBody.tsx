@@ -153,7 +153,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             });
         };
 
-        const { style, disabled, selectable = !disabled } = rowConfig(row);
+        const { style, cellStyle, disabled, selectable = !disabled } = rowConfig(row);
         const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
         const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
             selectedItem || {};
@@ -174,7 +174,11 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                     hover
                 >
                     {(enableMultipleAction || childrenRows.length > 0) && (
-                        <TableCell padding="checkbox" className={classes.checkboxCell}>
+                        <TableCell
+                            padding="checkbox"
+                            className={classes.checkboxCell}
+                            style={cellStyle}
+                        >
                             <div className={classes.flex}>
                                 {enableMultipleAction && (
                                     <Checkbox
@@ -206,12 +210,18 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 key={`${labelId}-column-${column.name}`}
                                 scope="row"
                                 align="left"
+                                style={cellStyle}
                             >
                                 {formatRowValue(column, row)}
                             </TableCell>
                         ))}
 
-                    <TableCell key={`${labelId}-actions`} padding="none" align={"center"}>
+                    <TableCell
+                        key={`${labelId}-actions`}
+                        padding="none"
+                        align={"center"}
+                        style={cellStyle}
+                    >
                         {!!showRowActions && (
                             <Tooltip title={i18n.t("Actions")}>
                                 <IconButton onClick={event => contextualAction(event)}>
