@@ -20,11 +20,7 @@ function defaultFormatter(value: any): ReactNode {
         );
     } else if (value.displayName || value.name || value.id) {
         return value.displayName || value.name || value.id;
-    } else if (
-        moment.isDate(value) ||
-        moment.isMoment(value) ||
-        moment(value, moment.ISO_8601, true).isValid()
-    ) {
+    } else if (isValidDate(value)) {
         return moment(value).format("YYYY-MM-DD HH:mm:ss");
     } else {
         return <Linkify key={value}>{value}</Linkify>;
@@ -40,3 +36,13 @@ export function formatRowValue<T extends ReferenceObject>(
 }
 
 export const defaultRowConfig = () => ({} as RowConfig);
+
+// Avoid dubious positives by skipping strings that do not contain at least year, month and day.
+function isValidDate(value: any): boolean {
+    if (moment.isDate(value) || moment.isMoment(value)) return true;
+
+    const date = moment(value, moment.ISO_8601, true);
+    const { format } = date.creationData();
+
+    return format !== "YYYY" && format !== "YYYY-MM" && date.isValid();
+}
