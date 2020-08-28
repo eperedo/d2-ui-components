@@ -192,7 +192,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ids = rowObjects
+        const refs = rowObjects
             .filter(row => {
                 const { selectable = true } = rowConfig(row);
                 return selectable;
@@ -201,8 +201,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
         handleSelectionChange(
             event.target.checked
-                ? _.uniq(selection.concat(ids))
-                : _.differenceBy(selection, ids, "id")
+                ? _.unionBy(selection, refs, "id")
+                : _.differenceBy(selection, refs, "id")
         );
     };
 
