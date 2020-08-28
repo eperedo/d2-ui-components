@@ -27,6 +27,7 @@ export interface TableAction<T extends ReferenceObject> {
 
 export interface RowConfig {
     style?: CSSProperties;
+    cellStyle?: CSSProperties;
     disabled?: boolean;
     selectable?: boolean;
 }
