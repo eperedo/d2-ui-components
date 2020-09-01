@@ -1,68 +1,13 @@
-import { createStyles, IconButton, makeStyles, Theme, Tooltip } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Icon from "@material-ui/core/Icon";
+import { makeStyles, Theme } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
-import Step from "@material-ui/core/Step";
-import StepButton from "@material-ui/core/StepButton";
-import Stepper from "@material-ui/core/Stepper";
 import _ from "lodash";
-import memoize from "nano-memoize";
 import { ReactComponentLike } from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
-import { DialogButton } from "../dialog-button/DialogButton";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { useSnackbar } from "../snackbar";
-import i18n from "../utils/i18n";
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: "100%",
-        },
-        description: {
-            marginBottom: 15,
-            marginLeft: 3,
-            fontSize: "1.1em",
-        },
-        warning: {
-            marginBottom: 15,
-            marginLeft: 3,
-            fontSize: "1.1em",
-            color: "#F00",
-            textAlign: "center",
-            backgroundColor: "#EEE",
-            padding: 20,
-        },
-        button: {
-            margin: theme.spacing(1),
-            marginRight: 5,
-            padding: 10,
-        },
-        buttonDisabled: {
-            color: "grey !important",
-        },
-        buttonContainer: {
-            display: "flex",
-            justifyContent: "flex-end",
-            paddingTop: 10,
-        },
-        stepButton: {
-            width: "auto",
-        },
-        contents: {
-            margin: 10,
-            padding: 25,
-        },
-        messages: {
-            padding: 0,
-            listStyleType: "none",
-            color: "red",
-        },
-        stepper: {
-            marginLeft: 10,
-            marginRight: 10,
-        },
-    })
-);
+import { FeedbackMessages } from "./FeedbackMessages";
+import { Navigation, NavigationProps } from "./Navigation";
+import Stepper, { StepperProps } from "./Stepper";
+import { getAdjacentSteps } from "./utils";
 
 export interface WizardStep {
     key: string;
@@ -76,92 +21,39 @@ export interface WizardStep {
 }
 
 export interface WizardProps {
+    className?: string;
     initialStepKey: string;
+    useSnackFeedback?: boolean;
+    lastClickableStepIndex?: number;
+    steps: WizardStep[];
+    NavigationComponent?: (props: NavigationProps) => ReactElement;
+    StepperComponent?: (props: StepperProps) => ReactElement;
     onStepChangeRequest: (
         currentStep: WizardStep,
         newStep: WizardStep
     ) => Promise<string[] | undefined>;
     onStepChange?: (stepKey: string) => void;
-    useSnackFeedback?: boolean;
-    steps: WizardStep[];
-    lastClickableStepIndex?: number;
 }
 
 export const Wizard: React.FC<WizardProps> = ({
+    className,
     initialStepKey,
     onStepChangeRequest,
     onStepChange = _.noop,
     useSnackFeedback = false,
     steps,
     lastClickableStepIndex: initialLastClickableStepIndex = 0,
+    StepperComponent = Stepper,
+    NavigationComponent = Navigation,
 }) => {
     const classes = useStyles();
     const snackbar = useSnackbar();
 
+    const [messages, setMessages] = useState<string[]>([]);
     const [currentStepKey, setCurrentStepKey] = useState(initialStepKey);
     const [lastClickableStepIndex, setLastClickableStepIndex] = useState(
         initialLastClickableStepIndex
     );
-    const [messages, setMessages] = useState([]);
-
-    const getAdjacentSteps = () => {
-        const index = _(steps).findIndex(step => step.key === currentStepKey);
-        const prevStepKey = index >= 1 ? steps[index - 1].key : null;
-        const nextStepKey = index >= 0 && index < steps.length - 1 ? steps[index + 1].key : null;
-        return { prevStepKey, nextStepKey };
-    };
-
-    const nextStep = () => {
-        const { nextStepKey } = getAdjacentSteps();
-        setStep(nextStepKey);
-    };
-
-    const prevStep = () => {
-        const { prevStepKey } = getAdjacentSteps();
-        setStep(prevStepKey);
-    };
-
-    const renderNavigationButton = ({ stepKey, onClick, label }) => {
-        return (
-            <Button
-                variant="contained"
-                classes={{ disabled: classes.buttonDisabled }}
-                disabled={!stepKey}
-                className={classes.button}
-                onClick={onClick}
-            >
-                {label}
-            </Button>
-        );
-    };
-
-    const renderHelp = ({ step, currentStepKey }) => {
-        return (
-            <DialogButton
-                buttonComponent={HelpButton}
-                title={`${step.label} - ${i18n.t("Help")}`}
-                contents={step.help}
-                initialIsOpen={step.helpDialogIsInitialOpen}
-                isVisible={step.help && step.key === currentStepKey}
-            />
-        );
-    };
-
-    const renderFeedbackMessages = () => {
-        if (useSnackFeedback || messages.length === 0) {
-            return null;
-        } else {
-            return (
-                <div className="messages">
-                    <ul className={classes.messages}>
-                        {messages.map((message, index) => (
-                            <li key={index}>{message}</li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        }
-    };
 
     const notifyStepChange = useCallback(
         (skepKey: string) => {
@@ -170,43 +62,66 @@ export const Wizard: React.FC<WizardProps> = ({
         [onStepChange]
     );
 
-    const setStep = async (newStepKey: string) => {
-        const stepsByKey = _.keyBy(steps, "key");
-        const newStep = stepsByKey[newStepKey];
-        const currentStep = stepsByKey[currentStepKey];
-        const currentStepIndex = _(steps).findIndex(step => step.key === currentStepKey);
-        const newStepIndex = _(steps).findIndex(step => step.key === newStepKey);
-        const shouldValidate = newStepIndex > currentStepIndex;
-        const errorMessages = shouldValidate ? await onStepChangeRequest(currentStep, newStep) : [];
+    const setStep = useCallback(
+        async (newStepKey: string) => {
+            const stepsByKey = _.keyBy(steps, "key");
+            const newStep = stepsByKey[newStepKey];
+            const currentStep = stepsByKey[currentStepKey];
+            const currentStepIndex = _(steps).findIndex(step => step.key === currentStepKey);
+            const newStepIndex = _(steps).findIndex(step => step.key === newStepKey);
+            const shouldValidate = newStepIndex > currentStepIndex;
+            const errorMessages = shouldValidate
+                ? await onStepChangeRequest(currentStep, newStep)
+                : [];
 
-        if (_(errorMessages).isEmpty()) {
-            const newLastClickableStepIndex = Math.max(lastClickableStepIndex, newStepIndex);
-            notifyStepChange(newStepKey);
-            setCurrentStepKey(newStepKey);
-            setLastClickableStepIndex(newLastClickableStepIndex);
-            setMessages([]);
-        } else {
-            if (useSnackFeedback) {
-                snackbar.error(errorMessages.join("\n"), {
-                    autoHideDuration: null,
-                });
-            } else {
-                setMessages(errorMessages);
+            if (_(errorMessages).isEmpty()) {
+                const newLastClickableStepIndex = Math.max(lastClickableStepIndex, newStepIndex);
+                notifyStepChange(newStepKey);
+                setCurrentStepKey(newStepKey);
+                setLastClickableStepIndex(newLastClickableStepIndex);
+                setMessages([]);
+            } else if (errorMessages) {
+                if (useSnackFeedback) {
+                    snackbar.error(errorMessages.join("\n"), {
+                        autoHideDuration: null,
+                    });
+                } else {
+                    setMessages(errorMessages);
+                }
             }
-        }
-    };
+        },
+        [
+            currentStepKey,
+            lastClickableStepIndex,
+            notifyStepChange,
+            onStepChangeRequest,
+            snackbar,
+            steps,
+            useSnackFeedback,
+        ]
+    );
 
-    const onStepClicked = memoize((stepKey: string) => () => {
-        setStep(stepKey);
-    });
+    const onStepClicked = useCallback(
+        (stepKey: string) => () => {
+            setStep(stepKey);
+        },
+        [setStep]
+    );
 
+    const nextStep = useCallback(() => {
+        const { nextStepKey } = getAdjacentSteps(steps, currentStepKey);
+        if (nextStepKey) setStep(nextStepKey);
+    }, [currentStepKey, steps, setStep]);
+
+    const prevStep = useCallback(() => {
+        const { prevStepKey } = getAdjacentSteps(steps, currentStepKey);
+        if (prevStepKey) setStep(prevStepKey);
+    }, [currentStepKey, steps, setStep]);
+
+    const { prevStepKey, nextStepKey } = getAdjacentSteps(steps, currentStepKey);
     const index = _(steps).findIndex(step => step.key === currentStepKey);
     const currentStepIndex = index >= 0 ? index : 0;
     const currentStep = steps[currentStepIndex];
-    const { prevStepKey, nextStepKey } = getAdjacentSteps();
-    const NavigationButton = renderNavigationButton;
-    const Help = renderHelp;
-    const FeedbackMessages = renderFeedbackMessages;
     const { component: StepComponent, props: stepProps = {}, warning, description } = currentStep;
 
     useEffect(() => {
@@ -214,32 +129,15 @@ export const Wizard: React.FC<WizardProps> = ({
     }, [notifyStepChange, currentStepKey]);
 
     return (
-        <div className={classes.root}>
-            {steps.length > 1 && (
-                <Stepper nonLinear={true} activeStep={currentStepIndex} className={classes.stepper}>
-                    {steps.map((step, index) => (
-                        <Step
-                            key={step.key}
-                            completed={false}
-                            disabled={index > lastClickableStepIndex}
-                        >
-                            <StepButton
-                                key={step.key}
-                                data-test-current={currentStep === step}
-                                onClick={onStepClicked(step.key)}
-                                classes={{ root: classes.stepButton }}
-                                className={currentStep === step ? "current-step" : ""}
-                            >
-                                {step.label}
-                            </StepButton>
+        <div className={[className, classes.root].join(" ")}>
+            <StepperComponent
+                steps={steps}
+                lastClickableStepIndex={lastClickableStepIndex}
+                currentStepKey={currentStepKey}
+                onStepClicked={onStepClicked}
+            />
 
-                            {step.help && <Help step={step} currentStepKey={currentStepKey} />}
-                        </Step>
-                    ))}
-                </Stepper>
-            )}
-
-            <FeedbackMessages />
+            {useSnackFeedback && <FeedbackMessages messages={messages} />}
 
             <Paper className={classes.contents} data-wizard-contents={true}>
                 {warning && <div className={classes.warning}>{warning}</div>}
@@ -248,32 +146,40 @@ export const Wizard: React.FC<WizardProps> = ({
 
                 {<StepComponent {...stepProps} />}
 
-                {steps.length > 1 && (
-                    <div className={classes.buttonContainer}>
-                        <NavigationButton
-                            stepKey={prevStepKey}
-                            onClick={prevStep}
-                            label={"← " + i18n.t("Previous")}
-                        />
-
-                        <NavigationButton
-                            stepKey={nextStepKey}
-                            onClick={nextStep}
-                            label={i18n.t("Next") + " →"}
-                        />
-                    </div>
-                )}
+                <NavigationComponent
+                    steps={steps}
+                    disableNext={!nextStepKey}
+                    disablePrev={!prevStepKey}
+                    onNext={nextStep}
+                    onPrev={prevStep}
+                />
             </Paper>
         </div>
     );
 };
 
-const HelpButton = ({ onClick }) => (
-    <Tooltip title={i18n.t("Help")}>
-        <IconButton onClick={onClick}>
-            <Icon color="primary">help</Icon>
-        </IconButton>
-    </Tooltip>
-);
+const useStyles = makeStyles((theme: Theme) => ({
+    root: {
+        width: "100%",
+    },
+    description: {
+        marginBottom: 15,
+        marginLeft: 3,
+        fontSize: "1.1em",
+    },
+    warning: {
+        marginBottom: 15,
+        marginLeft: 3,
+        fontSize: "1.1em",
+        color: "#F00",
+        textAlign: "center",
+        backgroundColor: "#EEE",
+        padding: 20,
+    },
+    contents: {
+        margin: 10,
+        padding: 25,
+    },
+}));
 
 export default Wizard;
