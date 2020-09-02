@@ -183,3 +183,4 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default Wizard;
+export { NavigationProps as WizardNavigationProps, StepperProps as WizardStepperProps };
