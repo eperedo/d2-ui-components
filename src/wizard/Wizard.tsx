@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import _ from "lodash";
 import { ReactComponentLike } from "prop-types";
@@ -26,9 +26,9 @@ export interface WizardProps {
     useSnackFeedback?: boolean;
     lastClickableStepIndex?: number;
     steps: WizardStep[];
-    NavigationComponent?: (props: NavigationProps) => ReactElement;
-    StepperComponent?: (props: StepperProps) => ReactElement;
-    onStepChangeRequest: (
+    NavigationComponent?: (props: NavigationProps) => ReactElement | null;
+    StepperComponent?: (props: StepperProps) => ReactElement | null;
+    onStepChangeRequest?: (
         currentStep: WizardStep,
         newStep: WizardStep
     ) => Promise<string[] | undefined>;
@@ -38,8 +38,8 @@ export interface WizardProps {
 export const Wizard: React.FC<WizardProps> = ({
     className,
     initialStepKey,
-    onStepChangeRequest,
-    onStepChange = _.noop,
+    onStepChangeRequest = () => undefined,
+    onStepChange = () => {},
     useSnackFeedback = false,
     steps,
     lastClickableStepIndex: initialLastClickableStepIndex = 0,
@@ -158,7 +158,7 @@ export const Wizard: React.FC<WizardProps> = ({
     );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: "100%",
     },

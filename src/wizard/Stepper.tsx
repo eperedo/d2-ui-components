@@ -48,7 +48,7 @@ export const Stepper = ({
     );
 };
 
-type EventHandler = (event: MouseEvent<HTMLButtonElement>) => void;
+type EventHandler = (event: MouseEvent<HTMLElement>) => void;
 
 export interface StepperProps {
     steps: WizardStep[];
