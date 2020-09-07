@@ -1,5 +1,5 @@
 import { Button, ButtonProps, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
 import i18n from "../utils/i18n";
 import { WizardStep } from "./Wizard";
 
@@ -11,11 +11,14 @@ export const Navigation: React.FC<NavigationProps> = ({
     onPrev,
 }) => {
     const classes = useStyles();
+    const className = useMemo(() => ["Wizard-Navigation", classes.buttonContainer].join(" "), [
+        classes,
+    ]);
 
     if (steps.length === 0) return null;
 
     return (
-        <div className={["Wizard-Navigation", classes.buttonContainer].join(" ")}>
+        <div className={className}>
             <NavigationButton
                 disabled={disablePrev}
                 onClick={onPrev}
@@ -34,10 +37,17 @@ export const Navigation: React.FC<NavigationProps> = ({
 const NavigationButton: React.FC<NavigationButtonProps> = ({ disabled, onClick, label }) => {
     const classes = useStyles();
 
+    const buttonStyleOverride = useMemo(
+        () => ({
+            disabled: classes.buttonDisabled,
+        }),
+        [classes]
+    );
+
     return (
         <Button
             variant="contained"
-            classes={{ disabled: classes.buttonDisabled }}
+            classes={buttonStyleOverride}
             disabled={disabled}
             className={classes.button}
             onClick={onClick}
