@@ -4,12 +4,12 @@ import React, { MouseEvent } from "react";
 import { Help } from "./Help";
 import { WizardStep } from "./Wizard";
 
-export const Stepper = ({
+export const Stepper: React.FC<StepperProps> = ({
     steps,
     lastClickableStepIndex,
     currentStepKey,
     onStepClicked,
-}: StepperProps) => {
+}) => {
     const classes = useStyles();
 
     if (steps.length === 0) return null;

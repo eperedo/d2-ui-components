@@ -3,13 +3,13 @@ import React from "react";
 import i18n from "../utils/i18n";
 import { WizardStep } from "./Wizard";
 
-export const Navigation = ({
+export const Navigation: React.FC<NavigationProps> = ({
     steps,
     disableNext,
     disablePrev,
     onNext,
     onPrev,
-}: NavigationProps) => {
+}) => {
     const classes = useStyles();
 
     if (steps.length === 0) return null;
@@ -31,7 +31,7 @@ export const Navigation = ({
     );
 };
 
-const NavigationButton = ({ disabled, onClick, label }: NavigationButtonProps) => {
+const NavigationButton: React.FC<NavigationButtonProps> = ({ disabled, onClick, label }) => {
     const classes = useStyles();
 
     return (

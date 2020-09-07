@@ -4,7 +4,7 @@ import { DialogButton } from "../dialog-button/DialogButton";
 import i18n from "../utils/i18n";
 import { WizardStep } from "./Wizard";
 
-const HelpButton = ({ onClick }: ButtonProps) => (
+const HelpButton: React.FC<ButtonProps> = ({ onClick }) => (
     <Tooltip title={i18n.t("Help")}>
         <IconButton onClick={onClick}>
             <Icon color="primary">help</Icon>
@@ -12,7 +12,7 @@ const HelpButton = ({ onClick }: ButtonProps) => (
     </Tooltip>
 );
 
-export const Help = ({ step, currentStepKey }: HelpProps) => (
+export const Help: React.FC<HelpProps> = ({ step, currentStepKey }) => (
     <DialogButton
         buttonComponent={HelpButton}
         title={`${step.label} - ${i18n.t("Help")}`}

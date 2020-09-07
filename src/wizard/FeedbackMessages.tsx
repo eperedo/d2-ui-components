@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import React from "react";
 
-export const FeedbackMessages = ({ messages }: FeedbackMessagesProps) => {
+export const FeedbackMessages: React.FC<FeedbackMessagesProps> = ({ messages }) => {
     const classes = useStyles();
 
     if (messages.length === 0) return null;
