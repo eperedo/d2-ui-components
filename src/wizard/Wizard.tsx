@@ -9,32 +9,6 @@ import { Navigation, NavigationProps } from "./Navigation";
 import Stepper, { StepperProps } from "./Stepper";
 import { getAdjacentSteps } from "./utils";
 
-export interface WizardStep {
-    key: string;
-    label: string;
-    warning?: string;
-    description?: string;
-    component: ReactComponentLike;
-    props?: object;
-    help?: React.ReactNode;
-    helpDialogIsInitialOpen?: boolean;
-}
-
-export interface WizardProps {
-    className?: string;
-    initialStepKey: string;
-    useSnackFeedback?: boolean;
-    lastClickableStepIndex?: number;
-    steps: WizardStep[];
-    NavigationComponent?: (props: NavigationProps) => ReactElement | null;
-    StepperComponent?: (props: StepperProps) => ReactElement | null;
-    onStepChangeRequest?: (
-        currentStep: WizardStep,
-        newStep: WizardStep
-    ) => Promise<string[] | undefined>;
-    onStepChange?: (stepKey: string) => void;
-}
-
 export const Wizard: React.FC<WizardProps> = ({
     className,
     initialStepKey,
@@ -182,5 +156,33 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+export interface WizardStep {
+    key: string;
+    label: string;
+    warning?: string;
+    description?: string;
+    component: ReactComponentLike;
+    props?: object;
+    help?: React.ReactNode;
+    helpDialogIsInitialOpen?: boolean;
+}
+
+export interface WizardProps {
+    className?: string;
+    initialStepKey: string;
+    useSnackFeedback?: boolean;
+    lastClickableStepIndex?: number;
+    steps: WizardStep[];
+    NavigationComponent?: (props: NavigationProps) => ReactElement | null;
+    StepperComponent?: (props: StepperProps) => ReactElement | null;
+    onStepChangeRequest?: (
+        currentStep: WizardStep,
+        newStep: WizardStep
+    ) => Promise<string[] | undefined>;
+    onStepChange?: (stepKey: string) => void;
+}
+
+export interface WizardNavigationProps extends NavigationProps {}
+export interface WizardStepperProps extends StepperProps {}
+
 export default Wizard;
-export { NavigationProps as WizardNavigationProps, StepperProps as WizardStepperProps };
