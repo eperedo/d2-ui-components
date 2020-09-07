@@ -9,4 +9,11 @@ module.exports = {
     transformIgnorePatterns: [],
     snapshotSerializers: ["enzyme-to-json/serializer"],
     setupFilesAfterEnv: ["<rootDir>/setupEnzyme.js"],
+    globals: {
+        "ts-jest": {
+            tsConfig: {
+                jsx: "react",
+            },
+        },
+    },
 };
