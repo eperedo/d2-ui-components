@@ -40,6 +40,7 @@ module.exports = {
         "no-mixed-spaces-and-tabs": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+        "no-prototype-builtins": "off",
     },
     plugins: ["@typescript-eslint", "react-hooks"],
     settings: {
