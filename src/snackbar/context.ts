@@ -1,3 +1,4 @@
 import React from "react";
+import { SnackbarState } from "./types";
 
-export default React.createContext(undefined);
+export default React.createContext<SnackbarState | undefined>(undefined);

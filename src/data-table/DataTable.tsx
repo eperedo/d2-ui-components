@@ -127,7 +127,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const [stateSelection, updateSelection] = useState(initialState.selection || []);
     const [statePagination, updatePagination] = useState(initialState.pagination);
-    const [visibleColumns, updateVisibleColumns] = useState([]);
+    const [visibleColumns, updateVisibleColumns] = useState<Array<keyof T>>([]);
     const [stateSorting, updateSorting] = useState(
         initialState.sorting || {
             field: columns[0].name,
@@ -164,10 +164,11 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     const enableMultipleAction = _.isUndefined(forceSelectionColumn)
         ? _.some(availableActions, "multiple")
         : forceSelectionColumn;
+    const totalRows = pagination.total ? pagination.total : rows.length;
 
     const selectionMessages = hideSelectionMessages
         ? []
-        : getSelectionMessages(rowObjects, selection, pagination, ids, childrenKeys);
+        : getSelectionMessages(rowObjects, selection, totalRows, ids, childrenKeys);
 
     // Contextual menu
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);

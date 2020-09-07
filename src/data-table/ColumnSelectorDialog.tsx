@@ -1,4 +1,3 @@
-import i18n from "@dhis2/d2-i18n";
 import { Checkbox, DialogContent } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,6 +6,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { ConfirmationDialog, ReferenceObject, TableColumn } from "..";
+import i18n from "../utils/i18n";
 
 interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];

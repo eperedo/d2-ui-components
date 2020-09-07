@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from "react";
-import loadingContext from "./context";
+import LoadingContext from "./context";
 import LoadingProvider from "./LoadingProvider";
 import { LoadingOptions, LoadingState } from "./types";
 
@@ -7,7 +7,7 @@ import { LoadingOptions, LoadingState } from "./types";
 export function withLoading(WrappedComponent: any) {
     return class extends React.Component {
         static displayName = `withLoading${WrappedComponent.displayName}`;
-        static contextType = loadingContext;
+        static contextType = LoadingContext;
 
         render() {
             return <WrappedComponent {...this.props} loading={this.context} />;
@@ -16,7 +16,9 @@ export function withLoading(WrappedComponent: any) {
 }
 
 export function useLoading() {
-    const contextValue = useContext<LoadingState>(loadingContext);
+    const contextValue = useContext<LoadingState | undefined>(LoadingContext);
+    if (!contextValue) throw new Error("Loading context has not been defined");
+
     const ref = useRef(contextValue);
     return ref.current;
 }

@@ -1,13 +1,7 @@
-import i18n from "@dhis2/d2-i18n";
 import _ from "lodash";
 import { MouseEvent } from "react";
-import {
-    ReferenceObject,
-    TableAction,
-    TableNotification,
-    TablePagination,
-    TableSelection,
-} from "../types";
+import i18n from "../../utils/i18n";
+import { ReferenceObject, TableAction, TableNotification, TableSelection } from "../types";
 
 export function updateSelection<T extends ReferenceObject>(selected: TableSelection[], row: T) {
     const selectedIndex = _.findIndex(selected, { id: row.id });
@@ -59,7 +53,7 @@ export function parseActions<T extends ReferenceObject>(
 export function getSelectionMessages<T extends ReferenceObject>(
     rows: T[],
     tableSelection: TableSelection[],
-    pagination: TablePagination,
+    total: number,
     ids: string[],
     childrenKeys: string[]
 ): TableNotification[] {
@@ -77,11 +71,11 @@ export function getSelectionMessages<T extends ReferenceObject>(
 
     const selection = _.differenceBy(tableSelection, childrenIds, "id");
 
-    const allSelected = selection.length === pagination.total;
+    const allSelected = selection.length === total;
     const selectionInOtherPages = _.differenceBy(selection, rows, "id");
     const allSelectedInPage = _.differenceBy(rows, selection, "id").length === 0;
-    const multiplePagesAvailable = pagination.total > rows.length;
-    const selectAllImplemented = ids.length === pagination.total;
+    const multiplePagesAvailable = total > rows.length;
+    const selectAllImplemented = ids.length === total;
 
     return _.compact([
         allSelected
@@ -108,9 +102,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
                   message: i18n.t("All {{total}} items on this page are selected.", {
                       total: rows.length,
                   }),
-                  link: i18n.t("Select all {{total}} items in all pages", {
-                      total: pagination.total,
-                  }),
+                  link: i18n.t("Select all {{total}} items in all pages", { total }),
                   newSelection: ids.map(id => ({ id })),
               }
             : null,

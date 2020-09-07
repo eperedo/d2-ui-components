@@ -1,10 +1,11 @@
 import Pagination from "@material-ui/core/TablePagination";
 import _ from "lodash";
 import React from "react";
+import { PartialBy } from "../utils/types";
 import { PaginationOptions, TablePagination } from "./types";
 
 export interface DataTablePaginationProps {
-    pagination: TablePagination;
+    pagination: PartialBy<TablePagination, "total">;
     paginationOptions: Partial<PaginationOptions>;
     defaultTotal: number;
     onChange?(newPagination: TablePagination): void;

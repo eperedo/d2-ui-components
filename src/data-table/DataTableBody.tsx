@@ -1,4 +1,3 @@
-import i18n from "@dhis2/d2-i18n";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,6 +22,7 @@ import {
 } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
+import i18n from "../utils/i18n";
 
 const defaultMouseActionsMapping: MouseActionsMapping = {
     left: { type: "primary" },
@@ -78,13 +78,13 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
         rowConfig,
         visibleColumns,
         sorting,
-        availableActions,
+        availableActions = [],
         selected,
         onChange = _.noop,
         openContextualMenu = _.noop,
         enableMultipleAction,
         loading,
-        childrenKeys,
+        childrenKeys = [],
         mouseActionsMapping = defaultMouseActionsMapping,
     } = props;
     const { field, order } = sorting;
@@ -153,8 +153,9 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             });
         };
 
-        const { style, cellStyle, disabled, selectable = !disabled } = rowConfig(row);
-        const selectedItem: Partial<TableSelection> = _.find(selected, { id: row.id });
+        const config = rowConfig ? rowConfig(row) : {};
+        const { style, cellStyle, disabled, selectable = !disabled } = config;
+        const selectedItem = _.find(selected, { id: row.id });
         const { checked = !!selectedItem, indeterminate = false, icon = <CheckBoxTwoToneIcon /> } =
             selectedItem || {};
         const rowClassName = _.compact([

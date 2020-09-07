@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 export function sortObjects<T extends ReferenceObject>(
     rows: T[],
     columns: TableColumn<T>[],
-    tablePagination: TablePagination,
+    tablePagination: Pick<TablePagination, "page" | "pageSize">,
     tableSorting: TableSorting<T>
 ) {
     const { field, order } = tableSorting;
