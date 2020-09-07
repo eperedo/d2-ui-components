@@ -183,7 +183,6 @@ export interface WizardProps {
     onStepChange?: (stepKey: string) => void;
 }
 
-export interface WizardNavigationProps extends NavigationProps {}
-export interface WizardStepperProps extends StepperProps {}
+export { NavigationProps as WizardNavigationProps, StepperProps as WizardStepperProps };
 
 export default Wizard;
