@@ -10,7 +10,7 @@
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "noEmit": true,
+        "declaration": true,
         "jsx": "preserve",
         "noUnusedParameters": true,
         "noUnusedLocals": true,
