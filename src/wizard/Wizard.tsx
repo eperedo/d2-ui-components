@@ -12,8 +12,8 @@ import { getAdjacentSteps } from "./utils";
 export const Wizard: React.FC<WizardProps> = ({
     className,
     initialStepKey,
-    onStepChangeRequest = () => undefined,
-    onStepChange = () => {},
+    onStepChangeRequest,
+    onStepChange,
     useSnackFeedback = false,
     steps,
     lastClickableStepIndex: initialLastClickableStepIndex = 0,
@@ -31,7 +31,7 @@ export const Wizard: React.FC<WizardProps> = ({
 
     const notifyStepChange = useCallback(
         (skepKey: string) => {
-            onStepChange(skepKey);
+            if (onStepChange) onStepChange(skepKey);
         },
         [onStepChange]
     );
@@ -44,9 +44,10 @@ export const Wizard: React.FC<WizardProps> = ({
             const currentStepIndex = _(steps).findIndex(step => step.key === currentStepKey);
             const newStepIndex = _(steps).findIndex(step => step.key === newStepKey);
             const shouldValidate = newStepIndex > currentStepIndex;
-            const errorMessages = shouldValidate
-                ? await onStepChangeRequest(currentStep, newStep)
-                : [];
+            const errorMessages =
+                shouldValidate && onStepChangeRequest
+                    ? await onStepChangeRequest(currentStep, newStep)
+                    : [];
 
             if (_(errorMessages).isEmpty()) {
                 const newLastClickableStepIndex = Math.max(lastClickableStepIndex, newStepIndex);
