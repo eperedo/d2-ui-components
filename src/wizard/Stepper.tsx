@@ -6,7 +6,7 @@ import { WizardStep } from "./Wizard";
 
 export const Stepper: React.FC<StepperProps> = ({
     steps,
-    lastClickableStepIndex,
+    lastClickableStepIndex = 0,
     currentStepKey,
     onStepClicked,
 }) => {
@@ -34,7 +34,7 @@ export const Stepper: React.FC<StepperProps> = ({
                     <StepButton
                         key={step.key}
                         data-test-current={currentStep === step}
-                        onClick={onStepClicked(step.key)}
+                        onClick={onStepClicked ? onStepClicked(step.key) : undefined}
                         classes={{ root: classes.stepButton }}
                         className={currentStep === step ? "current-step" : ""}
                     >
@@ -52,9 +52,9 @@ type EventHandler = (event: MouseEvent<HTMLElement>) => void;
 
 export interface StepperProps {
     steps: WizardStep[];
-    lastClickableStepIndex: number;
-    currentStepKey: string;
-    onStepClicked: (stepKey: string) => EventHandler;
+    lastClickableStepIndex?: number;
+    currentStepKey?: string;
+    onStepClicked?: (stepKey: string) => EventHandler;
 }
 
 const useStyles = makeStyles(() => ({

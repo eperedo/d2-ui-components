@@ -12,7 +12,7 @@ const HelpButton: React.FC<ButtonProps> = ({ onClick }) => (
     </Tooltip>
 );
 
-export const Help: React.FC<HelpProps> = ({ step, currentStepKey }) => (
+export const Help: React.FC<HelpProps> = ({ step, currentStepKey = "" }) => (
     <DialogButton
         buttonComponent={HelpButton}
         title={`${step.label} - ${i18n.t("Help")}`}
@@ -24,7 +24,7 @@ export const Help: React.FC<HelpProps> = ({ step, currentStepKey }) => (
 
 export interface HelpProps {
     step: WizardStep;
-    currentStepKey: string;
+    currentStepKey?: string;
 }
 
 export default Help;
