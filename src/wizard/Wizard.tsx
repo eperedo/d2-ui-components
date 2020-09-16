@@ -11,11 +11,11 @@ import { getAdjacentSteps } from "./utils";
 
 export const Wizard: React.FC<WizardProps> = ({
     className,
-    initialStepKey,
+    steps,
+    initialStepKey = steps[0] ? steps[0].key : "",
     onStepChangeRequest,
     onStepChange,
     useSnackFeedback = false,
-    steps,
     lastClickableStepIndex: initialLastClickableStepIndex = 0,
     StepperComponent = Stepper,
     NavigationComponent = Navigation,
@@ -123,6 +123,7 @@ export const Wizard: React.FC<WizardProps> = ({
 
                 <NavigationComponent
                     steps={steps}
+                    currentStepKey={currentStepKey}
                     disableNext={!nextStepKey}
                     disablePrev={!prevStepKey}
                     onNext={nextStep}
@@ -170,7 +171,7 @@ export interface WizardStep {
 
 export interface WizardProps {
     className?: string;
-    initialStepKey: string;
+    initialStepKey?: string;
     useSnackFeedback?: boolean;
     lastClickableStepIndex?: number;
     steps: WizardStep[];

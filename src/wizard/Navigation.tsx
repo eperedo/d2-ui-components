@@ -59,6 +59,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({ disabled, onClick, 
 
 export interface NavigationProps {
     steps: WizardStep[];
+    currentStepKey: string;
     disableNext: boolean;
     disablePrev: boolean;
     onNext: () => void;
