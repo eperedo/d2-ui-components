@@ -53,7 +53,7 @@ type EventHandler = (event: MouseEvent<HTMLElement>) => void;
 export interface StepperProps {
     steps: WizardStep[];
     lastClickableStepIndex?: number;
-    currentStepKey: string;
+    currentStepKey?: string;
     onStepClicked?: (stepKey: string) => EventHandler;
 }
 
