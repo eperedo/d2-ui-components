@@ -154,7 +154,7 @@ export default class OrgUnitsSelector extends React.Component {
                               ? selectableLevels.includes(orgUnit.level)
                               : !rootIds || rootIds.some(ouId => orgUnit.path.includes(ouId))
                       )
-                      .take(10)
+                      .take(50)
                       .value()
             : _.identity;
 
