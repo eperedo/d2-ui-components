@@ -37,12 +37,13 @@ export function formatRowValue<T extends ReferenceObject>(
 
 export const defaultRowConfig = () => ({} as RowConfig);
 
-// Avoid dubious positives by skipping strings that do not contain at least year, month and day.
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function isValidDate(value: any): boolean {
     if (moment.isDate(value) || moment.isMoment(value)) return true;
 
     const date = moment(value, moment.ISO_8601, true);
     const { format } = date.creationData();
 
+    // Avoid dubious positives by skipping strings that do not contain at least year, month and day
     return format !== "YYYY" && format !== "YYYY-MM" && date.isValid();
 }
