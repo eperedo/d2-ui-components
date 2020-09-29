@@ -1,14 +1,12 @@
-import React from "react";
-
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import { WithStyles } from "@material-ui/core";
-
-import i18n from "../locales";
+import Divider from "@material-ui/core/Divider";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import i18n from "../utils/i18n";
+import { ExternalAccess, GroupAccess, PublicAccess } from "./Access";
+import { AccessRule, MetaObject, SearchResult, ShareUpdate, SharingRule } from "./types";
 import UserSearch from "./UserSearch";
-import { PublicAccess, ExternalAccess, GroupAccess } from "./Access";
-import { AccessRule, SharingRule, MetaObject, ShareUpdate, SearchResult } from "./types";
 
 type Id = string;
 

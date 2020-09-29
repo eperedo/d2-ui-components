@@ -1,12 +1,27 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "declaration": true,
+        "target": "es2015",
+        "allowJs": true,
+        "skipLibCheck": true,
         "esModuleInterop": true,
-        "isolatedModules": false,
-        "skipLibCheck" : true,
-        "jsx": "react"
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "declaration": true,
+        "jsx": "react",
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ]
     },
-    "include": ["src"],
-    "exclude": ["**/*.spec.{js,jsx,ts,tsx}"]
+    "include": [
+        "src"
+    ]
 }

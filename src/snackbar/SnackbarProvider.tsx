@@ -3,7 +3,7 @@ import SnackbarContext from "./context";
 import SnackbarConsumer from "./SnackbarConsumer";
 import { SnackbarLevel, SnackbarOptions } from "./types";
 
-export const SnackbarProvider = ({ children }) => {
+export const SnackbarProvider: React.FC = ({ children }) => {
     const [state, setState] = useState<SnackbarOptions>({
         isOpen: false,
         message: "",
