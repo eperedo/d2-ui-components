@@ -4,14 +4,14 @@ import green from "@material-ui/core/colors/green";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { Theme, withStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
 import WarningIcon from "@material-ui/icons/Warning";
+//@ts-ignore
 import classNames from "classnames";
-import PropTypes from "prop-types";
 import React from "react";
 import SnackbarContext from "./context";
 
@@ -27,51 +27,57 @@ const variantIcon = {
     info: InfoIcon,
 };
 
-const styles = (theme: Theme) => ({
-    root: {
-        bottom: 0,
-    },
-    success: {
-        backgroundColor: green[600],
-    },
-    error: {
-        backgroundColor: theme.palette.error.dark,
-    },
-    info: {
-        backgroundColor: theme.palette.primary.dark,
-    },
-    warning: {
-        backgroundColor: amber[700],
-    },
-    icon: {
-        fontSize: 20,
-    },
-    iconVariant: {
-        opacity: 0.9,
-        marginRight: theme.spacing(4), // Or anything between 30px and 38px
-    },
-    content: {
-        display: "flex" as const,
-        alignItems: "center" as const,
-        whiteSpace: "pre-wrap" as const,
-    },
-    message: {
-        maxHeight: 500,
-        overflow: "auto",
-        paddingRight: 10,
-    },
-});
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            bottom: 0,
+        },
+        success: {
+            backgroundColor: green[600],
+        },
+        error: {
+            backgroundColor: theme.palette.error.dark,
+        },
+        info: {
+            backgroundColor: theme.palette.primary.dark,
+        },
+        warning: {
+            backgroundColor: amber[700],
+        },
+        icon: {
+            fontSize: 20,
+        },
+        iconVariant: {
+            opacity: 0.9,
+            marginRight: theme.spacing(4), // Or anything between 30px and 38px
+        },
+        content: {
+            display: "flex" as const,
+            alignItems: "center" as const,
+            whiteSpace: "pre-wrap" as const,
+        },
+        message: {
+            maxHeight: 500,
+            overflow: "auto",
+            paddingRight: 10,
+        },
+    })
+);
 
-const SnackbarConsumer = props => {
-    const { classes } = props;
+const SnackbarConsumer = () => {
+    const classes = useStyles();
 
     return (
         <SnackbarContext.Consumer>
-            {({ isOpen, message, variant, closeSnackbar, autoHideDuration }) => {
-                const Icon = variantIcon[variant];
-                if (!Icon) {
+            {state => {
+                if (!state) throw new Error("Snackbar context has not been defined");
+                const { isOpen, message, variant, closeSnackbar, autoHideDuration } = state;
+
+                if (!variant || !variantIcon[variant]) {
                     throw new Error(`Unknown variant: ${variant}`);
                 }
+
+                const Icon = variantIcon[variant];
 
                 return (
                     <Snackbar
@@ -97,7 +103,6 @@ const SnackbarConsumer = props => {
                                     key="close"
                                     aria-label="Close"
                                     color="inherit"
-                                    className={classes.close}
                                     onClick={closeSnackbar}
                                 >
                                     <CloseIcon className={classes.icon} />
@@ -111,8 +116,4 @@ const SnackbarConsumer = props => {
     );
 };
 
-SnackbarConsumer.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(SnackbarConsumer);
+export default SnackbarConsumer;

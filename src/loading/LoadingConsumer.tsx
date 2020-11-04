@@ -1,13 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-
-import { withStyles } from "@material-ui/core/styles";
-import LoadingContext from "./context";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import LoadingContext from "./context";
 
-const styles = _theme => ({
+const useStyles = makeStyles({
     loadingMask: {
         height: "100%",
         width: "100%",
@@ -33,12 +31,15 @@ const styles = _theme => ({
     },
 });
 
-const LoadingConsumer = props => {
-    const { classes } = props;
+const LoadingConsumer = () => {
+    const classes = useStyles();
 
     return (
         <LoadingContext.Consumer>
-            {({ isLoading, message, progress }) => {
+            {state => {
+                if (!state) throw new Error("Loading context has not been defined");
+                const { isLoading, message, progress = 0 } = state;
+
                 const hideMessage = !message || !message.trim();
                 return (
                     <div className={classes.loadingMask} hidden={!isLoading}>
@@ -71,8 +72,4 @@ const LoadingConsumer = props => {
     );
 };
 
-LoadingConsumer.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(LoadingConsumer);
+export default LoadingConsumer;

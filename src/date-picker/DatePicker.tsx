@@ -54,7 +54,7 @@ const getMaterialTheme = (isFilter: boolean, colors: Dictionary<string>) =>
     });
 
 export const DatePicker: React.FC<DatePickerProps> = ({
-    isFilter,
+    isFilter = false,
     errorStyle,
     errorText,
     ...datePickerProps

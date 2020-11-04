@@ -51,7 +51,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         filterComponents: parentFilterComponents,
         sideComponents: parentSideComponents,
         resetKey = "",
-        childrenKeys,
+        childrenKeys = [],
         ...rest
     } = props;
     const classes = useStyles();

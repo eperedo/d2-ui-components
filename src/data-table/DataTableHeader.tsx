@@ -1,4 +1,3 @@
-import i18n from "@dhis2/d2-i18n";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,10 +6,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import SettingsIcon from "@material-ui/icons/Settings";
+import ViewColumnIcon from "@material-ui/icons/ViewColumn";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
+import i18n from "../utils/i18n";
 import ColumnSelectorDialog from "./ColumnSelectorDialog";
 import { ContextualMenu } from "./ContextualMenu";
 import { DataTableNotifications } from "./DataTableNotifications";
@@ -67,13 +67,13 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         globalActions,
         ids,
         visibleColumns,
-        onVisibleColumnsChange = _.noop,
+        onVisibleColumnsChange,
         sorting,
-        onSortingChange = _.noop,
+        onSortingChange,
         allSelected = false,
         tableNotifications = [],
-        handleSelectionChange = _.noop,
-        onSelectAllClick = _.noop,
+        handleSelectionChange,
+        onSelectAllClick,
         enableMultipleAction,
         hideColumnVisibilityOptions = false,
         hideSelectAll = false,
@@ -86,7 +86,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
 
     const createSortHandler = (property: keyof T) => (_event: React.MouseEvent<unknown>) => {
         const isDesc = field === property && order === "desc";
-        onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
+        if (onSortingChange) onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
 
     const tableActions = _.compact([
@@ -115,7 +115,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                 <ColumnSelectorDialog
                     columns={columns}
                     visibleColumns={visibleColumns}
-                    onChange={onVisibleColumnsChange}
+                    onChange={onVisibleColumnsChange || _.noop}
                     onCancel={() => setOpenColumnSettings(false)}
                 />
             )}
@@ -160,7 +160,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         <TableCell padding="none" colSpan={columns.length + 2}>
                             <DataTableNotifications
                                 messages={tableNotifications}
-                                updateSelection={handleSelectionChange}
+                                updateSelection={handleSelectionChange || _.noop}
                             />
                         </TableCell>
                     </TableRow>

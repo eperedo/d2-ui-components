@@ -1,10 +1,9 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import i18n from "@dhis2/d2-i18n";
-
-import { ReferenceObject, ObjectsTableDetailField } from "./types";
+import React from "react";
+import i18n from "../utils/i18n";
+import { ObjectsTableDetailField, ReferenceObject } from "./types";
 import { formatRowValue } from "./utils/formatting";
 
 const useStyles = makeStyles({

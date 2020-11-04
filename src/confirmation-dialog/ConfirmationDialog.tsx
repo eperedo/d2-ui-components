@@ -11,9 +11,9 @@ import _ from "lodash";
 import React, { ReactNode } from "react";
 import i18n from "../utils/i18n";
 
-export interface ConfirmationDialogProps extends Partial<DialogProps> {
+export interface ConfirmationDialogProps extends Partial<Omit<DialogProps, "title">> {
     isOpen?: boolean;
-    title?: string;
+    title?: string | ReactNode;
     description?: string | ReactNode;
     onSave?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
