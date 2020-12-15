@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-12-14T11:17:49.713Z\n"
-"PO-Revision-Date: 2020-12-14T11:17:49.713Z\n"
+"POT-Creation-Date: 2020-12-15T09:07:13.167Z\n"
+"PO-Revision-Date: 2020-12-15T09:07:13.167Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -95,6 +95,9 @@ msgid "Select all"
 msgstr ""
 
 msgid "Deselect all"
+msgstr ""
+
+msgid "Select intersection"
 msgstr ""
 
 msgid "Organisation unit group"
