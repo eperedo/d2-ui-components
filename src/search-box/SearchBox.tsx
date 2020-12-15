@@ -2,11 +2,13 @@ import TextField from "@material-ui/core/TextField";
 import _ from "lodash";
 import React, { useCallback, useState, useEffect } from "react";
 import i18n from "../utils/i18n";
+
 export interface SearchBoxProps {
     value?: string;
     debounce?: number;
     onChange(value: string): void;
     hintText?: string;
+    className?: string;
 }
 
 const styles = {
@@ -18,6 +20,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
     hintText = i18n.t("Search by name"),
     onChange,
     debounce: debounceTime = 400,
+    className,
 }) => {
     const [stateValue, updateStateValue] = useState(value);
     useEffect(() => updateStateValue(value), [value]);
@@ -47,6 +50,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
             onChange={onKeyUp}
             placeholder={hintText}
             data-test="search"
+            className={className}
         />
     );
 };

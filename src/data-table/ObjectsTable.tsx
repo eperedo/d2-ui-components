@@ -1,5 +1,6 @@
 import React, { useState, ReactNode, MouseEvent, useCallback, useMemo } from "react";
 import _ from "lodash";
+import classnames from "classnames";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import DetailsIcon from "@material-ui/icons/Details";
 import { SearchBox } from "..";
@@ -35,6 +36,7 @@ export interface ObjectsTableProps<T extends ReferenceObject> extends DataTableP
     searchBoxColumns?: (keyof T)[];
     onActionButtonClick?(event: MouseEvent<unknown>): void;
     actionButtonLabel?: ReactNode;
+    className?: string;
 }
 
 export function ObjectsTable<T extends ReferenceObject = TableObject>(props: ObjectsTableProps<T>) {
@@ -52,6 +54,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         sideComponents: parentSideComponents,
         resetKey = "",
         childrenKeys = [],
+        className,
         ...rest
     } = props;
     const classes = useStyles();
@@ -96,13 +99,13 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         () => (
             <React.Fragment>
                 {showSearchBox && (
-                    <div key={"objects-table-search-box"} className={classes.searchBox}>
-                        <SearchBox
-                            value={searchValue}
-                            hintText={searchBoxLabel || "Search items"}
-                            onChange={handleSearchChange}
-                        />
-                    </div>
+                    <SearchBox
+                        key={"objects-table-search-box"}
+                        className={classes.searchBox}
+                        value={searchValue}
+                        hintText={searchBoxLabel || "Search items"}
+                        onChange={handleSearchChange}
+                    />
                 )}
                 {parentFilterComponents}
             </React.Fragment>
@@ -140,7 +143,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
             : parentRows;
 
     return (
-        <div className={classes.root}>
+        <div className={classnames([classes.root, className])}>
             <DataTable
                 rows={rows}
                 actions={actions}
