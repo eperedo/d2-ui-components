@@ -116,6 +116,10 @@ OrgUnitSelectByGroup.propTypes = {
     // one argument: The new array of selected organisation unit paths
     onUpdateSelection: PropTypes.func.isRequired,
 
+    // When a the selected item of the dropdown is changed, onItemSelection will be called with
+    // one argument: The selected org unit id in the dropdown
+    onItemSelection: PropTypes.func.isRequired,
+
     // If currentRoot is set, only org units that are descendants of the
     // current root org unit will be added to or removed from the selection
     currentRoot: PropTypes.object,

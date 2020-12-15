@@ -70,6 +70,11 @@ export default class OrgUnitsSelector extends React.Component {
             groups: null,
             programs: null,
             currentRoot: null,
+            selectedFilters: {
+                level: null,
+                orgUnitGroupId: null,
+                programId: null,
+            },
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
     }
@@ -241,7 +246,7 @@ export default class OrgUnitsSelector extends React.Component {
     render() {
         if (!this.state.levels) return null;
 
-        const { levels, currentRoot, roots, groups, programs } = this.state;
+        const { levels, currentRoot, roots, groups, programs, selectedFilters } = this.state;
         const {
             api,
             selected,
@@ -319,6 +324,15 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
+                                                        onItemSelection={selectedItem => {
+                                                            this.setState({
+                                                                ...this.state,
+                                                                selectedFilters: {
+                                                                    ...this.state.selectedFilters,
+                                                                    level: selectedItem,
+                                                                },
+                                                            });
+                                                        }}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -333,6 +347,15 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
+                                                        onItemSelection={selectedItem => {
+                                                            this.setState({
+                                                                ...this.state,
+                                                                selectedFilters: {
+                                                                    ...this.state.selectedFilters,
+                                                                    orgUnitGroupId: selectedItem,
+                                                                },
+                                                            });
+                                                        }}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -347,6 +370,15 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
+                                                        onItemSelection={selectedItem => {
+                                                            this.setState({
+                                                                ...this.state,
+                                                                selectedFilters: {
+                                                                    ...this.state.selectedFilters,
+                                                                    programId: selectedItem,
+                                                                },
+                                                            });
+                                                        }}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -361,6 +393,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                 currentRoot={currentRoot}
                                                 onUpdateSelection={this.handleSelectionUpdate}
                                                 selectableIds={selectableIds}
+                                                selectedFilters={selectedFilters}
                                             />
                                         </div>
                                     )}
