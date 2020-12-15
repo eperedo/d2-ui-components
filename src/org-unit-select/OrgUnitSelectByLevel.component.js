@@ -107,7 +107,7 @@ class OrgUnitSelectByLevel extends React.Component {
         const menuItems = this.props.levels
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
-        const label = i18n.t("Organisation Unit Level");
+        const label = i18n.t("Organisation unit level");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value
