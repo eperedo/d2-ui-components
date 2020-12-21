@@ -38,7 +38,7 @@ const LoadingConsumer = () => {
         <LoadingContext.Consumer>
             {state => {
                 if (!state) throw new Error("Loading context has not been defined");
-                const { isLoading, message, progress = 0 } = state;
+                const { isLoading, message, progress = -1 } = state;
 
                 const hideMessage = !message || !message.trim();
                 return (
