@@ -70,6 +70,8 @@ class OrgUnitSelectAll extends React.Component {
     }
 
     getRelativeLevelFilter(api, level, currentRoot) {
+        if (!currentRoot) return undefined;
+
         const rootLevel =
             currentRoot.level || currentRoot.path
                 ? this.props.currentRoot.path.match(/\//g).length
@@ -79,29 +81,28 @@ class OrgUnitSelectAll extends React.Component {
 
     getOrgUnitsByFilters() {
         const { api } = this.context;
+        const { selectedFilters, currentRoot } = this.props;
 
-        const cacheKey = `${this.props.selectedFilters.level}-${this.props.selectedFilters.orgUnitGroupId}-${this.props.selectedFilters.programId}`;
+        const cacheKey = `${selectedFilters.level}-${selectedFilters.orgUnitGroupId}-${selectedFilters.programId}`;
 
-        const level = this.props.selectedFilters.level
-            ? this.props.selectedFilters.level
-            : undefined;
+        const level = selectedFilters.level || undefined;
 
-        const filtersbyGroup = this.props.selectedFilters.orgUnitGroupId
-            ? [`organisationUnitGroups.id:eq:${this.props.selectedFilters.orgUnitGroupId}`]
+        const filtersbyGroup = selectedFilters.orgUnitGroupId
+            ? [`organisationUnitGroups.id:eq:${selectedFilters.orgUnitGroupId}`]
             : [];
 
-        const filtersbyGroupAndProgram = this.props.selectedFilters.programId
-            ? [...filtersbyGroup, `programs.id:eq:${this.props.selectedFilters.programId}`]
+        const filtersbyGroupAndProgram = selectedFilters.programId
+            ? [...filtersbyGroup, `programs.id:eq:${selectedFilters.programId}`]
             : [...filtersbyGroup];
 
-        if (this.props.currentRoot) {
+        if (currentRoot) {
             log.debug(
-                `Loading org units by filters ${this.props.selectedFilters} within ${this.props.currentRoot.displayName}`
+                `Loading org units by filters ${selectedFilters} within ${currentRoot.displayName}`
             );
             this.setState({ loading: true });
 
             const relativeLevel = level
-                ? this.getRelativeLevelFilter(api, level, this.props.currentRoot)
+                ? this.getRelativeLevelFilter(api, level, currentRoot)
                 : level;
 
             if (isNaN(relativeLevel) || relativeLevel < 0) {
@@ -111,7 +112,7 @@ class OrgUnitSelectAll extends React.Component {
                 this.addToSelection([]);
             }
 
-            api.get("/organisationUnits/" + this.props.currentRoot.id, {
+            api.get("/organisationUnits/" + currentRoot.id, {
                 paging: false,
                 includeDescendants: filtersbyGroupAndProgram.length > 0 ? true : undefined,
                 level: relativeLevel,
@@ -122,7 +123,7 @@ class OrgUnitSelectAll extends React.Component {
                 .then(({ organisationUnits }) => organisationUnits)
                 .then(orgUnitArray => {
                     log.debug(
-                        `Loaded ${orgUnitArray.length} org units by filters ${this.props.selectedFilters} within ${this.props.currentRoot.displayName}`
+                        `Loaded ${orgUnitArray.length} org units by filters ${selectedFilters} within ${currentRoot.displayName}`
                     );
                     this.setState({ loading: false });
                     this.addToSelection(orgUnitArray);
@@ -145,7 +146,7 @@ class OrgUnitSelectAll extends React.Component {
                 .then(({ organisationUnits }) => organisationUnits)
                 .then(orgUnitArray => {
                     log.debug(
-                        `Loaded ${orgUnitArray.length} org units by filters ${this.props.selectedFilters}`
+                        `Loaded ${orgUnitArray.length} org units by filters ${selectedFilters}`
                     );
 
                     this.setState({ loading: false });
@@ -156,10 +157,7 @@ class OrgUnitSelectAll extends React.Component {
                 })
                 .catch(err => {
                     this.setState({ loading: false });
-                    log.error(
-                        `Failed to load org units by filters ${this.props.selectedFilters}:`,
-                        err
-                    );
+                    log.error(`Failed to load org units by filters ${selectedFilters}:`, err);
                 });
         }
     }
@@ -242,7 +240,11 @@ OrgUnitSelectAll.propTypes = {
     currentRoot: PropTypes.object,
 
     // selected filters values: level, orgUnitGroupId, programId
-    selectedFilters: PropTypes.object,
+    selectedFilters: PropTypes.shape({
+        level: PropTypes.number,
+        orgUnitGroupId: PropTypes.string,
+        programId: PropTypes.string,
+    }),
 };
 
 OrgUnitSelectAll.contextTypes = { api: PropTypes.object.isRequired };

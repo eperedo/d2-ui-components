@@ -243,6 +243,33 @@ export default class OrgUnitsSelector extends React.Component {
         this.setState({ roots });
     };
 
+    changeLevel = level => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                level,
+            },
+        }));
+    };
+
+    changeOrgUnitGroup = orgUnitGroupId => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                orgUnitGroupId,
+            },
+        }));
+    };
+
+    changeProgram = programId => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                programId,
+            },
+        }));
+    };
+
     render() {
         if (!this.state.levels) return null;
 
@@ -324,15 +351,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
-                                                        onItemSelection={selectedItem => {
-                                                            this.setState({
-                                                                ...this.state,
-                                                                selectedFilters: {
-                                                                    ...this.state.selectedFilters,
-                                                                    level: selectedItem,
-                                                                },
-                                                            });
-                                                        }}
+                                                        onItemSelection={this.changeLevel}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -347,15 +366,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
-                                                        onItemSelection={selectedItem => {
-                                                            this.setState({
-                                                                ...this.state,
-                                                                selectedFilters: {
-                                                                    ...this.state.selectedFilters,
-                                                                    orgUnitGroupId: selectedItem,
-                                                                },
-                                                            });
-                                                        }}
+                                                        onItemSelection={this.changeOrgUnitGroup}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -370,15 +381,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
-                                                        onItemSelection={selectedItem => {
-                                                            this.setState({
-                                                                ...this.state,
-                                                                selectedFilters: {
-                                                                    ...this.state.selectedFilters,
-                                                                    programId: selectedItem,
-                                                                },
-                                                            });
-                                                        }}
+                                                        onItemSelection={this.changeProgram}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
