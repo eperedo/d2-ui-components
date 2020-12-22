@@ -10,7 +10,7 @@ import {
     renderDropdown,
 } from "./common";
 
-class OrgUnitSelectByGroup extends React.Component {
+class OrgUnitSelectByProgram extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -18,23 +18,23 @@ class OrgUnitSelectByGroup extends React.Component {
             loading: false,
             selection: undefined,
         };
-        this.groupCache = {};
+        this.programCache = {};
 
         this.addToSelection = addToSelection.bind(this);
         this.removeFromSelection = removeFromSelection.bind(this);
         this.handleChangeSelection = handleChangeSelection.bind(this);
 
-        this.getOrgUnitsForGroup = this.getOrgUnitsForGroup.bind(this);
+        this.getOrgUnitsForProgram = this.getOrgUnitsForProgram.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleDeselect = this.handleDeselect.bind(this);
     }
 
-    getOrgUnitsForGroup(groupId, ignoreCache = false) {
+    getOrgUnitsForProgram(programId, ignoreCache = false) {
         const { api } = this.context;
         return new Promise(resolve => {
             if (this.props.currentRoot) {
                 log.debug(
-                    `Loading org units for group ${groupId} within ${this.props.currentRoot.displayName}`
+                    `Loading org units for program ${programId} within ${this.props.currentRoot.displayName}`
                 );
                 this.setState({ loading: true });
 
@@ -42,61 +42,61 @@ class OrgUnitSelectByGroup extends React.Component {
                     paging: false,
                     includeDescendants: true,
                     fields: "id,path",
-                    filter: `organisationUnitGroups.id:eq:${groupId}`,
+                    filter: `programs.id:eq:${programId}`,
                 })
                     .getData()
                     .then(({ organisationUnits }) => organisationUnits)
                     .then(orgUnits => {
                         log.debug(
-                            `Loaded ${orgUnits.length} org units for group ${groupId} within ${this.props.currentRoot.displayName}`
+                            `Loaded ${orgUnits.length} org units for program ${programId} within ${this.props.currentRoot.displayName}`
                         );
                         this.setState({ loading: false });
 
                         resolve(orgUnits.slice());
                     });
-            } else if (!ignoreCache && this.groupCache.hasOwnProperty(groupId)) {
-                resolve(this.groupCache[groupId].slice());
+            } else if (!ignoreCache && this.programCache.hasOwnProperty(programId)) {
+                resolve(this.programCache[programId].slice());
             } else {
-                log.debug(`Loading org units for group ${groupId}`);
+                log.debug(`Loading org units for program ${programId}`);
                 this.setState({ loading: true });
 
                 const { api } = this.context;
-                api.models.organisationUnitGroups
+                api.models.programs
                     .get({
                         fields: { organisationUnits: { id: true, path: true } },
-                        filter: { id: { eq: groupId } },
+                        filter: { id: { eq: programId } },
                     })
                     .getData()
                     .then(({ objects }) => _.first(objects) || {})
                     .then(({ organisationUnits = [] }) => {
                         log.debug(
-                            `Loaded ${organisationUnits.length} org units for group ${groupId}`
+                            `Loaded ${organisationUnits.length} org units for program ${programId}`
                         );
                         this.setState({ loading: false });
-                        this.groupCache[groupId] = organisationUnits;
+                        this.programCache[programId] = organisationUnits;
 
                         // Make a copy of the returned array to ensure that the cache won't be modified from elsewhere
                         resolve(organisationUnits.slice());
                     })
                     .catch(err => {
                         this.setState({ loading: false });
-                        log.error(`Failed to load org units in group ${groupId}:`, err);
+                        log.error(`Failed to load org units in program ${programId}:`, err);
                     });
             }
         });
     }
 
     handleSelect() {
-        this.getOrgUnitsForGroup(this.state.selection).then(this.addToSelection);
+        this.getOrgUnitsForProgram(this.state.selection).then(this.addToSelection);
     }
 
     handleDeselect() {
-        this.getOrgUnitsForGroup(this.state.selection).then(this.removeFromSelection);
+        this.getOrgUnitsForProgram(this.state.selection).then(this.removeFromSelection);
     }
 
     render() {
-        const menuItems = this.props.groups;
-        const label = i18n.t("Organisation unit group");
+        const menuItems = this.props.programs;
+        const label = i18n.t("Program");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value
@@ -104,10 +104,10 @@ class OrgUnitSelectByGroup extends React.Component {
     }
 }
 
-OrgUnitSelectByGroup.propTypes = {
-    // groups is an array of either ModelCollection objects or plain objects,
+OrgUnitSelectByProgram.propTypes = {
+    // programs is an array of either ModelCollection objects or plain objects,
     // where each object should contain `id` and `displayName` properties
-    groups: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+    programs: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 
     // selected is an array of selected organisation unit IDs
     selected: PropTypes.array.isRequired,
@@ -117,16 +117,16 @@ OrgUnitSelectByGroup.propTypes = {
     onUpdateSelection: PropTypes.func.isRequired,
 
     // When a the selected item of the dropdown is changed, onItemSelection will be called with
-    // one argument: The selected org unit id in the dropdown
+    // one argument: The selected program id in the dropdown
     onItemSelection: PropTypes.func.isRequired,
 
     // If currentRoot is set, only org units that are descendants of the
     // current root org unit will be added to or removed from the selection
     currentRoot: PropTypes.object,
 
-    // TODO: Add group cache prop?
+    // TODO: Add program cache prop?
 };
 
-OrgUnitSelectByGroup.contextTypes = { api: PropTypes.any.isRequired };
+OrgUnitSelectByProgram.contextTypes = { api: PropTypes.any.isRequired };
 
-export default OrgUnitSelectByGroup;
+export default OrgUnitSelectByProgram;

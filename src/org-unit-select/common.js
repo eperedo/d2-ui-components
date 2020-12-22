@@ -37,6 +37,7 @@ function removeFromSelection(orgUnits) {
 
 function handleChangeSelection(event) {
     this.setState({ selection: event.target.value });
+    this.props.onItemSelection(event.target.value);
 }
 
 function renderDropdown(menuItems, label) {
