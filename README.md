@@ -418,7 +418,7 @@ $ cp i18n/en.pot i18n/es.po
 $ yarn localize
 ```
 
-### Local development with applications
+### Development
 
 In d2-ui-components:
 
@@ -427,7 +427,7 @@ $ yarn link
 $ yarn build-watch
 ```
 
-In the application:
+In the main application:
 
 ```
 $ yarn link d2-ui-components
