@@ -37,6 +37,7 @@ class OrgUnitSelectByLevel extends React.Component {
                         ? this.props.currentRoot.path.match(/\//g).length
                         : NaN;
                 const relativeLevel = level - rootLevel;
+
                 if (isNaN(relativeLevel) || relativeLevel < 0) {
                     log.info(
                         "Unable to select org unit levels higher up in the hierarchy than the current root"
@@ -106,7 +107,7 @@ class OrgUnitSelectByLevel extends React.Component {
         const menuItems = this.props.levels
             .filter(level => level.level >= currentRootLevel)
             .map(level => ({ id: level.level, displayName: level.displayName }));
-        const label = i18n.t("Organisation Unit Level");
+        const label = i18n.t("Organisation unit level");
 
         // The minHeight on the wrapping div below is there to compensate for the fact that a
         // Material-UI SelectField will change height depending on whether or not it has a value
@@ -125,6 +126,10 @@ OrgUnitSelectByLevel.propTypes = {
     // Whenever the selection changes, onUpdateSelection will be called with
     // one argument: The new array of selected organisation unit paths
     onUpdateSelection: PropTypes.func.isRequired,
+
+    // When a the selected item of the dropdown is changed, onItemSelection will be called with
+    // one argument: The selected level in the dropdown
+    onItemSelection: PropTypes.func.isRequired,
 
     // If currentRoot is set, only org units that are descendants of the
     // current root org unit will be added to or removed from the selection

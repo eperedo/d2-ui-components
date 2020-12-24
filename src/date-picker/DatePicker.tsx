@@ -5,11 +5,10 @@ import {
     DatePickerProps as MuiDatePickerProps,
     MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { CSSProperties } from "@material-ui/styles";
 import { Dictionary } from "lodash";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { CSSProperties } from "react";
 
 export interface DatePickerProps extends MuiDatePickerProps {
     isFilter?: boolean;

@@ -2,7 +2,12 @@ import { Card, CardContent } from "@material-ui/core";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
-import { OrgUnitSelectAll, OrgUnitSelectByGroup, OrgUnitSelectByLevel } from "../org-unit-select";
+import {
+    OrgUnitSelectAll,
+    OrgUnitSelectByGroup,
+    OrgUnitSelectByLevel,
+    OrgUnitSelectByProgram,
+} from "../org-unit-select";
 import { decrementMemberCount, incrementMemberCount, OrgUnitTree } from "../org-unit-tree";
 import SearchBox from "../search-box/SearchBox";
 import i18n from "../utils/i18n";
@@ -22,6 +27,7 @@ export default class OrgUnitsSelector extends React.Component {
         controls: PropTypes.shape({
             filterByLevel: PropTypes.bool,
             filterByGroup: PropTypes.bool,
+            filterByProgram: PropTypes.bool,
             selectAll: PropTypes.bool,
         }),
         withElevation: PropTypes.bool,
@@ -38,6 +44,7 @@ export default class OrgUnitsSelector extends React.Component {
         controls: {
             filterByLevel: true,
             filterByGroup: true,
+            filterByProgram: false,
             selectAll: true,
         },
         withElevation: true,
@@ -61,14 +68,20 @@ export default class OrgUnitsSelector extends React.Component {
             levels: null,
             roots: null,
             groups: null,
+            programs: null,
             currentRoot: null,
+            selectedFilters: {
+                level: null,
+                orgUnitGroupId: null,
+                programId: null,
+            },
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
     }
 
     componentDidMount() {
         const { props } = this;
-        const { filterByLevel, filterByGroup } = props.controls;
+        const { filterByLevel, filterByGroup, filterByProgram } = props.controls;
 
         Promise.all([
             !filterByLevel
@@ -92,12 +105,23 @@ export default class OrgUnitsSelector extends React.Component {
                       })
                       .getData()
                       .then(({ objects }) => objects),
+            !filterByProgram
+                ? Promise.resolve([])
+                : props.api.models.programs
+                      .get({
+                          pageSize: 1,
+                          paging: false,
+                          fields: { id: true, displayName: true },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             this.getRoots(),
-        ]).then(([levels, groups, defaultRoots]) => {
+        ]).then(([levels, groups, programs, defaultRoots]) => {
             this.setState({
                 roots: defaultRoots,
                 levels,
                 groups,
+                programs,
             });
         });
     }
@@ -219,10 +243,37 @@ export default class OrgUnitsSelector extends React.Component {
         this.setState({ roots });
     };
 
+    changeLevel = level => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                level,
+            },
+        }));
+    };
+
+    changeOrgUnitGroup = orgUnitGroupId => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                orgUnitGroupId,
+            },
+        }));
+    };
+
+    changeProgram = programId => {
+        this.setState(oldState => ({
+            selectedFilters: {
+                ...oldState.selectedFilters,
+                programId,
+            },
+        }));
+    };
+
     render() {
         if (!this.state.levels) return null;
 
-        const { levels, currentRoot, roots, groups } = this.state;
+        const { levels, currentRoot, roots, groups, programs, selectedFilters } = this.state;
         const {
             api,
             selected,
@@ -238,8 +289,9 @@ export default class OrgUnitsSelector extends React.Component {
             selectableIds,
             initiallyExpanded = roots.length > 1 ? [] : roots.map(ou => ou.path),
         } = this.props;
-        const { filterByLevel, filterByGroup, selectAll } = controls;
-        const someControlsVisible = filterByLevel || filterByGroup || selectAll;
+        const { filterByLevel, filterByGroup, filterByProgram, selectAll } = controls;
+
+        const someControlsVisible = filterByLevel || filterByGroup || selectAll || filterByProgram;
         const { renderOrgUnitSelectTitle: OrgUnitSelectTitle } = this;
         const getClass = root => `ou-root-${root.path.split("/").length - 1}`;
 
@@ -286,7 +338,7 @@ export default class OrgUnitsSelector extends React.Component {
                         {someControlsVisible && (
                             <div style={styles.contentItem}>
                                 <div style={styles.rightPanel}>
-                                    {(filterByLevel || filterByGroup) && (
+                                    {(filterByLevel || filterByGroup || filterByProgram) && (
                                         <React.Fragment>
                                             <OrgUnitSelectTitle />
 
@@ -299,13 +351,14 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
+                                                        onItemSelection={this.changeLevel}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
                                             )}
 
                                             {filterByGroup && (
-                                                <div>
+                                                <div style={styles.selectByGroup}>
                                                     <OrgUnitSelectByGroup
                                                         groups={groups}
                                                         selected={selected}
@@ -313,6 +366,22 @@ export default class OrgUnitsSelector extends React.Component {
                                                         onUpdateSelection={
                                                             this.handleSelectionUpdate
                                                         }
+                                                        onItemSelection={this.changeOrgUnitGroup}
+                                                        selectableIds={selectableIds}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {filterByProgram && (
+                                                <div>
+                                                    <OrgUnitSelectByProgram
+                                                        programs={programs}
+                                                        selected={selected}
+                                                        currentRoot={currentRoot}
+                                                        onUpdateSelection={
+                                                            this.handleSelectionUpdate
+                                                        }
+                                                        onItemSelection={this.changeProgram}
                                                         selectableIds={selectableIds}
                                                     />
                                                 </div>
@@ -327,6 +396,7 @@ export default class OrgUnitsSelector extends React.Component {
                                                 currentRoot={currentRoot}
                                                 onUpdateSelection={this.handleSelectionUpdate}
                                                 selectableIds={selectableIds}
+                                                selectedFilters={selectedFilters}
                                             />
                                         </div>
                                     )}
@@ -411,6 +481,10 @@ const styles = {
         margin: 4,
     },
     selectByLevel: {
+        marginBottom: -24,
+        marginTop: 0,
+    },
+    selectByGroup: {
         marginBottom: -24,
         marginTop: 0,
     },
