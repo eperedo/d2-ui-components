@@ -250,10 +250,7 @@ export default class GroupEditor extends Component {
         return items.filter(
             item =>
                 this.getFilterText().length === 0 ||
-                item.text
-                    .trim()
-                    .toLowerCase()
-                    .indexOf(this.getFilterText()) !== -1
+                item.text.trim().toLowerCase().indexOf(this.getFilterText()) !== -1
         );
     }
 
