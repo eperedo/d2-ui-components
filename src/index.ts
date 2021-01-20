@@ -14,5 +14,7 @@ export * from "./search-box/SearchBox";
 export * from "./snackbar";
 export * from "./wizard/Wizard";
 export * from "./sharing/Sharing";
+export * from "./objects-list/ObjectsList";
+export * from "./objects-list/objects-list-hooks";
 
 export { MultiSelector, SimpleCheckBox, DialogButton, OrgUnitsSelector };
