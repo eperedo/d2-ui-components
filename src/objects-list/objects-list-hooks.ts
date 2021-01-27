@@ -12,7 +12,11 @@ import {
 import i18n from "../utils/i18n";
 import { ObjectsListProps } from "./ObjectsList";
 
-export interface TableConfig<Obj extends ReferenceObject> {
+export interface TableConfig<Obj extends ReferenceObject>
+    extends Omit<
+        ObjectsTableProps<Obj>,
+        "rows" | "isLoading" | "onChange" | "pagination" | "onChangeSearch" | "reload"
+    > {
     columns: TableColumn<Obj>[];
     actions: TableAction<Obj>[];
     paginationOptions: PaginationOptions;
