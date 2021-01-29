@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     ObjectsTableDetailField,
+    ObjectsTableProps,
     PaginationOptions,
     ReferenceObject,
     TableAction,
