@@ -6,5 +6,4 @@ publish_opts=$(echo $version | grep -q beta && echo "--tag beta" || true)
 yarn publish $publish_opts --new-version $version
 
 git tag v$version -f
-git push
 git push --tags
