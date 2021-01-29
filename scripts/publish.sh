@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -u
+set -e -u -o pipefail
 
 version=$(cat package.json | jq -r '.version')
 publish_opts=$(echo $version | grep -q beta && echo "--tag beta" || true)
