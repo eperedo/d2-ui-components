@@ -47,12 +47,14 @@ export function ObjectsList<T extends ReferenceObject>(
         ...tableProps
     } = props;
 
+    const emptyRows = React.useMemo<T[]>(() => [], []);
+
     return (
         <div className={className}>
             {isLoading ? <span data-test-loading /> : <span data-test-loaded />}
             {
                 <ObjectsTable<T>
-                    rows={rows || []}
+                    rows={rows || emptyRows}
                     mouseActionsMapping={mouseActionsMapping}
                     {...tableProps}
                     filterComponents={
