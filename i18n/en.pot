@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2020-12-15T09:17:37.924Z\n"
-"PO-Revision-Date: 2020-12-15T09:17:37.924Z\n"
+"POT-Creation-Date: 2021-01-05T11:11:10.606Z\n"
+"PO-Revision-Date: 2021-01-05T11:11:10.606Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -53,6 +53,9 @@ msgid "All {{total}} items on this page are selected."
 msgstr ""
 
 msgid "Select all {{total}} items in all pages"
+msgstr ""
+
+msgid "<No value>"
 msgstr ""
 
 msgid "Hidden by filters"
@@ -107,9 +110,6 @@ msgid "Organisation unit level"
 msgstr ""
 
 msgid "Program"
-msgstr ""
-
-msgid "<No value>"
 msgstr ""
 
 msgid "Select"
