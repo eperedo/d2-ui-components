@@ -94,6 +94,9 @@ msgstr ""
 msgid "Search available/selected items"
 msgstr ""
 
+msgid "Search by name"
+msgstr ""
+
 msgid "Select all"
 msgstr ""
 
@@ -122,9 +125,6 @@ msgid "For organisation units within"
 msgstr ""
 
 msgid "For all organisation units"
-msgstr ""
-
-msgid "Search by name"
 msgstr ""
 
 msgid "Remove"
