@@ -9,6 +9,7 @@ export * from "./data-table/DataTable";
 export * from "./data-table/ObjectsTable";
 export * from "./data-table/types";
 export * from "./date-picker/DatePicker";
+export * from "./dropdown";
 export * from "./loading";
 export * from "./search-box/SearchBox";
 export * from "./snackbar";
