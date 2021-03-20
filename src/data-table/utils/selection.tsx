@@ -60,12 +60,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
     if (_.isEmpty(tableSelection)) return [];
 
     const childrenIds = _(rows)
-        .map(row =>
-            _(row)
-                .pick(childrenKeys)
-                .values()
-                .value()
-        )
+        .map(row => _(row).pick(childrenKeys).values().value())
         .flattenDeep()
         .value();
 
