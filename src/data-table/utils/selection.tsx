@@ -32,7 +32,7 @@ function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: stri
             .flatten()
             .compact()
             .value()
-            .map(row => buildChildrenRows(row as T, childrenKeys)),
+            .map((row: unknown) => buildChildrenRows(row as T, childrenKeys)),
     ]);
 }
 
