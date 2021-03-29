@@ -10,6 +10,10 @@ export function filterObjects<T extends TableObject>(
         _(o)
             .keys()
             .filter(k => searchColumns.includes(k))
-            .some(k => String(o[k]).toLowerCase().includes(searchValue.toLowerCase()))
+            .some(k =>
+                String(o[k])
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+            )
     );
 }

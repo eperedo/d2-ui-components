@@ -23,6 +23,19 @@ export function isEventCtrlClick(event: MouseEvent<unknown>) {
     return event && event.ctrlKey;
 }
 
+function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: string[]) {
+    return _.flatten([
+        row,
+        ..._(row)
+            .pick(childrenKeys)
+            .values()
+            .flatten()
+            .compact()
+            .map((row: T) => buildChildrenRows(row, childrenKeys))
+            .value(),
+    ]);
+}
+
 export function getActionRows<T extends ReferenceObject>(
     selectedRow: T,
     parentRows: T[],
@@ -30,9 +43,7 @@ export function getActionRows<T extends ReferenceObject>(
     childrenKeys: string[]
 ) {
     const isRowInSelection = _.some(selection, { id: selectedRow.id });
-    const childrenRows: T[] = _.flattenDeep(
-        parentRows.map(row => Object.values(_.pick(row, childrenKeys)))
-    );
+    const childrenRows = _.flatten(parentRows.map(row => buildChildrenRows(row, childrenKeys)));
 
     const rows = [...parentRows, ...childrenRows];
     const selectedRows = _.intersectionBy(rows, selection, "id");
@@ -60,7 +71,12 @@ export function getSelectionMessages<T extends ReferenceObject>(
     if (_.isEmpty(tableSelection)) return [];
 
     const childrenIds = _(rows)
-        .map(row => _(row).pick(childrenKeys).values().value())
+        .map(row =>
+            _(row)
+                .pick(childrenKeys)
+                .values()
+                .value()
+        )
         .flattenDeep()
         .value();
 
