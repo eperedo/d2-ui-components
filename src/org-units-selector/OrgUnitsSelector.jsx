@@ -433,9 +433,7 @@ function mergeChildren(root, children) {
     if (children.length === 0) {
         return root;
     } else {
-        const childPath = _.first(children)
-            .path.slice(1)
-            .split("/");
+        const childPath = _.first(children).path.slice(1).split("/");
         const parentPath = childPath.slice(0, childPath.length - 1);
         return assignChildren(root, parentPath, children);
     }
