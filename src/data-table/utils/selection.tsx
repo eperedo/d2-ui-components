@@ -23,7 +23,7 @@ export function isEventCtrlClick(event: MouseEvent<unknown>) {
     return event && event.ctrlKey;
 }
 
-function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: string[]) {
+function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: string[]): T[] {
     return _.flatten([
         row,
         ..._(row)
@@ -31,8 +31,8 @@ function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: stri
             .values()
             .flatten()
             .compact()
-            .map((row: T) => buildChildrenRows(row, childrenKeys))
-            .value(),
+            .value()
+            .map(row => buildChildrenRows(row as T, childrenKeys)),
     ]);
 }
 
