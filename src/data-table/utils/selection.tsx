@@ -24,16 +24,15 @@ export function isEventCtrlClick(event: MouseEvent<unknown>) {
 }
 
 function buildChildrenRows<T extends ReferenceObject>(row: T, childrenKeys: string[]): T[] {
-    return _.flatten([
-        row,
-        ..._(row)
-            .pick(childrenKeys)
-            .values()
-            .flatten()
-            .compact()
-            .value()
-            .map((row: unknown) => buildChildrenRows(row as T, childrenKeys)),
-    ]);
+    const childRows = _(row)
+        .pick(childrenKeys)
+        .values()
+        .flatten()
+        .compact()
+        .flatMap((row: T) => buildChildrenRows(row, childrenKeys))
+        .value();
+
+    return _.flatten([row, ...childRows]) as T[];
 }
 
 export function getActionRows<T extends ReferenceObject>(
