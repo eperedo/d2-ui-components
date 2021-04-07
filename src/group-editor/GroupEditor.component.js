@@ -344,6 +344,8 @@ export default class GroupEditor extends Component {
         const selectedLabel = () =>
             this.getSelectedCount() > 0 ? `${this.getSelectedCount()} ${i18n.t("Selected")}` : "";
 
+        const { showOptionsTooltip = true } = this.props;
+
         return (
             <div style={styles.container}>
                 <div style={styles.left}>
@@ -365,6 +367,7 @@ export default class GroupEditor extends Component {
                                     value={item.value}
                                     onDoubleClick={this.onAssignItems}
                                     style={styles.options}
+                                    title={showOptionsTooltip ? item.text : undefined}
                                 >
                                     {item.text}
                                 </option>
@@ -435,6 +438,7 @@ export default class GroupEditor extends Component {
                                         value={item.value}
                                         onDoubleClick={this.onRemoveItems}
                                         style={styles.options}
+                                        title={showOptionsTooltip ? item.text : undefined}
                                     >
                                         {item.text}
                                     </option>
@@ -490,6 +494,8 @@ GroupEditor.propTypes = {
 
     // The height of the component, defaults to 500px
     height: PropTypes.number,
+
+    showOptionsTooltip: PropTypes.bool,
 };
 
 GroupEditor.contextTypes = {
@@ -500,4 +506,5 @@ GroupEditor.defaultProps = {
     height: 500,
     filterText: "",
     onMoveItems: () => {},
+    showOptionsTooltip: true,
 };

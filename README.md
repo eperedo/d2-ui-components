@@ -420,15 +420,21 @@ $ yarn localize
 
 ### Development
 
-In d2-ui-components:
+In d2-ui-components, only the first time:
 
 ```
-$ yarn link
+$ yarn build
+$ (cd build && yarn link)
+```
+
+When starting development:
+
+```
 $ yarn build-watch
 ```
 
-In the main application:
+In the main React application:
 
 ```
-$ yarn link d2-ui-components
+$ yarn link "@eyeseetea/d2-ui-components"
 ```
