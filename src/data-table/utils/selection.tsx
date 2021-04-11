@@ -60,12 +60,37 @@ export function parseActions<T extends ReferenceObject>(
         .value();
 }
 
+function getMessages() {
+    return {
+        clearSelection: i18n.t("Clear selection"),
+        itemsInAllPages(options: { total: number }) {
+            return i18n.t("There are {{total}} items selected in all pages.", options);
+        },
+        itemsSelectedInOtherPages(options: { count: number; invisible: number }) {
+            return i18n.t("There are {{count}} items selected ({{invisible}} on other pages).", {
+                count: options.count,
+                invisible: options.invisible,
+            });
+        },
+        allItemsSelectedInCurrentPage(options: { total: number }) {
+            return i18n.t("All {{total}} items on this page are selected.", options);
+        },
+        selectAllItemsInAllPages(options: { total: number }) {
+            return i18n.t("Select all {{total}} items in all pages", options);
+        },
+    };
+}
+
+type GetMessageReturn = ReturnType<typeof getMessages>;
+export type SelectionMessages = Partial<GetMessageReturn>;
+
 export function getSelectionMessages<T extends ReferenceObject>(
     rows: T[],
     tableSelection: TableSelection[],
     total: number,
     ids: string[],
-    childrenKeys: string[]
+    childrenKeys: string[],
+    overrideMessages: Partial<SelectionMessages> | undefined
 ): TableNotification[] {
     if (_.isEmpty(tableSelection)) return [];
 
@@ -81,35 +106,39 @@ export function getSelectionMessages<T extends ReferenceObject>(
     const allSelectedInPage = _.differenceBy(rows, selection, "id").length === 0;
     const multiplePagesAvailable = total > rows.length;
     const selectAllImplemented = ids.length === total;
+    const messages = { ...getMessages(), ...overrideMessages };
 
-    return _.compact([
+    const notifications = [
         allSelected
             ? {
-                  message: i18n.t("There are {{total}} items selected in all pages.", {
-                      total: selection.length,
-                  }),
-                  link: i18n.t("Clear selection"),
+                  message: messages.itemsInAllPages({ total: selection.length }),
+                  link: messages.clearSelection,
                   newSelection: [],
               }
             : null,
         !allSelected && selectionInOtherPages.length > 0
             ? {
-                  message: i18n.t(
-                      "There are {{count}} items selected ({{invisible}} on other pages).",
-                      { count: selection.length, invisible: selectionInOtherPages.length }
-                  ),
-                  link: i18n.t("Clear selection"),
+                  message: messages.itemsSelectedInOtherPages({
+                      count: selection.length,
+                      invisible: selectionInOtherPages.length,
+                  }),
+                  link: messages.clearSelection,
                   newSelection: [],
               }
             : null,
         !allSelected && allSelectedInPage && multiplePagesAvailable && selectAllImplemented
             ? {
-                  message: i18n.t("All {{total}} items on this page are selected.", {
+                  message: messages.allItemsSelectedInCurrentPage({
                       total: rows.length,
                   }),
-                  link: i18n.t("Select all {{total}} items in all pages", { total }),
+                  link: messages.selectAllItemsInAllPages({ total }),
                   newSelection: ids.map(id => ({ id })),
               }
             : null,
-    ]);
+    ];
+
+    return _(notifications)
+        .compact()
+        .filter(notification => Boolean(notification.message))
+        .value();
 }
