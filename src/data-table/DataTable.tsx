@@ -26,7 +26,12 @@ import {
     TableState,
 } from "./types";
 import { defaultRowConfig } from "./utils/formatting";
-import { getActionRows, getSelectionMessages, parseActions } from "./utils/selection";
+import {
+    getActionRows,
+    getSelectionMessages,
+    parseActions,
+    SelectionMessages,
+} from "./utils/selection";
 import { sortObjects } from "./utils/sorting";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -95,6 +100,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     paginationOptions?: Partial<PaginationOptions>;
     onChange?(state: TableState<T>): void;
     resetKey?: string;
+    selectionMessages?: SelectionMessages;
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
@@ -123,6 +129,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         onChange = _.noop,
         resetKey,
         mouseActionsMapping,
+        selectionMessages: overrideSelectionMessages,
     } = props;
 
     const [stateSelection, updateSelection] = useState(initialState.selection || []);
@@ -166,9 +173,19 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         : forceSelectionColumn;
     const totalRows = pagination.total ? pagination.total : rows.length;
 
-    const selectionMessages = hideSelectionMessages
-        ? []
-        : getSelectionMessages(rowObjects, selection, totalRows, ids, childrenKeys);
+    const selectionMessagesBase = React.useMemo(
+        () =>
+            getSelectionMessages(
+                rowObjects,
+                selection,
+                totalRows,
+                ids,
+                childrenKeys,
+                overrideSelectionMessages
+            ),
+        [rowObjects, selection, totalRows, ids, childrenKeys, overrideSelectionMessages]
+    );
+    const selectionMessages = hideSelectionMessages ? [] : selectionMessagesBase;
 
     // Contextual menu
     const [contextMenuTarget, setContextMenuTarget] = useState<number[] | null>(null);
