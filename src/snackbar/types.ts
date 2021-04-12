@@ -1,8 +1,12 @@
+import { ReactNode } from "react";
+
 export type SnackbarLevel = "success" | "info" | "warning" | "error";
+
+type Message = ReactNode;
 
 export interface SnackbarOptions {
     isOpen: boolean;
-    message?: string;
+    message?: Message;
     variant?: SnackbarLevel;
     autoHideDuration?: number | null;
 }
@@ -10,11 +14,11 @@ export interface SnackbarOptions {
 export type SnackbarState = {
     openSnackbar: (
         variant: SnackbarLevel,
-        message: string,
+        message: Message,
         options?: Partial<SnackbarOptions>
     ) => void;
     closeSnackbar: () => void;
 } & {
-    [level in SnackbarLevel]: (message: string, options?: Partial<SnackbarOptions>) => void;
+    [level in SnackbarLevel]: (message: Message, options?: Partial<SnackbarOptions>) => void;
 } &
     SnackbarOptions;
