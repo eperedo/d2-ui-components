@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export type SnackbarLevel = "success" | "info" | "warning" | "error";
 
-type Message = ReactNode;
+export type Message = ReactNode;
 
 export interface SnackbarOptions {
     isOpen: boolean;
