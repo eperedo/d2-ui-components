@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SnackbarContext from "./context";
 import SnackbarConsumer from "./SnackbarConsumer";
-import { SnackbarLevel, SnackbarOptions } from "./types";
+import { Message, SnackbarLevel, SnackbarOptions } from "./types";
 
 export const SnackbarProvider: React.FC = ({ children }) => {
     const [state, setState] = useState<SnackbarOptions>({
@@ -12,7 +12,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
 
     const openSnackbar = (
         variant: SnackbarLevel,
-        message: string,
+        message: Message,
         options: Partial<SnackbarOptions> = {}
     ) => {
         const defaultAutoHideDuration = variant === "success" ? 2000 : undefined;
@@ -27,16 +27,16 @@ export const SnackbarProvider: React.FC = ({ children }) => {
     };
 
     const byLevel = {
-        success: (message: string, options: Partial<SnackbarOptions> = {}) => {
+        success: (message: Message, options: Partial<SnackbarOptions> = {}) => {
             openSnackbar("success", message, options);
         },
-        info: (message: string, options: Partial<SnackbarOptions> = {}) => {
+        info: (message: Message, options: Partial<SnackbarOptions> = {}) => {
             openSnackbar("info", message, options);
         },
-        warning: (message: string, options: Partial<SnackbarOptions> = {}) => {
+        warning: (message: Message, options: Partial<SnackbarOptions> = {}) => {
             openSnackbar("warning", message, options);
         },
-        error: (message: string, options: Partial<SnackbarOptions> = {}) => {
+        error: (message: Message, options: Partial<SnackbarOptions> = {}) => {
             openSnackbar("error", message, options);
         },
     };
