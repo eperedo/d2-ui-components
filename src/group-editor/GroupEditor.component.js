@@ -289,6 +289,7 @@ export default class GroupEditor extends Component {
                 fontFamily: "Roboto",
                 fontSize: 13,
                 outline: "none",
+                overflowX: "auto",
             },
             options: {
                 padding: ".25rem .5rem",
