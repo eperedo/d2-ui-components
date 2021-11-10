@@ -95,7 +95,7 @@ import { OrgUnitsSelector }  from "d2-ui-components";
 
 const MyOrgUnitsSelector = () => (
     <OrgUnitsSelector
-        d2={d2}
+        api={api}
         onChange={orgUnitsPaths => console.log("Selected orgUnitPaths", orgUnitsPaths)}
         selected={["/ImspTQPwCqd/O6uvpzGd5pu", "/ImspTQPwCqd/PMa2VCrupOd"]}
         levels={[1, 2]}
