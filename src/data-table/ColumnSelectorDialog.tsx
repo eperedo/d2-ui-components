@@ -1,31 +1,28 @@
-import { Checkbox, DialogContent } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { DialogContent } from "@material-ui/core";
 import React from "react";
 import { ConfirmationDialog, ReferenceObject, TableColumn } from "..";
+import { TableColumnSelector } from "./TableColumnSelector";
 import i18n from "../utils/i18n";
+import { TransferOption, Transfer } from "@dhis2/ui";
 
 interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
     visibleColumns: (keyof T)[];
-    onChange: (visibleColumns: (keyof T)[]) => void;
+    reorder?: boolean;
+    onChange: (visibleColumns: (keyof T)[] | string[]) => void;
     onCancel: () => void;
 }
 
 export function ColumnSelectorDialog<T extends ReferenceObject>(
     props: ColumnSelectorDialogProps<T>
 ) {
+    const reorder = typeof props.reorder === "undefined" ? true : props.reorder;
     const { columns, visibleColumns, onChange, onCancel } = props;
-
-    const toggleElement = (name: keyof T) => {
-        const newSelection = !visibleColumns.includes(name)
-            ? [...visibleColumns, name]
-            : visibleColumns.filter(item => item !== name);
-        onChange(newSelection);
-    };
+    const transferOptions: TransferOption[] = columns.map(
+        ({ name, text: label }): TransferOption => ({ label, value: name.toString() })
+    );
+    const selected = visibleColumns.map(column => column.toString());
+    const tableColumnSelectorProps = { columns, visibleColumns, onChange };
 
     return (
         <ConfirmationDialog
@@ -37,37 +34,16 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
             disableEnforceFocus
         >
             <DialogContent>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell colSpan={12}>{i18n.t("Column")}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {columns.map(({ name, text }) => {
-                            const checked = visibleColumns.includes(name);
-                            const disabled = visibleColumns.length <= 1 && checked;
+                {reorder && (
+                    <Transfer
+                        enableOrderChange
+                        onChange={({ selected }) => onChange(selected)}
+                        options={transferOptions}
+                        selected={selected}
+                    />
+                )}
 
-                            return (
-                                <TableRow key={`cell-${name}`}>
-                                    <TableCell
-                                        component="th"
-                                        scope="row"
-                                        onClick={() => !disabled && toggleElement(name)}
-                                    >
-                                        <Checkbox
-                                            color={"primary"}
-                                            checked={checked}
-                                            disabled={disabled}
-                                            tabIndex={-1}
-                                        />
-                                        {text}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                {!reorder && <TableColumnSelector {...tableColumnSelectorProps} />}
             </DialogContent>
         </ConfirmationDialog>
     );
