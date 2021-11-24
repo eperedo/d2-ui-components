@@ -23,6 +23,7 @@ import {
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
 import i18n from "../utils/i18n";
+import { nullColumn } from "./utils/sorting";
 
 const defaultMouseActionsMapping: MouseActionsMapping = {
     left: { type: "primary" },
@@ -204,8 +205,8 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         </TableCell>
                     )}
 
-                    {columns
-                        .filter(({ name }) => visibleColumns.includes(name))
+                    {visibleColumns
+                        .map(vc => columns.find(c => c.name === vc) || nullColumn)
                         .map(column => (
                             <TableCell
                                 key={`${labelId}-column-${column.name}`}
@@ -213,7 +214,7 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 align="left"
                                 style={cellStyle}
                             >
-                                {formatRowValue(column, row)}
+                                {formatRowValue(column as TableColumn<T>, row)}
                             </TableCell>
                         ))}
 

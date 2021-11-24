@@ -9,7 +9,7 @@ interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
     visibleColumns: (keyof T)[];
     reorder?: boolean;
-    onChange: (visibleColumns: (keyof T)[] | string[]) => void;
+    onChange: (visibleColumns: (keyof T)[]) => void;
     onCancel: () => void;
 }
 
@@ -37,7 +37,7 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
                 {reorder && (
                     <Transfer
                         enableOrderChange
-                        onChange={({ selected }) => onChange(selected)}
+                        onChange={({ selected }) => onChange(selected as (keyof T)[])}
                         options={transferOptions}
                         selected={selected}
                     />

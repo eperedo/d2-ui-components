@@ -22,6 +22,7 @@ import {
     TableSelection,
     TableSorting,
 } from "./types";
+import { nullColumn } from "./utils/sorting";
 
 const useStyles = makeStyles({
     visuallyHidden: {
@@ -128,25 +129,27 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                             )}
                         </TableCell>
                     )}
-                    {columns
-                        .filter(({ name }) => visibleColumns.includes(name))
-                        .map(column => (
-                            <TableCell
-                                key={`data-table-cell-${column.name}`}
-                                align="left"
-                                sortDirection={field === column.name ? order : false}
-                            >
-                                <TableSortLabel
-                                    active={field === column.name}
-                                    direction={order}
-                                    onClick={createSortHandler(column.name)}
-                                    IconComponent={ExpandMoreIcon}
-                                    disabled={column.sortable === false}
+                    {visibleColumns
+                        .map(vc => columns.find(c => c.name === vc) || nullColumn)
+                        .map(column => {
+                            return (
+                                <TableCell
+                                    key={`data-table-cell-${column.name}`}
+                                    align="left"
+                                    sortDirection={field === column.name ? order : false}
                                 >
-                                    {column.text}
-                                </TableSortLabel>
-                            </TableCell>
-                        ))}
+                                    <TableSortLabel
+                                        active={field === column.name}
+                                        direction={order}
+                                        onClick={createSortHandler(column.name as keyof T)}
+                                        IconComponent={ExpandMoreIcon}
+                                        disabled={column.sortable === false}
+                                    >
+                                        {column.text}
+                                    </TableSortLabel>
+                                </TableCell>
+                            );
+                        })}
                     <TableCell padding="none" align={"center"} onClick={openTableActions}>
                         {tableActions.length > 0 && (
                             <IconButton>
