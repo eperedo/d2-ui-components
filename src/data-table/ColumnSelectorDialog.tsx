@@ -35,6 +35,10 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
                         options={sortableColumns}
                         selected={visibleColumns}
                         enableOrderChange={true}
+                        filterable={true}
+                        filterablePicked={true}
+                        selectedWidth="100%"
+                        optionsWidth="100%"
                         onChange={({ selected }: { selected: Array<keyof T> }) =>
                             onChange(selected)
                         }
