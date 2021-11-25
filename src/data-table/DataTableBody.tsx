@@ -10,6 +10,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
+import i18n from "../utils/i18n";
 import {
     MouseActionMapping,
     MouseActionsMapping,
@@ -22,8 +23,6 @@ import {
 } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
-import i18n from "../utils/i18n";
-import { nullColumn } from "./utils/sorting";
 
 const defaultMouseActionsMapping: MouseActionsMapping = {
     left: { type: "primary" },
@@ -205,8 +204,9 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         </TableCell>
                     )}
 
-                    {visibleColumns
-                        .map(vc => columns.find(c => c.name === vc) || nullColumn)
+                    {_(visibleColumns)
+                        .map(vc => columns.find(c => c.name === vc))
+                        .compact()
                         .map(column => (
                             <TableCell
                                 key={`${labelId}-column-${column.name}`}
@@ -214,9 +214,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                                 align="left"
                                 style={cellStyle}
                             >
-                                {formatRowValue(column as TableColumn<T>, row)}
+                                {formatRowValue(column, row)}
                             </TableCell>
-                        ))}
+                        ))
+                        .value()}
 
                     <TableCell
                         key={`${labelId}-actions`}

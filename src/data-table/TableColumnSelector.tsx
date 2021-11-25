@@ -23,9 +23,6 @@ export function TableColumnSelector<T extends ReferenceObject>(props: TableColum
         const newSelection = !visibleColumns.includes(name)
             ? [...visibleColumns, name]
             : visibleColumns.filter(item => item !== name);
-
-        console.debug("NEW SELECTION");
-        console.debug(newSelection);
         onChange(newSelection);
     };
 

@@ -22,7 +22,6 @@ import {
     TableSelection,
     TableSorting,
 } from "./types";
-import { nullColumn } from "./utils/sorting";
 
 const useStyles = makeStyles({
     visuallyHidden: {
@@ -59,6 +58,7 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
     enableMultipleAction: boolean;
     hideColumnVisibilityOptions?: boolean;
     hideSelectAll?: boolean;
+    allowReorderingColumns?: boolean;
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
@@ -78,6 +78,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         enableMultipleAction,
         hideColumnVisibilityOptions = false,
         hideSelectAll = false,
+        allowReorderingColumns,
     } = props;
 
     const { field, order } = sorting;
@@ -118,6 +119,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                     visibleColumns={visibleColumns}
                     onChange={onVisibleColumnsChange || _.noop}
                     onCancel={() => setOpenColumnSettings(false)}
+                    allowReorderingColumns={allowReorderingColumns}
                 />
             )}
             <TableHead>
@@ -129,8 +131,9 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                             )}
                         </TableCell>
                     )}
-                    {visibleColumns
-                        .map(vc => columns.find(c => c.name === vc) || nullColumn)
+                    {_(visibleColumns)
+                        .map(vc => columns.find(c => c.name === vc))
+                        .compact()
                         .map(column => {
                             return (
                                 <TableCell
@@ -149,7 +152,8 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                                     </TableSortLabel>
                                 </TableCell>
                             );
-                        })}
+                        })
+                        .value()}
                     <TableCell padding="none" align={"center"} onClick={openTableActions}>
                         {tableActions.length > 0 && (
                             <IconButton>

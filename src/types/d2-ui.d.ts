@@ -5,8 +5,8 @@ declare module "@dhis2/ui" {
         disabled?: boolean;
     };
 
-    export type TransferProps = {
-        options: TransferOption[];
+    export type TransferProps<T extends TransferOption> = {
+        options: T[];
         onChange: (params: { selected: string[] }) => void;
         addAllText?: string;
         addIndividualText?: string;

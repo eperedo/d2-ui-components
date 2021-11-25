@@ -20,8 +20,6 @@ export function sortObjects<T extends ReferenceObject>(
         .value();
 }
 
-export const nullColumn = { name: "", text: "", sortable: false };
-
 function getValue<T extends ReferenceObject>(
     row: T,
     column: TableColumn<T> | undefined,
