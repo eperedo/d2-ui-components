@@ -39,6 +39,7 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
                         filterablePicked={true}
                         selectedWidth="100%"
                         optionsWidth="100%"
+                        height="400px"
                         onChange={({ selected }: { selected: Array<keyof T> }) =>
                             onChange(selected)
                         }

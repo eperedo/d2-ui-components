@@ -91,6 +91,10 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         if (onSortingChange) onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
 
+    const currentColumns = _.compact(
+        visibleColumns.map(column => columns.find(({ name }) => name === column))
+    );
+
     const tableActions = _.compact([
         !hideColumnVisibilityOptions
             ? {
@@ -131,29 +135,25 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                             )}
                         </TableCell>
                     )}
-                    {_(visibleColumns)
-                        .map(vc => columns.find(c => c.name === vc))
-                        .compact()
-                        .map(column => {
-                            return (
-                                <TableCell
-                                    key={`data-table-cell-${column.name}`}
-                                    align="left"
-                                    sortDirection={field === column.name ? order : false}
+                    {currentColumns.map(column => {
+                        return (
+                            <TableCell
+                                key={`data-table-cell-${column.name}`}
+                                align="left"
+                                sortDirection={field === column.name ? order : false}
+                            >
+                                <TableSortLabel
+                                    active={field === column.name}
+                                    direction={order}
+                                    onClick={createSortHandler(column.name)}
+                                    IconComponent={ExpandMoreIcon}
+                                    disabled={column.sortable === false}
                                 >
-                                    <TableSortLabel
-                                        active={field === column.name}
-                                        direction={order}
-                                        onClick={createSortHandler(column.name as keyof T)}
-                                        IconComponent={ExpandMoreIcon}
-                                        disabled={column.sortable === false}
-                                    >
-                                        {column.text}
-                                    </TableSortLabel>
-                                </TableCell>
-                            );
-                        })
-                        .value()}
+                                    {column.text}
+                                </TableSortLabel>
+                            </TableCell>
+                        );
+                    })}
                     <TableCell padding="none" align={"center"} onClick={openTableActions}>
                         {tableActions.length > 0 && (
                             <IconButton>

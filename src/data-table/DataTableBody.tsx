@@ -163,6 +163,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             disabled ? classes.disabledRow : null,
         ]).join(" ");
 
+        const currentColumns = _.compact(
+            visibleColumns.map(column => columns.find(({ name }) => name === column))
+        );
+
         return (
             <React.Fragment key={`data-table-row-${index}`}>
                 <TableRow
@@ -204,20 +208,16 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         </TableCell>
                     )}
 
-                    {_(visibleColumns)
-                        .map(vc => columns.find(c => c.name === vc))
-                        .compact()
-                        .map(column => (
-                            <TableCell
-                                key={`${labelId}-column-${column.name}`}
-                                scope="row"
-                                align="left"
-                                style={cellStyle}
-                            >
-                                {formatRowValue(column, row)}
-                            </TableCell>
-                        ))
-                        .value()}
+                    {currentColumns.map(column => (
+                        <TableCell
+                            key={`${labelId}-column-${column.name}`}
+                            scope="row"
+                            align="left"
+                            style={cellStyle}
+                        >
+                            {formatRowValue(column, row)}
+                        </TableCell>
+                    ))}
 
                     <TableCell
                         key={`${labelId}-actions`}
