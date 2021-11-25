@@ -16,8 +16,7 @@ interface ColumnSelectorDialogProps<T extends ReferenceObject> {
 export function ColumnSelectorDialog<T extends ReferenceObject>(
     props: ColumnSelectorDialogProps<T>
 ) {
-    const reorder = typeof props.reorder === "undefined" ? true : props.reorder;
-    const { columns, visibleColumns, onChange, onCancel } = props;
+    const { columns, visibleColumns, onChange, onCancel, reorder = true } = props;
     const transferOptions: TransferOption[] = columns.map(
         ({ name, text: label }): TransferOption => ({ label, value: name.toString() })
     );
