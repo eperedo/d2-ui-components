@@ -1,16 +1,14 @@
-import { Checkbox, DialogContent } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { Transfer } from "@dhis2/ui";
+import { DialogContent } from "@material-ui/core";
 import React from "react";
 import { ConfirmationDialog, ReferenceObject, TableColumn } from "..";
 import i18n from "../utils/i18n";
+import { TableColumnSelector } from "./TableColumnSelector";
 
 interface ColumnSelectorDialogProps<T extends ReferenceObject> {
     columns: TableColumn<T>[];
     visibleColumns: (keyof T)[];
+    allowReorderingColumns?: boolean;
     onChange: (visibleColumns: (keyof T)[]) => void;
     onCancel: () => void;
 }
@@ -18,14 +16,8 @@ interface ColumnSelectorDialogProps<T extends ReferenceObject> {
 export function ColumnSelectorDialog<T extends ReferenceObject>(
     props: ColumnSelectorDialogProps<T>
 ) {
-    const { columns, visibleColumns, onChange, onCancel } = props;
-
-    const toggleElement = (name: keyof T) => {
-        const newSelection = !visibleColumns.includes(name)
-            ? [...visibleColumns, name]
-            : visibleColumns.filter(item => item !== name);
-        onChange(newSelection);
-    };
+    const { columns, visibleColumns, onChange, onCancel, allowReorderingColumns = true } = props;
+    const sortableColumns = columns.map(({ name, text: label }) => ({ label, value: name }));
 
     return (
         <ConfirmationDialog
@@ -33,41 +25,32 @@ export function ColumnSelectorDialog<T extends ReferenceObject>(
             title={i18n.t("Columns to show in table")}
             onCancel={onCancel}
             cancelText={i18n.t("Close")}
-            fullWidth
+            maxWidth={"lg"}
+            fullWidth={true}
             disableEnforceFocus
         >
             <DialogContent>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell colSpan={12}>{i18n.t("Column")}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {columns.map(({ name, text }) => {
-                            const checked = visibleColumns.includes(name);
-                            const disabled = visibleColumns.length <= 1 && checked;
-
-                            return (
-                                <TableRow key={`cell-${name}`}>
-                                    <TableCell
-                                        component="th"
-                                        scope="row"
-                                        onClick={() => !disabled && toggleElement(name)}
-                                    >
-                                        <Checkbox
-                                            color={"primary"}
-                                            checked={checked}
-                                            disabled={disabled}
-                                            tabIndex={-1}
-                                        />
-                                        {text}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
+                {allowReorderingColumns ? (
+                    <Transfer
+                        options={sortableColumns}
+                        selected={visibleColumns}
+                        enableOrderChange={true}
+                        filterable={true}
+                        filterablePicked={true}
+                        selectedWidth="100%"
+                        optionsWidth="100%"
+                        height="400px"
+                        onChange={({ selected }: { selected: Array<keyof T> }) =>
+                            onChange(selected)
+                        }
+                    />
+                ) : (
+                    <TableColumnSelector
+                        columns={columns}
+                        visibleColumns={visibleColumns}
+                        onChange={onChange}
+                    />
+                )}
             </DialogContent>
         </ConfirmationDialog>
     );
