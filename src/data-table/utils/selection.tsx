@@ -105,7 +105,7 @@ export function getSelectionMessages<T extends ReferenceObject>(
     const selectionInOtherPages = _.differenceBy(selection, rows, "id");
     const allSelectedInPage = _.differenceBy(rows, selection, "id").length === 0;
     const multiplePagesAvailable = total > rows.length;
-    const selectAllImplemented = ids.length === total;
+    const selectAllImplemented = ids.length > 0;
     const messages = { ...getMessages(), ...overrideMessages };
 
     const notifications = [
