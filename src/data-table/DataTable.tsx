@@ -84,6 +84,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     globalActions?: TableGlobalAction[];
     initialState?: TableInitialState<T>;
     forceSelectionColumn?: boolean;
+    allowReorderingColumns?: boolean;
     hideSelectionMessages?: boolean;
     hideColumnVisibilityOptions?: boolean;
     hideSelectAll?: boolean;
@@ -130,6 +131,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         resetKey,
         mouseActionsMapping,
         selectionMessages: overrideSelectionMessages,
+        allowReorderingColumns,
     } = props;
 
     const [stateSelection, updateSelection] = useState(initialState.selection || []);
@@ -277,6 +279,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             enableMultipleAction={enableMultipleAction}
                             hideColumnVisibilityOptions={hideColumnVisibilityOptions}
                             hideSelectAll={hideSelectAll}
+                            allowReorderingColumns={allowReorderingColumns}
                         />
                         <DataTableBody
                             rows={rowObjects}
