@@ -102,6 +102,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     onChange?(state: TableState<T>): void;
     resetKey?: string;
     selectionMessages?: SelectionMessages;
+    onReorderColumns(columns: Array<keyof T>): void;
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
@@ -132,6 +133,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         mouseActionsMapping,
         selectionMessages: overrideSelectionMessages,
         allowReorderingColumns,
+        onReorderColumns,
     } = props;
 
     const [stateSelection, updateSelection] = useState(initialState.selection || []);
@@ -147,7 +149,11 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     useEffect(() => updatePagination(pagination => ({ ...pagination, page: 1 })), [resetKey]);
     useEffect(() => {
         const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
-        updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
+        updateVisibleColumns(visibleColumns => {
+            const update = _.uniq([...visibleColumns, ...newVisibleColumns]);
+            onReorderColumns(update);
+            return update;
+        });
     }, [columns]);
 
     const { pageSizeInitialValue: pageSize = 25 } = paginationOptions;
