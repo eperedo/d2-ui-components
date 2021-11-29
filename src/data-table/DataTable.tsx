@@ -102,7 +102,7 @@ export interface DataTableProps<T extends ReferenceObject> {
     onChange?(state: TableState<T>): void;
     resetKey?: string;
     selectionMessages?: SelectionMessages;
-    onReorderColumns(columns: Array<keyof T>): void;
+    onReorderColumns?(columns: Array<keyof T>): void;
 }
 
 export function DataTable<T extends ReferenceObject = TableObject>(props: DataTableProps<T>) {
@@ -151,7 +151,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
         const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
         updateVisibleColumns(visibleColumns => {
             const update = _.uniq([...visibleColumns, ...newVisibleColumns]);
-            onReorderColumns(update);
+            if (onReorderColumns) onReorderColumns(update);
             return update;
         });
     }, [columns]);
