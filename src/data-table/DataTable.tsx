@@ -147,14 +147,15 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     );
 
     useEffect(() => updatePagination(pagination => ({ ...pagination, page: 1 })), [resetKey]);
+
     useEffect(() => {
         const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
-        updateVisibleColumns(visibleColumns => {
-            const update = _.uniq([...visibleColumns, ...newVisibleColumns]);
-            if (onReorderColumns) onReorderColumns(update);
-            return update;
-        });
+        updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
     }, [columns]);
+
+    useEffect(() => {
+        if (onReorderColumns) onReorderColumns(visibleColumns);
+    }, [visibleColumns]);
 
     const { pageSizeInitialValue: pageSize = 25 } = paginationOptions;
 
