@@ -155,7 +155,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     useEffect(() => {
         if (onReorderColumns) onReorderColumns(visibleColumns);
-    }, [visibleColumns]);
+    }, [onReorderColumns, visibleColumns]);
 
     const { pageSizeInitialValue: pageSize = 25 } = paginationOptions;
 
