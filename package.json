@@ -7,7 +7,7 @@
         "type": "git",
         "url": "git+https://github.com/eyeseetea/d2-ui-components.git"
     },
-    "version": "2.6.8",
+    "version": "2.6.9",
     "main": "index.js",
     "types": "index.d.ts",
     "peerDependencies": {
@@ -69,6 +69,7 @@
         "@date-io/moment": "1.0.2",
         "@dhis2/d2-i18n": "1.0.6",
         "@dhis2/d2-ui-core": "6.3.0",
+        "@dhis2/ui": "6.15.2",
         "@material-ui/pickers": "3.2.10",
         "classnames": "2.2.6",
         "downshift": "5.4.2",

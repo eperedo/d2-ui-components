@@ -40,17 +40,24 @@ type GetRows<Obj extends ReferenceObject> = (
     sorting: TableSorting<Obj>
 ) => Promise<{ objects: Obj[]; pager: Pager }>;
 
+type GetAllIds<Obj extends ReferenceObject> = (
+    search: string,
+    sorting: TableSorting<Obj>
+) => Promise<string[]>;
+
 // Group state to avoid multiple re-renders on individual setState dispatchers
 interface State<Obj extends ReferenceObject> {
     rows: Obj[] | undefined;
     pagination: TablePagination;
     sorting: TableSorting<Obj>;
     isLoading: boolean;
+    ids?: string[];
 }
 
 export function useObjectsTable<Obj extends ReferenceObject>(
     config: TableConfig<Obj>,
-    getRows: GetRows<Obj>
+    getRows: GetRows<Obj>,
+    getAllIds?: GetAllIds<Obj>
 ): ObjectsListProps<Obj> {
     const initialPagination: TablePagination = useMemo(
         () => ({
@@ -73,16 +80,20 @@ export function useObjectsTable<Obj extends ReferenceObject>(
     const loadRows = useCallback(
         async (sorting: TableSorting<Obj>, pagination: Partial<TablePagination>) => {
             setState(state => ({ ...state, isLoading: true }));
+
             const paging = { ...initialPagination, ...pagination };
             const res = await getRows(search.trim(), paging, sorting);
+            const ids = getAllIds ? await getAllIds(search.trim(), sorting) : undefined;
+
             setState({
                 rows: res.objects,
                 pagination: { ...pagination, ...res.pager },
                 sorting,
                 isLoading: false,
+                ids,
             });
         },
-        [getRows, search, initialPagination]
+        [getRows, getAllIds, search, initialPagination]
     );
 
     const reload = useCallback(async () => {
@@ -109,5 +120,6 @@ export function useObjectsTable<Obj extends ReferenceObject>(
         searchBoxLabel: config.searchBoxLabel || i18n.t("Search by name"),
         onChangeSearch: setSearch,
         reload,
+        ids: state.ids,
     };
 }
