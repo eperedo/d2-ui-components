@@ -43,6 +43,7 @@ export function ObjectsList<T extends ReferenceObject>(
         children,
         isLoading,
         rows,
+        reload,
         mouseActionsMapping = defaultMouseActionsMapping,
         ...tableProps
     } = props;
@@ -54,6 +55,7 @@ export function ObjectsList<T extends ReferenceObject>(
             {isLoading ? <span data-test-loading /> : <span data-test-loaded />}
             {
                 <ObjectsTable<T>
+                    reload={reload}
                     rows={rows || emptyRows}
                     mouseActionsMapping={mouseActionsMapping}
                     {...tableProps}

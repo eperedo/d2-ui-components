@@ -37,6 +37,7 @@ export interface ObjectsTableProps<T extends ReferenceObject> extends DataTableP
     onActionButtonClick?(event: MouseEvent<unknown>): void;
     actionButtonLabel?: ReactNode;
     className?: string;
+    reload: () => void;
 }
 
 export function ObjectsTable<T extends ReferenceObject = TableObject>(props: ObjectsTableProps<T>) {
@@ -55,6 +56,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
         resetKey = "",
         childrenKeys = [],
         className,
+        reload,
         ...rest
     } = props;
     const classes = useStyles();
@@ -82,7 +84,7 @@ export function ObjectsTable<T extends ReferenceObject = TableObject>(props: Obj
                           const row = _.find(allRows, ["id", selectedIds[0]]);
                           if (row) setDetailsPaneObject(row);
                       }
-                      if (action.onClick) action.onClick(selectedIds);
+                      if (action.onClick) action.onClick(selectedIds, { reload });
                   }
                 : action.onClick,
     }));
