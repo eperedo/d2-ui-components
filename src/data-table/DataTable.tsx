@@ -150,7 +150,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     useEffect(() => {
         const newVisibleColumns = columns.filter(({ hidden }) => !hidden).map(({ name }) => name);
-        updateVisibleColumns(visibleColumns => _.uniq([...visibleColumns, ...newVisibleColumns]));
+        updateVisibleColumns(newVisibleColumns);
     }, [columns]);
 
     useEffect(() => {
