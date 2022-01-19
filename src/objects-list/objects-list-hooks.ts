@@ -16,12 +16,7 @@ import { ObjectsListProps } from "./ObjectsList";
 export interface TableConfig<Obj extends ReferenceObject>
     extends Omit<
         ObjectsTableProps<Obj>,
-        | "rows"
-        | "isLoading"
-        | "onChange"
-        | "pagination"
-        | "onChangeSearch"
-        | "reload"
+        "rows" | "isLoading" | "onChange" | "pagination" | "onChangeSearch" | "reload"
     > {
     columns: TableColumn<Obj>[];
     actions: TableAction<Obj>[];
@@ -68,9 +63,9 @@ export function useObjectsTable<Obj extends ReferenceObject>(
     const initialState = useMemo(
         () => ({
             pagination: {
-            page: 1,
-            pageSize: config.paginationOptions.pageSizeInitialValue ?? 20,
-            total: 0,
+                page: 1,
+                pageSize: config.paginationOptions.pageSizeInitialValue ?? 20,
+                total: 0,
             },
             sorting: config.initialSorting,
             selection: config.initialSelection,
