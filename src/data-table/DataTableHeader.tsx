@@ -58,6 +58,7 @@ export interface DataTableHeaderProps<T extends ReferenceObject> {
     enableMultipleAction: boolean;
     hideColumnVisibilityOptions?: boolean;
     hideSelectAll?: boolean;
+    allowReorderingColumns?: boolean;
 }
 
 export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeaderProps<T>) {
@@ -77,6 +78,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         enableMultipleAction,
         hideColumnVisibilityOptions = false,
         hideSelectAll = false,
+        allowReorderingColumns,
     } = props;
 
     const { field, order } = sorting;
@@ -88,6 +90,10 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
         const isDesc = field === property && order === "desc";
         if (onSortingChange) onSortingChange({ field: property, order: isDesc ? "asc" : "desc" });
     };
+
+    const currentColumns = _.compact(
+        visibleColumns.map(column => columns.find(({ name }) => name === column))
+    );
 
     const tableActions = _.compact([
         !hideColumnVisibilityOptions
@@ -117,6 +123,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                     visibleColumns={visibleColumns}
                     onChange={onVisibleColumnsChange || _.noop}
                     onCancel={() => setOpenColumnSettings(false)}
+                    allowReorderingColumns={allowReorderingColumns}
                 />
             )}
             <TableHead>
@@ -128,9 +135,8 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                             )}
                         </TableCell>
                     )}
-                    {columns
-                        .filter(({ name }) => visibleColumns.includes(name))
-                        .map(column => (
+                    {currentColumns.map(column => {
+                        return (
                             <TableCell
                                 key={`data-table-cell-${column.name}`}
                                 align="left"
@@ -146,7 +152,8 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                                     {column.text}
                                 </TableSortLabel>
                             </TableCell>
-                        ))}
+                        );
+                    })}
                     <TableCell padding="none" align={"center"} onClick={openTableActions}>
                         {tableActions.length > 0 && (
                             <IconButton>

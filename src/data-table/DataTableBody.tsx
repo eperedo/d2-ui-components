@@ -10,6 +10,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import _ from "lodash";
 import React, { MouseEvent, useState } from "react";
+import i18n from "../utils/i18n";
 import {
     MouseActionMapping,
     MouseActionsMapping,
@@ -22,7 +23,6 @@ import {
 } from "./types";
 import { formatRowValue } from "./utils/formatting";
 import { isEventCtrlClick, parseActions, updateSelection } from "./utils/selection";
-import i18n from "../utils/i18n";
 
 const defaultMouseActionsMapping: MouseActionsMapping = {
     left: { type: "primary" },
@@ -163,6 +163,10 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
             disabled ? classes.disabledRow : null,
         ]).join(" ");
 
+        const currentColumns = _.compact(
+            visibleColumns.map(column => columns.find(({ name }) => name === column))
+        );
+
         return (
             <React.Fragment key={`data-table-row-${index}`}>
                 <TableRow
@@ -204,18 +208,16 @@ export function DataTableBody<T extends ReferenceObject>(props: DataTableBodyPro
                         </TableCell>
                     )}
 
-                    {columns
-                        .filter(({ name }) => visibleColumns.includes(name))
-                        .map(column => (
-                            <TableCell
-                                key={`${labelId}-column-${column.name}`}
-                                scope="row"
-                                align="left"
-                                style={cellStyle}
-                            >
-                                {formatRowValue(column, row)}
-                            </TableCell>
-                        ))}
+                    {currentColumns.map(column => (
+                        <TableCell
+                            key={`${labelId}-column-${column.name}`}
+                            scope="row"
+                            align="left"
+                            style={cellStyle}
+                        >
+                            {formatRowValue(column, row)}
+                        </TableCell>
+                    ))}
 
                     <TableCell
                         key={`${labelId}-actions`}

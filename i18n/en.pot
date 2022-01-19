@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2021-04-09T08:17:10.988Z\n"
-"PO-Revision-Date: 2021-04-09T08:17:10.988Z\n"
+"POT-Creation-Date: 2021-11-24T07:20:30.326Z\n"
+"PO-Revision-Date: 2021-11-24T07:20:30.326Z\n"
 
 msgid "Cancel"
 msgstr ""
@@ -23,9 +23,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Column"
-msgstr ""
-
 msgid "Actions"
 msgstr ""
 
@@ -36,6 +33,9 @@ msgid "Loading details..."
 msgstr ""
 
 msgid "No detail fields provided"
+msgstr ""
+
+msgid "Column"
 msgstr ""
 
 msgid "Clear selection"
