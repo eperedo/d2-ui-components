@@ -7,6 +7,7 @@ import {
     TableAction,
     TableColumn,
     TablePagination,
+    TableSelection,
     TableSorting,
     TableState,
 } from "..";
@@ -90,7 +91,7 @@ export function useObjectsTable<Obj extends ReferenceObject>(
         async (sorting: TableSorting<Obj>, pagination: Partial<TablePagination>) => {
             setState(state => ({ ...state, isLoading: true }));
 
-            const paging = { ...initialPagination, ...pagination };
+            const paging = { ...initialState.pagination, ...pagination };
             const res = await getRows(search.trim(), paging, sorting);
             const ids = getAllIds ? await getAllIds(search.trim(), sorting) : undefined;
 
@@ -102,7 +103,7 @@ export function useObjectsTable<Obj extends ReferenceObject>(
                 ids,
             });
         },
-        [getRows, getAllIds, search, initialPagination]
+        [getRows, getAllIds, search, initialState.pagination]
     );
 
     const reload = useCallback(async () => {
@@ -110,8 +111,8 @@ export function useObjectsTable<Obj extends ReferenceObject>(
     }, [loadRows, state.sorting, state.pagination]);
 
     useEffect(() => {
-        loadRows(config.initialSorting, initialPagination);
-    }, [config.initialSorting, loadRows, initialPagination]);
+        loadRows(config.initialSorting, initialState.pagination);
+    }, [config.initialSorting, loadRows, initialState.pagination]);
 
     const onChange = useCallback(
         (newState: TableState<Obj>) => {
