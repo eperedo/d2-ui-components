@@ -7,6 +7,7 @@ import {
     TableAction,
     TableColumn,
     TablePagination,
+    TableSelection,
     TableSorting,
     TableState,
 } from "..";
@@ -22,6 +23,7 @@ export interface TableConfig<Obj extends ReferenceObject>
     actions: TableAction<Obj>[];
     paginationOptions: PaginationOptions;
     initialSorting: TableSorting<Obj>;
+    initialSelection?: TableSelection[];
     details?: ObjectsTableDetailField<Obj>[];
     searchBoxLabel?: string;
     initialSearch?: string;
@@ -59,19 +61,27 @@ export function useObjectsTable<Obj extends ReferenceObject>(
     getRows: GetRows<Obj>,
     getAllIds?: GetAllIds<Obj>
 ): ObjectsListProps<Obj> {
-    const initialPagination: TablePagination = useMemo(
+    const initialState = useMemo(
         () => ({
-            page: 1,
-            pageSize: config.paginationOptions.pageSizeInitialValue ?? 20,
-            total: 0,
+            pagination: {
+                page: 1,
+                pageSize: config.paginationOptions.pageSizeInitialValue ?? 20,
+                total: 0,
+            },
+            sorting: config.initialSorting,
+            selection: config.initialSelection,
         }),
-        [config.paginationOptions.pageSizeInitialValue]
+        [
+            config.initialSelection,
+            config.initialSorting,
+            config.paginationOptions.pageSizeInitialValue,
+        ]
     );
 
     const [state, setState] = useState<State<Obj>>(() => ({
         rows: undefined,
-        pagination: initialPagination,
-        sorting: config.initialSorting,
+        pagination: initialState.pagination,
+        sorting: initialState.sorting,
         isLoading: false,
     }));
 
@@ -81,7 +91,7 @@ export function useObjectsTable<Obj extends ReferenceObject>(
         async (sorting: TableSorting<Obj>, pagination: Partial<TablePagination>) => {
             setState(state => ({ ...state, isLoading: true }));
 
-            const paging = { ...initialPagination, ...pagination };
+            const paging = { ...initialState.pagination, ...pagination };
             const res = await getRows(search.trim(), paging, sorting);
             const ids = getAllIds ? await getAllIds(search.trim(), sorting) : undefined;
 
@@ -93,7 +103,7 @@ export function useObjectsTable<Obj extends ReferenceObject>(
                 ids,
             });
         },
-        [getRows, getAllIds, search, initialPagination]
+        [getRows, getAllIds, search, initialState.pagination]
     );
 
     const reload = useCallback(async () => {
@@ -101,8 +111,8 @@ export function useObjectsTable<Obj extends ReferenceObject>(
     }, [loadRows, state.sorting, state.pagination]);
 
     useEffect(() => {
-        loadRows(config.initialSorting, initialPagination);
-    }, [config.initialSorting, loadRows, initialPagination]);
+        loadRows(config.initialSorting, initialState.pagination);
+    }, [config.initialSorting, loadRows, initialState.pagination]);
 
     const onChange = useCallback(
         (newState: TableState<Obj>) => {
@@ -120,6 +130,7 @@ export function useObjectsTable<Obj extends ReferenceObject>(
         searchBoxLabel: config.searchBoxLabel || i18n.t("Search by name"),
         onChangeSearch: setSearch,
         reload,
+        initialState,
         ids: state.ids,
     };
 }
