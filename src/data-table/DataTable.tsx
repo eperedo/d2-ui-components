@@ -138,7 +138,9 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
 
     const [stateSelection, updateSelection] = useState(initialState.selection || []);
     const [statePagination, updatePagination] = useState(initialState.pagination);
-    const [visibleColumns, updateVisibleColumns] = useState<Array<keyof T>>([]);
+    const [stateVisibleColumns, updateVisibleColumns] = useState<Array<keyof T>>(
+        initialState.visibleColumns || []
+    );
     const [stateSorting, updateSorting] = useState(
         initialState.sorting || {
             field: columns[0].name,
@@ -154,8 +156,8 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
     }, [columns]);
 
     useEffect(() => {
-        if (onReorderColumns) onReorderColumns(visibleColumns);
-    }, [onReorderColumns, visibleColumns]);
+        if (onReorderColumns) onReorderColumns(stateVisibleColumns);
+    }, [onReorderColumns, stateVisibleColumns]);
 
     const { pageSizeInitialValue: pageSize = 25 } = paginationOptions;
 
@@ -275,7 +277,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             columns={columns}
                             globalActions={globalActions}
                             ids={ids}
-                            visibleColumns={visibleColumns}
+                            visibleColumns={stateVisibleColumns}
                             onVisibleColumnsChange={updateVisibleColumns}
                             sorting={sorting}
                             onSortingChange={handleSortingChange}
@@ -292,7 +294,7 @@ export function DataTable<T extends ReferenceObject = TableObject>(props: DataTa
                             rows={rowObjects}
                             columns={columns}
                             rowConfig={rowConfig}
-                            visibleColumns={visibleColumns}
+                            visibleColumns={stateVisibleColumns}
                             sorting={sorting}
                             selected={selection}
                             onChange={handleSelectionChange}

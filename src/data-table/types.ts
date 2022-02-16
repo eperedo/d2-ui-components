@@ -55,6 +55,7 @@ export type TableInitialState<T extends ReferenceObject> = Partial<
     Omit<TableState<T>, "pagination">
 > & {
     pagination?: Partial<TablePagination>;
+    visibleColumns?: Array<keyof T>;
 };
 
 export interface TableNotification {
