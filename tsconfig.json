@@ -14,7 +14,9 @@
         "jsx": "react",
         "noUnusedParameters": true,
         "noUnusedLocals": true,
+        "strictNullChecks": true,
         "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
         "lib": [
             "dom",
             "dom.iterable",
