@@ -1,3 +1,3 @@
 import "./locales";
 
-export { SimpleCheckBox } from "./simple-check-box/SimpleCheckBox";
+export { Feedback } from "./feedback/Feedback";
