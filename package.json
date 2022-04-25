@@ -12,7 +12,9 @@
         "@material-ui/core": "4",
         "@material-ui/icons": "4",
         "react": "17",
-        "react-dom": "17"
+        "react-dom": "17",
+        "@types/react": "17",
+        "@types/react-dom": "17"
     },
     "devDependencies": {
         "@babel/cli": "7.17.6",
@@ -85,11 +87,10 @@
         "throttle-debounce": "4.0.1"
     },
     "scripts": {
-        "build-base": "mkdir -p build && cp README.md LICENSE build/ && yarn build-css && yarn localize && yarn build-locales && cp package.json build/ && yarn build-babel && yarn build-tsc",
+        "build-base": "mkdir -p build && cp README.md LICENSE build/ && yarn localize && yarn build-locales && cp package.json build/ && yarn build-babel && yarn build-tsc",
         "build-tsc": "tsc --outDir build",
         "build-babel": "babel src/ --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
         "build-locales": "mkdir -p build/locales && cp -a src/locales/* build/locales",
-        "build-css": "cd src && cp -a --parents **/*.css ../build",
         "build": "yarn code-quality && yarn build-base",
         "build-watch": "yarn build-base && concurrently 'yarn build-babel --watch' 'yarn build-tsc --watch'",
         "code-quality": "yarn lint && yarn prettify && echo disabled yarn test",
