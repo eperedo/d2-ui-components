@@ -5,5 +5,38 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2022-04-19T05:48:46.338Z\n"
-"PO-Revision-Date: 2022-04-19T05:48:46.338Z\n"
+"POT-Creation-Date: 2022-04-25T18:03:45.167Z\n"
+"PO-Revision-Date: 2022-04-25T18:03:45.167Z\n"
+
+msgid "Send feedback"
+msgstr ""
+
+msgid "I have read and accept the "
+msgstr ""
+
+msgid "EyeSeeTea S.L. Privacy Policy"
+msgstr ""
+
+msgid ", paying special attention to the "
+msgstr ""
+
+msgid "Application Feedback"
+msgstr ""
+
+msgid " section."
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Include screenshot"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Send"
+msgstr ""
