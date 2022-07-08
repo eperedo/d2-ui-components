@@ -50,6 +50,7 @@ class OrgUnitTree extends React.Component {
         super(props);
 
         this.state = {
+            useShortNames: props.useShortNames,
             children:
                 props.root.children === false ||
                 (Array.isArray(props.root.children) && props.root.children.length === 0)
@@ -94,6 +95,7 @@ class OrgUnitTree extends React.Component {
                         id: true,
                         level: true,
                         displayName: true,
+                        shortName: true,
                         children: true,
                         path: true,
                         parent: true,
@@ -159,6 +161,7 @@ class OrgUnitTree extends React.Component {
                     hideMemberCount={this.props.hideMemberCount}
                     orgUnitsPathsToInclude={this.props.orgUnitsPathsToInclude}
                     selectableIds={this.props.selectableIds}
+                    useShortNames={this.props.useShortNames}
                 />
             );
         }
@@ -270,7 +273,7 @@ class OrgUnitTree extends React.Component {
                         onClick={this.handleSelectClick}
                     />
                 )}
-                {currentOu.displayName}
+                {this.state.useShortNames ? currentOu.shortName : currentOu.displayName}
                 {hasChildren && !this.props.hideMemberCount && !!memberCount && (
                     <span style={styles.memberCount}>({memberCount})</span>
                 )}

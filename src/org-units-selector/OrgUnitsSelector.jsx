@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@material-ui/core";
+import { Card, CardContent, FormControlLabel, Switch } from "@material-ui/core";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
@@ -75,6 +75,7 @@ export default class OrgUnitsSelector extends React.Component {
                 orgUnitGroupId: null,
                 programId: null,
             },
+            useShortNames: false,
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
     }
@@ -87,34 +88,34 @@ export default class OrgUnitsSelector extends React.Component {
             !filterByLevel
                 ? Promise.resolve([])
                 : props.api.models.organisationUnitLevels
-                      .get({
-                          paging: false,
-                          fields: { id: true, level: true, displayName: true },
-                          order: "level:asc",
-                          filter: { level: { in: props.levels } },
-                      })
-                      .getData()
-                      .then(({ objects }) => objects),
+                    .get({
+                        paging: false,
+                        fields: { id: true, level: true, displayName: true },
+                        order: "level:asc",
+                        filter: { level: { in: props.levels } },
+                    })
+                    .getData()
+                    .then(({ objects }) => objects),
             !filterByGroup
                 ? Promise.resolve([])
                 : props.api.models.organisationUnitGroups
-                      .get({
-                          pageSize: 1,
-                          paging: false,
-                          fields: { id: true, displayName: true },
-                      })
-                      .getData()
-                      .then(({ objects }) => objects),
+                    .get({
+                        pageSize: 1,
+                        paging: false,
+                        fields: { id: true, displayName: true },
+                    })
+                    .getData()
+                    .then(({ objects }) => objects),
             !filterByProgram
                 ? Promise.resolve([])
                 : props.api.models.programs
-                      .get({
-                          pageSize: 1,
-                          paging: false,
-                          fields: { id: true, displayName: true },
-                      })
-                      .getData()
-                      .then(({ objects }) => objects),
+                    .get({
+                        pageSize: 1,
+                        paging: false,
+                        fields: { id: true, displayName: true },
+                    })
+                    .getData()
+                    .then(({ objects }) => objects),
             this.getRoots(),
         ]).then(([levels, groups, programs, defaultRoots]) => {
             this.setState({
@@ -172,14 +173,14 @@ export default class OrgUnitsSelector extends React.Component {
         const { rootIds, selectableLevels } = this.props;
         const postFilter = search
             ? orgUnits =>
-                  _(orgUnits)
-                      .filter(orgUnit =>
-                          selectableLevels
-                              ? selectableLevels.includes(orgUnit.level)
-                              : !rootIds || rootIds.some(ouId => orgUnit.path.includes(ouId))
-                      )
-                      .take(50)
-                      .value()
+                _(orgUnits)
+                    .filter(orgUnit =>
+                        selectableLevels
+                            ? selectableLevels.includes(orgUnit.level)
+                            : !rootIds || rootIds.some(ouId => orgUnit.path.includes(ouId))
+                    )
+                    .take(50)
+                    .value()
             : _.identity;
 
         const response = this.queryRoots({ search });
@@ -273,7 +274,15 @@ export default class OrgUnitsSelector extends React.Component {
     render() {
         if (!this.state.levels) return null;
 
-        const { levels, currentRoot, roots, groups, programs, selectedFilters } = this.state;
+        const {
+            levels,
+            currentRoot,
+            roots,
+            groups,
+            programs,
+            selectedFilters,
+            useShortNames,
+        } = this.state;
         const {
             api,
             selected,
@@ -312,7 +321,20 @@ export default class OrgUnitsSelector extends React.Component {
                         <div style={styles.contentItem}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
+                                    <FormControlLabel
+                                        style={{ paddingLeft: "10px" }}
+                                        control={
+                                            <Switch
+                                                size="small"
+                                                onChange={() =>
+                                                    this.setState({ useShortNames: !useShortNames })
+                                                }
+                                            />
+                                        }
+                                        label={i18n.t("Use short names")}
+                                    />
                                     <OrgUnitTree
+                                        key={useShortNames}
                                         api={api}
                                         root={root}
                                         selected={selected}
@@ -330,6 +352,7 @@ export default class OrgUnitsSelector extends React.Component {
                                         hideMemberCount={hideMemberCount}
                                         selectOnClick={selectOnClick}
                                         selectableIds={selectableIds}
+                                        useShortNames={useShortNames}
                                     />
                                 </div>
                             ))}
