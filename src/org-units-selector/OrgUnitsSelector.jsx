@@ -88,34 +88,34 @@ export default class OrgUnitsSelector extends React.Component {
             !filterByLevel
                 ? Promise.resolve([])
                 : props.api.models.organisationUnitLevels
-                    .get({
-                        paging: false,
-                        fields: { id: true, level: true, displayName: true },
-                        order: "level:asc",
-                        filter: { level: { in: props.levels } },
-                    })
-                    .getData()
-                    .then(({ objects }) => objects),
+                      .get({
+                          paging: false,
+                          fields: { id: true, level: true, displayName: true },
+                          order: "level:asc",
+                          filter: { level: { in: props.levels } },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             !filterByGroup
                 ? Promise.resolve([])
                 : props.api.models.organisationUnitGroups
-                    .get({
-                        pageSize: 1,
-                        paging: false,
-                        fields: { id: true, displayName: true },
-                    })
-                    .getData()
-                    .then(({ objects }) => objects),
+                      .get({
+                          pageSize: 1,
+                          paging: false,
+                          fields: { id: true, displayName: true },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             !filterByProgram
                 ? Promise.resolve([])
                 : props.api.models.programs
-                    .get({
-                        pageSize: 1,
-                        paging: false,
-                        fields: { id: true, displayName: true },
-                    })
-                    .getData()
-                    .then(({ objects }) => objects),
+                      .get({
+                          pageSize: 1,
+                          paging: false,
+                          fields: { id: true, displayName: true },
+                      })
+                      .getData()
+                      .then(({ objects }) => objects),
             this.getRoots(),
         ]).then(([levels, groups, programs, defaultRoots]) => {
             this.setState({
@@ -173,14 +173,14 @@ export default class OrgUnitsSelector extends React.Component {
         const { rootIds, selectableLevels } = this.props;
         const postFilter = search
             ? orgUnits =>
-                _(orgUnits)
-                    .filter(orgUnit =>
-                        selectableLevels
-                            ? selectableLevels.includes(orgUnit.level)
-                            : !rootIds || rootIds.some(ouId => orgUnit.path.includes(ouId))
-                    )
-                    .take(50)
-                    .value()
+                  _(orgUnits)
+                      .filter(orgUnit =>
+                          selectableLevels
+                              ? selectableLevels.includes(orgUnit.level)
+                              : !rootIds || rootIds.some(ouId => orgUnit.path.includes(ouId))
+                      )
+                      .take(50)
+                      .value()
             : _.identity;
 
         const response = this.queryRoots({ search });
