@@ -38,6 +38,7 @@ export default class OrgUnitsSelector extends React.Component {
         singleSelection: PropTypes.bool,
         selectableIds: PropTypes.arrayOf(PropTypes.string),
         showShortName: PropTypes.bool,
+        showNameSetting: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -56,6 +57,7 @@ export default class OrgUnitsSelector extends React.Component {
         singleSelection: false,
         selectableIds: undefined,
         showShortName: false,
+        showNameSetting: false,
     };
 
     static childContextTypes = {
@@ -77,7 +79,7 @@ export default class OrgUnitsSelector extends React.Component {
                 orgUnitGroupId: null,
                 programId: null,
             },
-            useShortNames: false,
+            useShortNames: props.showShortName,
         };
         this.contentsStyle = { ...styles.contents, height: props.height };
     }
@@ -323,12 +325,13 @@ export default class OrgUnitsSelector extends React.Component {
                         <div style={styles.contentItem}>
                             {roots.map(root => (
                                 <div key={root.path} className={`ou-root ${getClass(root)}`}>
-                                    {this.props.showShortName ? (
+                                    {this.props.showNameSetting ? (
                                         <FormControlLabel
                                             style={{ paddingLeft: "10px" }}
                                             control={
                                                 <Switch
                                                     size="small"
+                                                    checked={useShortNames}
                                                     onChange={() =>
                                                         this.setState({
                                                             useShortNames: !useShortNames,
