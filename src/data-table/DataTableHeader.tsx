@@ -136,6 +136,7 @@ export function DataTableHeader<T extends ReferenceObject>(props: DataTableHeade
                         </TableCell>
                     )}
                     {currentColumns.map(column => {
+                        console.log("Column", column, field, order);
                         return (
                             <TableCell
                                 key={`data-table-cell-${column.name}`}
